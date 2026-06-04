@@ -1,11 +1,18 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Fraunces, Inter } from "next/font/google"
+import { Playfair_Display, Great_Vibes, Inter } from "next/font/google"
 import "./globals.css"
 
-const fraunces = Fraunces({
+const playfair = Playfair_Display({
   subsets: ["latin"],
-  variable: "--font-fraunces",
+  variable: "--font-playfair",
+  display: "swap",
+})
+
+const greatVibes = Great_Vibes({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-great-vibes",
   display: "swap",
 })
 
@@ -16,7 +23,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "Chatbase + NextJS Template — AI Agents in One Click",
+  title: "Tulsi & Vraj's Wedding 2027 - Vadodara",
   description: "Deploy intelligent AI support agents that solve your customers' problems with seamless integrations and enterprise security",
 }
 
@@ -26,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${inter.variable}`}>
+    <html lang="en" className={`${playfair.variable} ${greatVibes.variable} ${inter.variable}`}>
       <body className="antialiased">{children}</body>
     </html>
   )
