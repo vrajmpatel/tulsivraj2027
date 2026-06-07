@@ -27,7 +27,7 @@ export function Hero() {
             ))}
           </div>
           <span className="mt-4 font-serif text-sm tracking-[0.3em] uppercase opacity-90 lg:text-base">
-            Wedding 2027 • Vadodara
+            Jan 5th 2027 • Vadodara
           </span>
         </h1>
       </div>
