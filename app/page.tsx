@@ -1,6 +1,6 @@
 import { Nav } from "@/components/nav"
 import { Hero } from "@/components/hero"
-import { ProductSection } from "@/components/product-section"
+import { Countdown } from "@/components/countdown"
 import Script from "next/script"
 
 export default function Home() {
@@ -19,7 +19,7 @@ export default function Home() {
       )}
       <Nav />
       <Hero />
-      <ProductSection />
+      <Countdown />
     </main>
   )
 }

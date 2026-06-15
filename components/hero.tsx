@@ -1,3 +1,5 @@
+import { RsvpDialog } from "@/components/rsvp-dialog"
+
 export function Hero() {
   return (
     <section className="relative min-h-screen pb-8">
@@ -30,6 +32,10 @@ export function Hero() {
             Jan 5th 2027 • Vadodara
           </span>
         </h1>
+
+        <div className="transform translate-y-[8vh]">
+          <RsvpDialog />
+        </div>
       </div>
     </section>
   )
