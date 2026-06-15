@@ -1,7 +1,6 @@
 import { Nav } from "@/components/nav"
 import { Hero } from "@/components/hero"
 import { Countdown } from "@/components/countdown"
-import { WardrobePlanner } from "@/components/wardrobe-planner"
 import Script from "next/script"
 
 export default function Home() {
@@ -21,7 +20,6 @@ export default function Home() {
       <Nav />
       <Hero />
       <Countdown />
-      <WardrobePlanner />
     </main>
   )
 }

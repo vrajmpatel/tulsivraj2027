@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useState } from "react"
 import { Flower2, Sun, Music, Gem, Heart, type LucideIcon } from "lucide-react"
 
 type PaletteColor = { name: string; hex: string }
@@ -149,59 +149,28 @@ function eventTitle(ev: Pick<WardrobeEvent, "host" | "name">) {
   return ev.host ? `${ev.host} ${ev.name}` : ev.name
 }
 
-function Swatch({
-  color,
-  copied,
-  onCopy,
-}: {
-  color: PaletteColor
-  copied: boolean
-  onCopy: (hex: string) => void
-}) {
-  return (
-    <button
-      type="button"
-      className="wp-sw"
-      onClick={() => onCopy(color.hex)}
-      title={`Click to copy ${color.hex}`}
-    >
-      <span className="wp-sw-chip" style={{ background: color.hex }}>
-        {copied ? <span className="wp-sw-copied">Copied</span> : null}
-      </span>
-      <span className="wp-sw-name">{color.name}</span>
-      <span className="wp-sw-hex">{color.hex.toUpperCase()}</span>
-    </button>
-  )
-}
-
 export function WardrobePlanner() {
   const [active, setActive] = useState(0)
-  const [copied, setCopied] = useState<string | null>(null)
   const [saved, setSaved] = useState<Record<string, boolean>>({})
-  const copyTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const ev = EVENTS[active]
   const EventIcon = ev.icon
 
-  const copy = (hex: string) => {
-    navigator.clipboard?.writeText(hex).catch(() => {})
-    setCopied(hex)
-    if (copyTimer.current) clearTimeout(copyTimer.current)
-    copyTimer.current = setTimeout(() => setCopied(null), 1100)
-  }
-
   return (
     <section id="wardrobe-planner" className="wp-root scroll-mt-24">
-      <div className="wp-container">
-        {/* Header */}
-        <header className="wp-head">
-          <span className="wp-kicker">Wardrobe Planner</span>
-          <h2 className="wp-title">What to Wear</h2>
-          <p className="wp-sub">
+      {/* Hero — same treatment as the Guide page hero */}
+      <header className="wp-hero">
+        <div className="wp-hero-img" aria-hidden="true" />
+        <div className="wp-hero-inner">
+          <p className="wp-hero-kicker">Wardrobe Planner</p>
+          <h1 className="wp-hero-title">What to Wear</h1>
+          <p className="wp-hero-sub">
             A colour guide for every celebration — five days, five moods. Come dressed for the moment.
           </p>
-        </header>
+        </div>
+      </header>
 
+      <div className="wp-container">
         {/* Event tabs */}
         <div className="dirA-tabs">
           {EVENTS.map((e, i) => (
@@ -209,10 +178,7 @@ export function WardrobePlanner() {
               key={e.id}
               type="button"
               className={"dirA-tab" + (i === active ? " is-active" : "")}
-              onClick={() => {
-                setActive(i)
-                setCopied(null)
-              }}
+              onClick={() => setActive(i)}
               aria-pressed={i === active}
             >
               <span className="dirA-tab-day">{e.dayNum}</span>
@@ -224,19 +190,24 @@ export function WardrobePlanner() {
         {/* Featured spread */}
         <div className="dirA-spread">
           {/* Left — colour-field mood panel */}
-          <div className="dirA-mood">
-            <div className="dirA-bands">
-              {ev.palette.map((c) => (
-                <div key={c.hex} className="dirA-band" style={{ background: c.hex }} />
-              ))}
-            </div>
-            <div className="dirA-mood-tex" aria-hidden="true" />
-            <div className="dirA-mood-card">
-              <span className="dirA-mood-ico" style={{ color: ev.key }}>
-                <EventIcon size={22} strokeWidth={1.6} />
-              </span>
-              <span className="dirA-mood-code">{ev.code}</span>
-              <span className="dirA-mood-mood">{ev.mood}</span>
+          <div className="dirA-mood-col">
+            <div className="wp-label">The Palette</div>
+            <div className="dirA-mood">
+              <div className="dirA-bands">
+                {ev.palette.map((c) => (
+                  <div key={c.hex} className="dirA-band" style={{ background: c.hex }}>
+                    <span className="dirA-band-name">{c.name}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="dirA-mood-tex" aria-hidden="true" />
+              <div className="dirA-mood-card">
+                <span className="dirA-mood-ico" style={{ color: ev.key }}>
+                  <EventIcon size={22} strokeWidth={1.6} />
+                </span>
+                <span className="dirA-mood-code">{ev.code}</span>
+                <span className="dirA-mood-mood">{ev.mood}</span>
+              </div>
             </div>
           </div>
 
@@ -250,14 +221,6 @@ export function WardrobePlanner() {
               <span>{ev.time}</span>
             </div>
             <h3 className="dirA-event">{eventTitle(ev)}</h3>
-            <p className="dirA-blurb">{ev.blurb}</p>
-
-            <div className="wp-label">The Palette</div>
-            <div className="dirA-swatches">
-              {ev.palette.map((c) => (
-                <Swatch key={c.hex} color={c} copied={copied === c.hex} onCopy={copy} />
-              ))}
-            </div>
 
             <div className="dirA-suggest">
               <div className="dirA-sug">

@@ -33,7 +33,7 @@ export function Hero() {
           </span>
         </h1>
 
-        <div className="transform translate-y-[8vh]">
+        <div className="mt-10 transform translate-y-[8vh]">
           <RsvpDialog />
         </div>
       </div>

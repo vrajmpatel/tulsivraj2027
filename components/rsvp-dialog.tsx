@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { Mail } from "lucide-react"
 import { toast } from "sonner"
 
 import { createClient } from "@/utils/supabase/client"
@@ -79,10 +80,11 @@ export function RsvpDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
-          size="lg"
-          className="mt-10 border border-white/70 bg-white/10 px-10 font-serif text-sm uppercase tracking-[0.3em] text-white backdrop-blur-sm transition-colors hover:bg-white hover:text-black"
+          variant="outline"
+          className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 pl-5 pr-2.5 py-2 font-serif text-xs tracking-[0.25em] uppercase text-white shadow-md backdrop-blur-md transition-all hover:bg-white/20 active:scale-95 cursor-pointer h-10"
         >
-          RSVP
+          <Mail className="w-4 h-4 text-gray-300 shrink-0" />
+          <span>RSVP</span>
         </Button>
       </DialogTrigger>
 
