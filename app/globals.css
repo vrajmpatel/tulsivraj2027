@@ -125,3 +125,157 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ====================================================================== */
+/*  Wardrobe Planner — Direction A · Editorial Lookbook                    */
+/*  Ported from the claude.ai/design handoff. Variables are prefixed and   */
+/*  scoped to .wp-root so they never collide with the site theme tokens.   */
+/* ====================================================================== */
+.wp-root {
+  --wp-bg: oklch(0.97 0.01 85);
+  --wp-fg: oklch(0.27 0.012 70);
+  --wp-muted: oklch(0.52 0.012 70);
+  --wp-faint: oklch(0.62 0.012 70);
+  --wp-line: oklch(0.88 0.012 80);
+  --wp-clay: oklch(0.56 0.13 38);
+  --wp-clay-soft: oklch(0.93 0.045 50);
+  --wp-serif: var(--font-playfair), "Playfair Display", Georgia, serif;
+  --wp-display: var(--font-oranienbaum), "Oranienbaum", "Playfair Display", serif;
+  --wp-sans: var(--font-inter), "Inter", system-ui, sans-serif;
+
+  background: var(--wp-bg);
+  color: var(--wp-fg);
+  font-family: var(--wp-sans);
+}
+
+.wp-container { max-width: 1200px; margin: 0 auto; padding: 72px 24px 88px; }
+@media (min-width: 768px) { .wp-container { padding: 96px 60px 104px; } }
+
+/* ---- Shared header ---------------------------------------------------- */
+.wp-head { max-width: 760px; margin-bottom: 30px; }
+.wp-kicker {
+  font-family: var(--wp-serif); font-size: 12px; font-weight: 600;
+  letter-spacing: 0.32em; text-transform: uppercase; color: var(--wp-clay);
+}
+.wp-title {
+  font-family: var(--wp-display); font-weight: 400;
+  font-size: 44px; line-height: 1.02; letter-spacing: 0.01em;
+  margin: 14px 0 0; color: var(--wp-fg);
+}
+@media (min-width: 768px) { .wp-title { font-size: 56px; } }
+.wp-sub {
+  font-size: 16px; line-height: 1.55; color: var(--wp-muted);
+  margin: 14px 0 0; max-width: 600px; text-wrap: pretty;
+}
+.wp-label {
+  font-family: var(--wp-serif); font-size: 11px; font-weight: 600;
+  letter-spacing: 0.26em; text-transform: uppercase; color: var(--wp-faint);
+  margin-bottom: 12px;
+}
+.wp-dot { color: var(--wp-line); margin: 0 2px; }
+
+.wp-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--wp-sans); font-size: 13.5px; font-weight: 500;
+  padding: 11px 20px; border-radius: 999px; border: 1px solid transparent;
+  cursor: pointer; transition: all .2s ease; letter-spacing: 0.01em;
+}
+.wp-btn-primary { background: var(--wp-fg); color: var(--wp-bg); }
+.wp-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(60,40,25,.18); }
+.wp-btn-primary.is-saved { background: var(--wp-clay); color: #fff; }
+.wp-btn-primary.is-saved svg { fill: currentColor; }
+
+/* ---- Editorial tabs --------------------------------------------------- */
+.dirA-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 26px; }
+.dirA-tab {
+  display: flex; align-items: center; gap: 10px;
+  background: transparent; border: 1px solid var(--wp-line);
+  border-radius: 999px; padding: 9px 18px 9px 12px; cursor: pointer;
+  font-family: var(--wp-sans); color: var(--wp-muted); transition: all .18s ease;
+}
+.dirA-tab:hover { border-color: var(--wp-clay); color: var(--wp-fg); }
+.dirA-tab-day {
+  font-family: var(--wp-serif); font-size: 13px; font-weight: 600;
+  color: var(--wp-faint); border-right: 1px solid var(--wp-line);
+  padding-right: 10px; transition: color .18s;
+}
+.dirA-tab-name { font-size: 13.5px; font-weight: 500; }
+.dirA-tab.is-active { background: var(--wp-fg); border-color: var(--wp-fg); color: var(--wp-bg); }
+.dirA-tab.is-active .dirA-tab-day { color: var(--wp-clay-soft); border-color: rgba(255,255,255,.25); }
+
+/* ---- Featured spread -------------------------------------------------- */
+.dirA-spread { display: grid; grid-template-columns: 1fr; gap: 28px; }
+@media (min-width: 880px) {
+  .dirA-spread { grid-template-columns: 44% 1fr; gap: 38px; align-items: stretch; }
+}
+
+/* mood panel */
+.dirA-mood {
+  position: relative; border-radius: 16px; overflow: hidden;
+  min-height: 420px; box-shadow: 0 18px 40px -22px rgba(60,40,25,.5);
+}
+@media (min-width: 880px) { .dirA-mood { min-height: 470px; } }
+.dirA-bands { position: absolute; inset: 0; display: flex; }
+.dirA-band { flex: 1; transition: flex .5s cubic-bezier(.4,0,.2,1); }
+.dirA-mood:hover .dirA-band:first-child { flex: 1.5; }
+.dirA-mood-tex {
+  position: absolute; inset: 0;
+  background: url('/indian_floral.jpg') center/520px; opacity: 0.16;
+  mix-blend-mode: soft-light; pointer-events: none;
+}
+.dirA-mood::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(to top, rgba(30,20,12,.34), rgba(30,20,12,0) 46%);
+}
+.dirA-mood-card {
+  position: absolute; left: 20px; right: 20px; bottom: 20px; z-index: 2;
+  background: rgba(255,253,249,.86); backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,.5);
+  border-radius: 12px; padding: 18px 20px;
+  display: flex; flex-direction: column; gap: 7px;
+}
+.dirA-mood-ico { display: inline-flex; }
+.dirA-mood-code { font-family: var(--wp-display); font-size: 26px; line-height: 1; color: var(--wp-fg); }
+.dirA-mood-mood { font-size: 13.5px; color: var(--wp-muted); line-height: 1.5; }
+
+/* detail column */
+.dirA-detail { display: flex; flex-direction: column; }
+.dirA-meta {
+  font-size: 12.5px; font-weight: 500; letter-spacing: 0.04em;
+  color: var(--wp-clay); text-transform: uppercase;
+}
+.dirA-event { font-family: var(--wp-serif); font-weight: 600; font-size: 30px; margin: 8px 0 0; }
+.dirA-blurb { font-size: 15px; color: var(--wp-muted); line-height: 1.6; margin: 8px 0 24px; max-width: 480px; }
+
+.dirA-swatches { display: flex; gap: 12px; margin-bottom: 26px; }
+.wp-sw {
+  display: flex; flex-direction: column; gap: 8px; align-items: flex-start;
+  background: none; border: none; padding: 0; cursor: pointer; flex: 1; text-align: left;
+}
+.wp-sw-chip {
+  position: relative; width: 100%; height: 64px; border-radius: 9px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.06); transition: transform .16s ease;
+  display: flex; align-items: center; justify-content: center;
+}
+.wp-sw:hover .wp-sw-chip { transform: translateY(-3px); box-shadow: inset 0 0 0 1px rgba(0,0,0,.06), 0 8px 18px -8px rgba(0,0,0,.4); }
+.wp-sw-copied {
+  font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  color: #fff; background: rgba(0,0,0,.42); padding: 4px 8px; border-radius: 5px; backdrop-filter: blur(2px);
+}
+.wp-sw-name { font-size: 13px; font-weight: 500; color: var(--wp-fg); }
+.wp-sw-hex { font-family: var(--wp-sans); font-size: 11px; color: var(--wp-faint); letter-spacing: 0.04em; margin-top: -4px; }
+
+.dirA-suggest { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 22px; }
+.dirA-sug-l {
+  display: block; font-family: var(--wp-serif); font-size: 11px; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--wp-clay); margin-bottom: 7px;
+}
+.dirA-sug p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--wp-fg); }
+
+.dirA-avoid {
+  display: flex; gap: 12px; align-items: baseline; padding: 14px 16px;
+  background: var(--wp-clay-soft); border-radius: 10px; margin-bottom: 24px;
+  font-size: 13.5px; color: oklch(0.4 0.08 40); line-height: 1.5;
+}
+.dirA-avoid-l { font-family: var(--wp-serif); font-weight: 600; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; white-space: nowrap; }
+.dirA-actions { margin-top: auto; }
