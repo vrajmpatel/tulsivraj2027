@@ -35,22 +35,8 @@ export function Countdown() {
   ]
 
   return (
-    <section className="relative overflow-hidden py-20">
-      {/* Indian mango wallpaper */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: "url(/indian_mango.png)",
-          backgroundRepeat: "repeat",
-          backgroundSize: "480px",
-        }}
-        aria-hidden="true"
-      />
-
-      <div
-        className="relative z-10 mx-auto max-w-4xl px-6 text-center text-white lg:px-8"
-        style={{ textShadow: "0 1px 2px rgba(0,0,0,0.35), 0 3px 16px rgba(0,0,0,0.3)" }}
-      >
+    <section className="bg-background py-20">
+      <div className="mx-auto max-w-4xl px-6 text-center text-black lg:px-8">
         <h2 className="font-serif text-3xl tracking-wide sm:text-4xl">
           Counting down to our wedding
         </h2>
