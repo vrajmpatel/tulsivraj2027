@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react"
 
+import { AddToCalendar } from "@/components/add-to-calendar"
+
 // The wedding (Lagna) is on January 5th, 2027. Months are 0-indexed.
 const WEDDING_DATE = new Date(2027, 0, 5, 0, 0, 0)
 
@@ -37,22 +39,26 @@ export function Countdown() {
   return (
     <section className="bg-background py-20">
       <div className="mx-auto max-w-4xl px-6 text-center text-black lg:px-8">
-        <h2 className="font-serif text-3xl tracking-wide sm:text-4xl">
-          Counting down to our wedding
-        </h2>
+        <div className="mb-8 flex justify-center">
+          <AddToCalendar />
+        </div>
 
-        <div className="mt-10 flex items-start justify-center gap-8 sm:gap-14">
+        <div className="flex items-start justify-center gap-8 sm:gap-14">
           {units.map((unit) => (
             <div key={unit.label} className="flex min-w-[64px] flex-col items-center sm:min-w-[92px]">
-              <span className="font-serif text-5xl leading-none tabular-nums sm:text-7xl">
+              <span className="font-poiret text-5xl leading-none tabular-nums sm:text-7xl">
                 {unit.value === undefined ? "--" : String(unit.value).padStart(2, "0")}
               </span>
-              <span className="mt-2 font-serif text-[10px] uppercase tracking-[0.3em] sm:text-xs">
+              <span className="mt-2 font-poiret text-[10px] lowercase tracking-[0.3em] sm:text-xs">
                 {unit.label}
               </span>
             </div>
           ))}
         </div>
+
+        <p className="mt-10 font-windsong text-5xl lowercase text-zinc-400 opacity-60 sm:text-7xl">
+          until we tie the knot
+        </p>
       </div>
     </section>
   )

@@ -4,7 +4,6 @@ import { useState } from "react"
 import { Mail } from "lucide-react"
 import { toast } from "sonner"
 
-import { createClient } from "@/utils/supabase/client"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -45,22 +44,44 @@ export function RsvpDialog() {
     }
 
     setSubmitting(true)
-    const supabase = createClient()
 
-    const { error } = await supabase.from("rsvp").insert({
-      full_name: form.full_name.trim(),
-      email: form.email.trim() || null,
-      phone: form.phone.trim() || null,
-      attending: form.attending === "yes",
-      guest_count: Number(form.guest_count) || 1,
-      message: form.message.trim() || null,
-    })
+    let res: Response
+    try {
+      res = await fetch("/api/rsvp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          full_name: form.full_name.trim(),
+          email: form.email.trim() || null,
+          phone: form.phone.trim() || null,
+          attending: form.attending === "yes",
+          guest_count: Number(form.guest_count) || 1,
+          message: form.message.trim() || null,
+        }),
+      })
+    } catch (err) {
+      setSubmitting(false)
+      toast.error("Something went wrong. Please try again.")
+      console.error("RSVP request failed:", err)
+      return
+    }
 
+    const data = await res.json().catch(() => ({}))
     setSubmitting(false)
 
-    if (error) {
-      toast.error("Something went wrong. Please try again.")
-      console.error("RSVP insert failed:", error)
+    // Already in the system — they've RSVP'd before. Let them know, gently.
+    if (res.status === 409 || data?.duplicate) {
+      toast.info(
+        data?.message ??
+          "It looks like you're already on our list — we've got your RSVP!",
+      )
+      setOpen(false)
+      return
+    }
+
+    if (!res.ok) {
+      toast.error(data?.error ?? "Something went wrong. Please try again.")
+      console.error("RSVP submit failed:", data)
       return
     }
 

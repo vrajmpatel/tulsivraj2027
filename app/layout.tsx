@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Playfair_Display, Oranienbaum, Inter } from "next/font/google"
+import { Playfair_Display, Oranienbaum, Inter, Poiret_One, WindSong } from "next/font/google"
 import { Toaster } from "@/components/ui/sonner"
 import "./globals.css"
 
@@ -23,6 +23,20 @@ const inter = Inter({
   display: "swap",
 })
 
+const poiretOne = Poiret_One({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-poiret",
+  display: "swap",
+})
+
+const windSong = WindSong({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-windsong",
+  display: "swap",
+})
+
 export const metadata: Metadata = {
   title: "Tulsi & Vraj's Wedding 2027 - Vadodara",
   description: "Deploy intelligent AI support agents that solve your customers' problems with seamless integrations and enterprise security",
@@ -34,7 +48,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${playfair.variable} ${oranienbaum.variable} ${inter.variable}`}>
+    <html lang="en" className={`${playfair.variable} ${oranienbaum.variable} ${inter.variable} ${poiretOne.variable} ${windSong.variable}`}>
       <body className="antialiased">
         {children}
         <Toaster />
