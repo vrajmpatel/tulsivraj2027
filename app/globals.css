@@ -1104,6 +1104,192 @@
 .admin-root .foot p { font-size: 15.5px; line-height: 1.6; color: var(--ad-muted); margin: 16px auto 0; max-width: 460px; }
 .admin-root .foot .sig { font-family: var(--ad-serif); font-style: italic; font-size: 22px; color: var(--ad-fg); margin-top: 24px; }
 
+/* ====================================================================== */
+/*  Our Story (/our-story) — ported from the claude.ai/design handoff      */
+/*  (project/Our Story.html). "7,900 Miles to I Do" — a long-distance      */
+/*  timeline with a scroll-linked distance meter. Same cream + clay        */
+/*  language as the other pages; every selector is scoped under            */
+/*  .story-root so the generic class names never leak.                     */
+/* ====================================================================== */
+.story-root {
+  --st-bg: oklch(0.97 0.01 85);
+  --st-bg-deep: oklch(0.945 0.012 80);
+  --st-card: oklch(0.995 0.004 85);
+  --st-fg: oklch(0.27 0.012 70);
+  --st-muted: oklch(0.52 0.012 70);
+  --st-faint: oklch(0.62 0.012 70);
+  --st-line: oklch(0.88 0.012 80);
+  --st-line-soft: oklch(0.92 0.01 80);
+  --st-clay: oklch(0.56 0.13 38);
+  --st-clay-deep: oklch(0.46 0.12 36);
+  --st-clay-soft: oklch(0.93 0.045 50);
+  --st-teal: oklch(0.52 0.08 195);
+  --st-teal-soft: oklch(0.92 0.035 195);
+  --st-serif: var(--font-playfair), "Playfair Display", Georgia, serif;
+  --st-display: var(--font-oranienbaum), "Oranienbaum", "Playfair Display", serif;
+  --st-sans: var(--font-inter), "Inter", system-ui, sans-serif;
+
+  background: var(--st-bg);
+  color: var(--st-fg);
+  font-family: var(--st-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+.story-root * { box-sizing: border-box; }
+.story-root img { display: block; max-width: 100%; }
+.story-root a { color: inherit; }
+
+.story-root .wrap { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
+@media (max-width: 640px) { .story-root .wrap { padding: 0 18px; } }
+
+/* ---- Hero ------------------------------------------------------------- */
+.story-root .hero {
+  position: relative; padding: 130px 0 70px; overflow: hidden; text-align: center;
+  background: radial-gradient(ellipse 900px 500px at 50% -10%, var(--st-clay-soft), transparent 70%);
+}
+.story-root .hero-kicker {
+  font-family: var(--st-serif); font-size: 14px; font-weight: 500; font-style: italic;
+  letter-spacing: 0.22em; color: var(--st-clay);
+}
+.story-root .hero-title {
+  font-family: var(--st-display); font-weight: 400; color: var(--st-fg);
+  font-size: clamp(42px, 7vw, 86px); line-height: 1.02; margin: 16px 0 0;
+}
+.story-root .hero-sub { margin: 20px auto 0; max-width: 560px; color: var(--st-muted); font-size: 16.5px; line-height: 1.6; }
+
+/* ---- Route map --------------------------------------------------------- */
+.story-root .route { position: relative; max-width: 820px; margin: 56px auto 0; padding: 0 20px; }
+.story-root .route-svg { width: 100%; height: auto; display: block; }
+.story-root .route-ends { display: flex; justify-content: space-between; margin-top: -6px; }
+.story-root .route-pin-label {
+  font-family: var(--st-serif); font-size: 13px; font-weight: 600; letter-spacing: 0.04em; color: var(--st-fg);
+}
+.story-root .route-pin-sub { font-size: 11px; color: var(--st-faint); letter-spacing: 0.08em; text-transform: uppercase; }
+.story-root .route-stat {
+  display: inline-flex; align-items: baseline; gap: 8px; margin-top: 22px;
+  font-family: var(--st-serif); font-style: italic; color: var(--st-clay-deep); font-size: 15px;
+}
+.story-root .route-stat b { font-family: var(--st-display); font-style: normal; font-size: 22px; color: var(--st-fg); }
+
+/* ---- Sticky distance meter --------------------------------------------- */
+.story-root .meter-wrap {
+  position: sticky; top: 0; z-index: 30; background: oklch(0.97 0.01 85 / 0.92);
+  backdrop-filter: blur(14px); border-bottom: 1px solid var(--st-line-soft); padding: 16px 0;
+}
+.story-root .meter-row { display: flex; align-items: center; gap: 16px; }
+/* Reserve room on the left so the floating back button never covers the
+   departure city once the meter is stuck to the top. */
+@media (max-width: 1340px) { .story-root .meter-row { padding-left: 96px; } }
+.story-root .meter-city { font-family: var(--st-serif); font-size: 12.5px; font-weight: 600; letter-spacing: 0.05em; color: var(--st-fg); white-space: nowrap; flex: 0 0 auto; }
+.story-root .meter-city.right { text-align: right; }
+.story-root .meter-track { position: relative; flex: 1; height: 3px; background: var(--st-line); border-radius: 999px; }
+.story-root .meter-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 4%; background: var(--st-clay); border-radius: 999px; transition: width .25s linear; }
+.story-root .meter-plane {
+  position: absolute; top: 50%; left: 4%; width: 22px; height: 22px;
+  transform: translate(-50%, -50%) rotate(90deg); color: var(--st-clay-deep);
+  transition: left .25s linear; display: flex; align-items: center; justify-content: center;
+}
+.story-root .meter-num { flex: 0 0 auto; font-family: var(--st-display); font-size: 18px; color: var(--st-clay-deep); min-width: 148px; text-align: center; white-space: nowrap; }
+.story-root .meter-num span { font-family: var(--st-sans); font-size: 10.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--st-faint); display: block; margin-top: 1px; }
+@media (max-width: 700px) {
+  .story-root .meter-row { padding-left: 84px; }
+  .story-root .meter-city, .story-root .meter-num { font-size: 11px; min-width: 0; }
+  .story-root .meter-num span { display: none; }
+}
+
+/* ---- Section scaffold --------------------------------------------------- */
+.story-root .sec { padding: 70px 0; }
+.story-root .sec.alt { background: var(--st-bg-deep); }
+.story-root .sec-head { max-width: 680px; margin: 0 auto 50px; text-align: center; }
+.story-root .kicker { font-family: var(--st-serif); font-size: 12px; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--st-clay); }
+.story-root .sec-title { font-family: var(--st-display); font-weight: 400; font-size: clamp(32px, 5vw, 46px); line-height: 1.05; margin: 14px 0 0; }
+.story-root .sec-intro { font-size: 16px; line-height: 1.65; color: var(--st-muted); margin: 14px 0 0; }
+
+.story-root .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
+.story-root .reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .story-root .reveal { opacity: 1; transform: none; transition: none; } }
+
+/* ---- Timeline ------------------------------------------------------------ */
+.story-root .story-tl { display: flex; flex-direction: column; gap: 0; position: relative; }
+.story-root .story-tl::before {
+  content: ''; position: absolute; left: 50%; top: 10px; bottom: 10px; width: 1px;
+  background: repeating-linear-gradient(to bottom, var(--st-line) 0 6px, transparent 6px 12px);
+  transform: translateX(-50%); z-index: 0;
+}
+@media (max-width: 860px) { .story-root .story-tl::before { left: 34px; } }
+
+.story-root .story-item { display: grid; grid-template-columns: 1fr 60px 1fr; gap: 0 34px; padding: 44px 0; position: relative; z-index: 1; align-items: center; }
+@media (max-width: 860px) { .story-root .story-item { grid-template-columns: 60px 1fr; padding: 30px 0; } }
+
+.story-root .story-marker { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.story-root .story-dot {
+  width: 46px; height: 46px; border-radius: 999px; background: var(--st-card); border: 1px solid var(--st-line);
+  display: flex; align-items: center; justify-content: center; color: var(--st-clay); flex: 0 0 auto;
+  box-shadow: 0 6px 16px -8px rgba(60,40,25,.3);
+}
+.story-root .story-item.is-milestone .story-dot { background: var(--st-clay); color: #fff; border-color: var(--st-clay); }
+.story-root .story-date { font-family: var(--st-serif); font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em; color: var(--st-faint); white-space: nowrap; }
+
+.story-root .story-card {
+  background: var(--st-card); border: 1px solid var(--st-line-soft); border-radius: 16px; padding: 26px 28px;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.story-root .story-card:hover { transform: translateY(-2px); box-shadow: 0 18px 34px -22px rgba(60,40,25,.4); }
+@media (max-width: 860px) {
+  .story-root .story-item .side.empty { display: none !important; }
+  .story-root .story-item .side:not(.empty) { grid-column: 2; }
+}
+
+.story-root .story-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 11px; border-radius: 999px; margin-bottom: 12px; }
+.story-root .story-badge.pa { background: var(--st-teal-soft); color: var(--st-teal); }
+.story-root .story-badge.vad { background: var(--st-clay-soft); color: var(--st-clay-deep); }
+.story-root .story-badge.both { background: var(--st-fg); color: #fff; }
+
+.story-root .story-card h4 { font-family: var(--st-serif); font-weight: 600; font-size: 19px; margin: 0 0 8px; line-height: 1.28; }
+.story-root .story-card p { margin: 0; font-size: 14.5px; line-height: 1.62; color: var(--st-muted); }
+.story-root .story-card p.ph { font-style: italic; color: var(--st-faint); }
+
+/* Photo placeholder frame (stand-in for the design canvas's image slots). */
+.story-root .photo-slot {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; height: 170px; margin-top: 16px; padding: 0 16px; border-radius: 12px;
+  border: 1px dashed var(--st-line); background: var(--st-bg-deep);
+  color: var(--st-faint); font-size: 12.5px; font-style: italic; text-align: center;
+}
+.story-root .story-item.is-milestone .photo-slot {
+  border-color: oklch(0.45 0.012 70); background: oklch(0.32 0.012 70); color: oklch(0.68 0.012 80);
+}
+
+.story-root .story-item.is-milestone .story-card { background: var(--st-fg); border-color: var(--st-fg); }
+.story-root .story-item.is-milestone .story-card h4 { color: #fff; }
+.story-root .story-item.is-milestone .story-card p { color: oklch(0.86 0.012 80); }
+
+/* ---- Edit note (scaffold reminder) --------------------------------------- */
+.story-root .edit-note {
+  max-width: 620px; margin: 0 auto 40px; background: var(--st-clay-soft); border: 1px dashed var(--st-clay);
+  border-radius: 12px; padding: 14px 18px; font-size: 13px; color: var(--st-clay-deep); line-height: 1.55;
+  display: flex; gap: 10px; align-items: flex-start;
+}
+.story-root .edit-note svg { flex: 0 0 auto; margin-top: 1px; }
+
+/* ---- Finale --------------------------------------------------------------- */
+.story-root .finale { text-align: center; padding: 90px 0 100px; position: relative; overflow: hidden; }
+.story-root .finale-tex { position: absolute; inset: 0; background: url('/indian_mango.png') center/520px; opacity: .5; pointer-events: none; }
+.story-root .finale::before { content: ''; position: absolute; inset: 0; background: linear-gradient(var(--st-bg-deep), oklch(0.97 0.01 85 / 0.3)); }
+.story-root .finale-inner { position: relative; z-index: 1; }
+.story-root .finale .flo { font-size: 18px; letter-spacing: .5em; color: var(--st-clay); }
+.story-root .finale h3 { font-family: var(--st-display); font-size: clamp(30px,5vw,48px); margin: 18px 0 0; line-height: 1.1; }
+.story-root .finale p { font-size: 16px; line-height: 1.6; color: var(--st-muted); margin: 16px auto 0; max-width: 480px; }
+.story-root .finale-stat { margin-top: 30px; font-family: var(--st-display); font-size: 26px; color: var(--st-clay-deep); }
+.story-root .finale-stat span { display: block; font-family: var(--st-sans); font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--st-faint); margin-top: 4px; }
+.story-root .finale-links { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 34px; }
+.story-root .finale-links a {
+  font-size: 13px; font-weight: 500; color: var(--st-muted); text-decoration: none;
+  padding: 9px 18px; border-radius: 999px; border: 1px solid var(--st-line); background: var(--st-card);
+  transition: all .18s ease;
+}
+.story-root .finale-links a:hover { color: var(--st-clay); border-color: var(--st-clay); }
+
 /* ---- Invitee picker panel (portaled to <body>, so styled globally) --- */
 .invitee-combo-pop {
   position: fixed; z-index: 80; background: oklch(0.995 0.004 85);
