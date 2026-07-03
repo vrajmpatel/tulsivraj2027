@@ -3,7 +3,7 @@ import { BackButton } from "@/components/back-button"
 import { OurStory } from "@/components/our-story"
 
 export const metadata: Metadata = {
-  title: "Our Story — 7,900 Miles to \"I Do\" · Tulsi & Vraj's Wedding 2027",
+  title: "Our Story — 7,900 Miles to the Mandap · Tulsi & Vraj's Wedding 2027",
   description:
     "One of us grew up outside Philadelphia, the other in Vadodara. Follow the long-distance story of how Tulsi & Vraj closed the 7,900-mile gap — chapter by chapter, all the way to the mandap on January 5, 2027.",
 }

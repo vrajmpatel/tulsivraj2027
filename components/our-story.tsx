@@ -90,7 +90,6 @@ const CHAPTERS: Chapter[] = [
 // ----------------------------------------------------------------------------
 
 export function OurStory() {
-  const storyRef = useRef<HTMLElement>(null)
   const fillRef = useRef<HTMLDivElement>(null)
   const planeRef = useRef<HTMLDivElement>(null)
   const milesRef = useRef<HTMLSpanElement>(null)
@@ -115,19 +114,16 @@ export function OurStory() {
     )
     reveals.forEach((r) => ro.observe(r))
 
-    // Scroll-linked distance meter — counts down from 7,900 mi to 0 as the
-    // timeline scrolls by. Direct DOM writes to avoid re-rendering on scroll.
+    // Scroll-linked distance meter — the plane flies dot to dot as the page
+    // scrolls top to bottom, counting down from 7,900 mi to 0. Direct DOM
+    // writes to avoid re-rendering on scroll.
     const updateMeter = () => {
-      const story = storyRef.current
-      if (!story || !fillRef.current || !planeRef.current || !milesRef.current || !stateRef.current) return
-      const rect = story.getBoundingClientRect()
-      const vh = window.innerHeight
-      const total = rect.height - vh * 0.4
-      const scrolled = vh * 0.6 - rect.top
-      let progress = total > 0 ? scrolled / total : 0
+      if (!fillRef.current || !planeRef.current || !milesRef.current || !stateRef.current) return
+      const max = document.documentElement.scrollHeight - window.innerHeight
+      let progress = max > 0 ? window.scrollY / max : 0
       progress = Math.max(0, Math.min(1, progress))
 
-      const pct = (4 + progress * 92).toFixed(2)
+      const pct = (progress * 100).toFixed(2)
       fillRef.current.style.width = pct + "%"
       planeRef.current.style.left = pct + "%"
 
@@ -156,49 +152,15 @@ export function OurStory() {
           <h1 className="hero-title">
             7,900 Miles
             <br />
-            to &ldquo;I Do&rdquo;
+            to the Mandap
           </h1>
           <p className="hero-sub">
             One of us grew up outside Philadelphia. The other, in Vadodara. Here&apos;s the (very
             long-distance) story of how we closed the gap.
           </p>
 
-          <div className="route">
-            <svg className="route-svg" viewBox="0 0 800 160" fill="none" aria-hidden="true">
-              <path
-                d="M70 90 C 260 10, 540 10, 730 90"
-                stroke="var(--st-clay)"
-                strokeWidth="1.5"
-                strokeDasharray="1 7"
-                strokeLinecap="round"
-              />
-              <g transform="translate(70,90)">
-                <circle r="7" fill="var(--st-teal)" />
-                <circle r="12" fill="none" stroke="var(--st-teal)" strokeWidth="1" opacity=".4" />
-              </g>
-              <g transform="translate(730,90)">
-                <circle r="7" fill="var(--st-clay)" />
-                <circle r="12" fill="none" stroke="var(--st-clay)" strokeWidth="1" opacity=".4" />
-              </g>
-              <g transform="translate(400,32) rotate(8)" fill="var(--st-clay-deep)">
-                <path d="M0 -9 L2.4 -2 L9 0 L2.4 2 L0 9 L-2.4 2 L-9 0 L-2.4 -2 Z" opacity=".9" />
-              </g>
-            </svg>
-            <div className="route-ends">
-              <div>
-                <div className="route-pin-label">Yardley, Pennsylvania</div>
-                <div className="route-pin-sub">Where she&apos;s from</div>
-              </div>
-              <div style={{ textAlign: "right" }}>
-                <div className="route-pin-label">Vadodara, Gujarat</div>
-                <div className="route-pin-sub">Where he&apos;s from</div>
-              </div>
-            </div>
-            <div style={{ textAlign: "center" }}>
-              <div className="route-stat">
-                <b>~7,900 miles</b> · 10.5 time zones · countless texts
-              </div>
-            </div>
+          <div className="route-stat">
+            <b>10.5 time zones</b> · countless texts
           </div>
         </div>
       </header>
@@ -207,14 +169,22 @@ export function OurStory() {
       <div className="meter-wrap">
         <div className="wrap">
           <div className="meter-row">
-            <span className="meter-city">Yardley, PA</span>
+            <div className="meter-city">
+              <span>Yardley, PA</span>
+              <span className="sub">Where he&apos;s from</span>
+            </div>
             <div className="meter-track">
               <div className="meter-fill" ref={fillRef} />
+              <span className="meter-end start" aria-hidden="true" />
+              <span className="meter-end end" aria-hidden="true" />
               <div className="meter-plane" ref={planeRef}>
                 <Plane size={18} strokeWidth={1.6} />
               </div>
             </div>
-            <span className="meter-city right">Vadodara, GJ</span>
+            <div className="meter-city right">
+              <span>Vadodara, GJ</span>
+              <span className="sub">Where she&apos;s from</span>
+            </div>
             <div className="meter-num">
               <span ref={milesRef}>7,900 mi</span>
               <span ref={stateRef}>apart</span>
@@ -224,7 +194,7 @@ export function OurStory() {
       </div>
 
       {/* Timeline */}
-      <section className="sec" id="story" ref={storyRef}>
+      <section className="sec" id="story">
         <div className="wrap">
           <div className="sec-head reveal">
             <span className="kicker">Chapter by Chapter</span>
@@ -286,11 +256,7 @@ export function OurStory() {
         <div className="finale-tex" aria-hidden="true" />
         <div className="wrap finale-inner">
           <div className="flo">❀ ❀ ❀</div>
-          <h3>Two homes, one story</h3>
-          <p>
-            Thank you for following along the long way round. We can&apos;t wait to celebrate the
-            ending — and the beginning — with you.
-          </p>
+          <p>We can&apos;t wait to celebrate with you.</p>
           <div className="finale-stat">
             0 miles<span>Forever, starting Jan 5, 2027</span>
           </div>
