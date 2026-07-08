@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Flower2, Sun, Music, Gem, Heart, type LucideIcon } from "lucide-react"
 
 type PaletteColor = { name: string; hex: string }
@@ -162,6 +162,20 @@ export function WardrobePlanner() {
   const [active, setActive] = useState(0)
   const [saved, setSaved] = useState<Record<string, boolean>>({})
 
+  // Deep links from the EVENTS menu: /wardrobe-planner#<event-id> selects the
+  // matching tab and scrolls to the planner (no element carries the hash id).
+  useEffect(() => {
+    const applyHash = () => {
+      const idx = EVENTS.findIndex((e) => e.id === window.location.hash.slice(1))
+      if (idx < 0) return
+      setActive(idx)
+      document.getElementById("wardrobe-planner-events")?.scrollIntoView({ behavior: "smooth" })
+    }
+    applyHash()
+    window.addEventListener("hashchange", applyHash)
+    return () => window.removeEventListener("hashchange", applyHash)
+  }, [])
+
   const ev = EVENTS[active]
   const EventIcon = ev.icon
 
@@ -179,7 +193,7 @@ export function WardrobePlanner() {
         </div>
       </header>
 
-      <div className="wp-container">
+      <div id="wardrobe-planner-events" className="wp-container scroll-mt-24">
         {/* Event tabs */}
         <div className="dirA-tabs">
           {EVENTS.map((e, i) => (

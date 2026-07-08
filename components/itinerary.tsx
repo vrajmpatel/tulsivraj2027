@@ -6,25 +6,27 @@ import { Clock, Sunset, Utensils, Shirt, Camera, MapPin, ArrowUp, type LucideIco
 
 // ----------------------------------------------------------------------------
 // Content — distilled from the claude.ai/design handoff (project/Itinerary.html),
-// itself built from the couple's wedding-day itinerary document. A warm,
-// guest-facing timeline of the wedding day (Tuesday, Jan 5 2027 · Aambaug).
+// itself built from the couple's wedding itinerary document. A warm,
+// guest-facing timeline of the wedding week (Jan 2–5, 2027 · Vadodara): one
+// section per event, mirroring the Wardrobe Planner's event list, with the
+// wedding day itself condensed into the Lagna section.
 // ----------------------------------------------------------------------------
 
 const SECTIONS = [
-  { id: "glance", label: "At a Glance" },
-  { id: "baraat", label: "The Baraat" },
-  { id: "varmala", label: "Welcome & Varmala" },
-  { id: "ceremony", label: "The Ceremony" },
-  { id: "celebration", label: "Celebration" },
+  { id: "mehendi", label: "Mehendi" },
+  { id: "haldi-tulsi", label: "Tulsi's Haldi" },
+  { id: "haldi-vraj", label: "Vraj's Haldi" },
+  { id: "sangeet", label: "Sangeet" },
+  { id: "lagna", label: "Lagna" },
   { id: "know", label: "Good to Know" },
 ] as const
 
 type GlanceCard = { tag: string; big: string; small: string; key?: boolean }
 
 const GLANCE: GlanceCard[] = [
-  { tag: "Doors & Hi-Tea", big: "4:00 PM", small: "Arrive, settle in, and enjoy tea and snacks." },
-  { tag: "The Baraat", big: "5:00 PM", small: "Vraj's procession sets off with drums and dancing." },
-  { tag: "Varmala · Sunset", big: "6:07 PM", small: "The garland exchange — the moment not to miss.", key: true },
+  { tag: "Welcome Hour & Hi-Tea", big: "4:00 PM", small: "Arrive, settle in, and enjoy tea and snacks." },
+  { tag: "The Baraat", big: "5:00 PM", small: "The celebration sets off with drums and dancing." },
+  { tag: "Varmala", big: "6:07 PM", small: "The garland exchange — the moment not to miss.", key: true },
   { tag: "Ceremony", big: "6:45 PM", small: "The wedding rites begin, with dinner alongside." },
 ]
 
@@ -36,8 +38,8 @@ type TLRow = {
   sun?: boolean
   keyCard?: boolean
   tag: string
-  title: string
-  desc: string
+  title?: string
+  desc?: string
   span?: string
 }
 
@@ -45,7 +47,7 @@ const BARAAT: TLRow[] = [
   {
     t: "4:00", ap: "PM", first: true,
     tag: "Welcome & Hi-Tea", title: "Arrival & refreshments",
-    desc: "Make your way to Aambaug, find your bearings, and enjoy tea and snacks as the baraat gathers and the evening begins.",
+    desc: "Make your way to Aambaug and enjoy tea and snacks as the baraat gathers and the evening begins.",
   },
   {
     t: "5:00", ap: "PM", last: true,
@@ -58,28 +60,12 @@ const BARAAT: TLRow[] = [
 const VARMALA: TLRow[] = [
   {
     t: "5:55", ap: "PM", first: true,
-    tag: "Arrival", title: "The Baraat arrives",
+    tag: "Arrival", title: "Varmala",
     desc: "The procession reaches Aambaug to the welcome of the Nasik dhol as everyone gathers for the garland exchange.",
-  },
-  {
-    t: "6:07", ap: "PM", sun: true, keyCard: true,
-    tag: "Varmala · Garland Exchange", title: "Jaimala at sunset",
-    desc: "Timed to the setting sun, Tulsi enters with her brothers beneath a canopy of flowers. The couple exchange floral garlands — their first ceremony together, a sign of acceptance and joy.",
-    span: "The moment not to miss",
-  },
-  {
-    t: "6:10", ap: "PM", last: true,
-    tag: "Ponkhvanu", title: "Welcoming the groom",
-    desc: "The bride's family welcomes Vraj with a warm, playful ritual at the entrance before everyone settles in for the ceremony.",
-  },
+  }
 ]
 
 const CEREMONY: TLRow[] = [
-  {
-    t: "6:30", ap: "PM", first: true,
-    tag: "Settle In", title: "Music & gathering",
-    desc: "A team of Gujarati musical singers opens the evening as guests find their seats ahead of the ceremony.",
-  },
   {
     t: "6:45", ap: "PM",
     tag: "Groom's Entry", title: "The ceremony begins",
@@ -124,6 +110,156 @@ const CELEBRATION: TLRow[] = [
     t: "11:00", ap: "PM", last: true,
     tag: "Departure", title: "The couple departs",
     desc: "The newlyweds set off into married life. Safe travels home — and thank you for celebrating with us.",
+  },
+]
+
+// The pre-wedding events, one section each, matching the Wardrobe Planner's
+// event list. Schedules (`rows`) are filled in as the couple confirms them —
+// an empty list renders a "schedule to be announced" placeholder.
+type EventSection = {
+  id: string
+  kicker: string
+  title: string
+  intro: string
+  timelineLabel: string
+  rows: TLRow[]
+}
+
+const PRE_EVENTS: EventSection[] = [
+  {
+    id: "mehendi",
+    kicker: "Saturday · Jan 2 · Evening",
+    title: "Mehendi",
+    intro:
+      "Henna, thumkas, and breaking the ice — one game at a time.",
+    timelineLabel: "The Evening's Flow",
+    rows: [
+      {
+        t: "4:30", ap: "PM", first: true,
+        tag: "Guest Arrival",
+        desc: "Make your way over, say your hellos, and settle in as the celebrations get underway.",
+      },
+      {
+        t: "5:00", ap: "PM",
+        tag: "Henna",
+        desc: "The mehendi artists get to work as fun and games keep everyone entertained.",
+      },
+      {
+        t: "7:00", ap: "PM", last: true,
+        tag: "Dinner",
+      },
+    ],
+  },
+  {
+    id: "haldi-tulsi",
+    kicker: "Sunday · Jan 3 · Afternoon",
+    title: "Tulsi's Vidhi & Haldi",
+    intro:
+      "Auspicious vidhi rituals and a joyful turmeric ceremony to bless Tulsi ahead of the wedding.",
+    timelineLabel: "The Day's Rituals",
+    rows: [
+      {
+        t: "1:30", ap: "PM", first: true,
+        tag: "Ganesh Puja",
+        desc: "The day opens with a prayer to Lord Ganesha for an auspicious beginning.",
+      },
+      {
+        t: "2:15", ap: "PM",
+        tag: "Mandap Muharat",
+        desc: "A ritual to bless the mandap and formally begin the wedding preparations.",
+      },
+      {
+        t: "2:45", ap: "PM",
+        tag: "Pithi",
+        desc: "The turmeric ceremony — family and friends take turns applying pithi to bless Tulsi.",
+      },
+      {
+        t: "4:00", ap: "PM",
+        tag: "Grah Shanti",
+        desc: "A puja inviting peace and harmony ahead of the wedding.",
+      },
+      {
+        t: "6:00", ap: "PM",
+        tag: "Varadh",
+      },
+      {
+        t: "7:00", ap: "PM", last: true,
+        tag: "Dinner",
+      },
+    ],
+  },
+  {
+    id: "haldi-vraj",
+    kicker: "Monday · Jan 4 · Morning",
+    title: "Vraj's Vidhi & Haldi",
+    intro:
+      "Auspicious vidhi rituals and a joyful turmeric ceremony to bless Vraj ahead of the wedding.",
+    timelineLabel: "Morning Rituals",
+    rows: [
+      {
+        t: "8:00", ap: "AM", first: true,
+        tag: "Ganesh Puja",
+        desc: "The day opens with a prayer to Lord Ganesha for an auspicious beginning.",
+      },
+      {
+        t: "8:45", ap: "AM",
+        tag: "Mandap Muharat",
+        desc: "A ritual to bless the mandap and formally begin the wedding preparations.",
+      },
+      {
+        t: "9:15", ap: "AM",
+        tag: "Pithi",
+        desc: "The turmeric ceremony — family and friends take turns applying pithi to bless Tulsi.",
+      },
+      {
+        t: "10:00", ap: "AM",
+        tag: "Grah Shanti",
+        desc: "A puja inviting peace and harmony ahead of the wedding.",
+      },
+      {
+        t: "12:00", ap: "PM", last: true,
+        tag: "Varadh & Lunch",
+      },
+    ],
+  },
+  {
+    id: "sangeet",
+    kicker: "Monday · Jan 4 · Evening",
+    title: "Sangeet",
+    intro:
+      "An evening of music, dance performances and celebration — the glam night before the wedding day.",
+    timelineLabel: "The Evening's Flow",
+    rows: [
+      {
+        t: "6:30", ap: "PM", first: true,
+        tag: "Guest Arrival",
+        desc: "Arrive, settle in, and soak up the atmosphere as the night gets going.",
+      },
+      {
+        t: "7:00", ap: "PM",
+        tag: "Couple's Entry & Introductions",
+        desc: "Tulsi and Vraj make their entrance, and the families are introduced.",
+      },
+      {
+        t: "7:30", ap: "PM",
+        tag: "Performances",
+        desc: "Family and friends take the stage with dances prepared for the couple.",
+      },
+      {
+        t: "8:30", ap: "PM",
+        tag: "Dinner",
+      },
+      {
+        t: "9:00", ap: "PM",
+        tag: "Garba",
+        desc: "Gujarati folk dance. Not to be missed!",
+      },
+      {
+        t: "9:30", ap: "PM", last: true,
+        tag: "Open Dance Floor",
+        desc: "Hit the dance floor!",
+      },
+    ],
   },
 ]
 
@@ -197,8 +333,8 @@ function Timeline({ label, rows }: { label: string; rows: TLRow[] }) {
             </div>
             <div className={"tl-card" + (r.keyCard ? " is-key" : "")}>
               <p className="tag">{r.tag}</p>
-              <h4>{r.title}</h4>
-              <p className="desc">{r.desc}</p>
+              {r.title && <h4>{r.title}</h4>}
+              {r.desc && <p className="desc">{r.desc}</p>}
               {r.span && <span className="span">{r.span}</span>}
             </div>
           </div>
@@ -269,18 +405,15 @@ export function Itinerary() {
       <header className="hero">
         <div className="hero-img" aria-hidden="true" />
         <div className="wrap hero-inner">
-          <p className="hero-kicker">~ Subh Lagna ~</p>
-          <h1 className="hero-title">The Wedding Day</h1>
+          <p className="hero-kicker">~ Itinerary ~</p>
+          <h1 className="hero-title">The Gujarati Wedding</h1>
           <p className="hero-sub">
-            An evening of ceremony and celebration at Aambaug — from the baraat through the sunset
-            varmala to the wedding rites and the farewell. Here&apos;s how the day unfolds.
+            Four days of Gujarati shenanigans! Let’s create beautiful memories with music, traditions, and the people we love most. Bring out your brightest Indian glam, your loudest cheers, and your biggest smiles for four unforgettable days filled with love, joy, and celebration.
           </p>
           <div className="hero-meta">
-            <span>Tulsi &amp; Vraj</span>
+            <span>Vadodara</span>
             <span className="dot" />
-            <span>Aambaug · Vadodara</span>
-            <span className="dot" />
-            <span>Tuesday · Jan 5, 2027</span>
+            <span>Jan 2 – 5, 2027</span>
           </div>
         </div>
       </header>
@@ -289,7 +422,7 @@ export function Itinerary() {
       <nav className="subnav" id="subnav">
         <div className="wrap">
           <div className="subnav-row">
-            <span className="subnav-brand">The Wedding Day</span>
+            <span className="subnav-brand">The Wedding Itinerary</span>
             {SECTIONS.map((s) => (
               <a
                 key={s.id}
@@ -304,97 +437,58 @@ export function Itinerary() {
         </div>
       </nav>
 
-      {/* At a Glance */}
-      <section id="glance" className="sec">
-        <div className="wrap">
-          <div className="sec-head reveal">
-            <span className="kicker">At a Glance</span>
-            <h2 className="sec-title">The shape of the evening</h2>
-            <p className="sec-intro">
-              The celebration runs from late afternoon into the night. Aim to arrive in good time for
-              the baraat — the heart of the evening is the varmala, exchanged as the sun sets.
-            </p>
-          </div>
-
-          <div className="glance reveal">
-            {GLANCE.map((g) => (
-              <div className={"gcard" + (g.key ? " is-key" : "")} key={g.tag}>
-                <div className="tag">{g.tag}</div>
-                <div className="big">{g.big}</div>
-                <div className="small">{g.small}</div>
+      {/* Pre-wedding events — Mehendi, both Vidhi & Haldis, Sangeet */}
+      {PRE_EVENTS.map((ev, i) => (
+        <section id={ev.id} key={ev.id} className={"sec" + (i % 2 === 1 ? " alt" : "")}>
+          <div className="wrap">
+            <div className="sec-head reveal">
+              <span className="kicker">{ev.kicker}</span>
+              <h2 className="sec-title">{ev.title}</h2>
+              <p className="sec-intro">{ev.intro}</p>
+            </div>
+            {ev.rows.length > 0 ? (
+              <Timeline label={ev.timelineLabel} rows={ev.rows} />
+            ) : (
+              <div className="block reveal">
+                <div className="subhead">
+                  <span className="l">Schedule</span>
+                  <span className="rule" />
+                </div>
+                <span className="tba">Full schedule to be announced</span>
               </div>
-            ))}
+            )}
           </div>
+        </section>
+      ))}
 
-          <p className="note-line reveal">
-            <Clock size={18} strokeWidth={1.6} />
-            <span>
-              Like most Indian weddings, the evening flows at its own gentle pace — these times are a
-              guide, not a strict schedule. Come early, stay late, and enjoy every moment.
-            </span>
-          </p>
-        </div>
-      </section>
-
-      {/* The Baraat */}
-      <section id="baraat" className="sec alt">
+      {/* Lagna — the wedding day, from the baraat through the farewell */}
+      <section id="lagna" className="sec">
         <div className="wrap">
           <div className="sec-head reveal">
-            <span className="kicker">Late Afternoon</span>
-            <h2 className="sec-title">The Baraat</h2>
+            <span className="kicker">Tuesday · Jan 5 · Evening</span>
+            <h2 className="sec-title">Lagna</h2>
             <p className="sec-intro">
-              The groom&apos;s joyful arrival. The afternoon opens with snacks and tea before Vraj&apos;s
-              procession winds its way to the venue with music and dancing — everyone is welcome to
-              join in.
+              The wedding day itself, at Aambaug. Aim to arrive directly for the baraat — the heart
+              of the evening is the varmala, exchanged as the sun sets.
             </p>
           </div>
-          <Timeline label="Procession & Welcome" rows={BARAAT} />
-        </div>
-      </section>
 
-      {/* Welcome & Varmala */}
-      <section id="varmala" className="sec">
-        <div className="wrap">
-          <div className="sec-head reveal">
-            <span className="kicker">Sunset</span>
-            <h2 className="sec-title">Welcome &amp; Varmala</h2>
-            <p className="sec-intro">
-              As the baraat reaches the venue, the two families come together. The garland exchange —
-              the varmala — is timed for sunset and is the emotional opening of the wedding.
-            </p>
+          <div className="block reveal">
+            <div className="glance">
+              {GLANCE.map((g) => (
+                <div className={"gcard" + (g.key ? " is-key" : "")} key={g.tag}>
+                  <div className="tag">{g.tag}</div>
+                  <div className="big">{g.big}</div>
+                  <div className="small">{g.small}</div>
+                </div>
+              ))}
+            </div>
           </div>
-          <Timeline label="The Couple Meets" rows={VARMALA} />
-        </div>
-      </section>
 
-      {/* The Ceremony */}
-      <section id="ceremony" className="sec alt">
-        <div className="wrap">
-          <div className="sec-head reveal">
-            <span className="kicker">Evening</span>
-            <h2 className="sec-title">The Wedding Ceremony</h2>
-            <p className="sec-intro">
-              Under the guidance of the pandit, the sacred rites unfold around the holy fire. Gujarati
-              folk singers set the mood, and dinner is served alongside — so please eat whenever you
-              wish.
-            </p>
-          </div>
-          <Timeline label="The Rites Begin" rows={CEREMONY} />
-        </div>
-      </section>
-
-      {/* Celebration */}
-      <section id="celebration" className="sec">
-        <div className="wrap">
-          <div className="sec-head reveal">
-            <span className="kicker">Into the Night</span>
-            <h2 className="sec-title">Reception &amp; Farewell</h2>
-            <p className="sec-intro">
-              With the vows complete, the evening turns to celebration — greeting the couple, dinner
-              with family, and the bittersweet farewell that closes the night.
-            </p>
-          </div>
-          <Timeline label="Celebrate & Send Off" rows={CELEBRATION} />
+          <Timeline label="The Baraat" rows={BARAAT} />
+          <Timeline label="Welcome & Varmala" rows={VARMALA} />
+          <Timeline label="The Wedding Ceremony" rows={CEREMONY} />
+          <Timeline label="Reception & Farewell" rows={CELEBRATION} />
         </div>
       </section>
 

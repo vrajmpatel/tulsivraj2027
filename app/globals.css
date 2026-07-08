@@ -829,7 +829,8 @@
 .itin-root .pp .k { font-family: var(--it-serif); font-size: 11px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--it-clay-soft); }
 .itin-root .pp h4 { font-family: var(--it-display); font-size: 30px; margin: 12px 0 8px; color: #fff; line-height: 1.05; }
 .itin-root .pp p { margin: 0; font-size: 14.5px; line-height: 1.6; color: oklch(0.86 0.012 80); }
-.itin-root .pp .tba { display: inline-block; margin-top: 18px; font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--it-clay-soft); border: 1px dashed oklch(0.55 0.06 60); padding: 7px 14px; border-radius: 999px; }
+.itin-root .tba { display: inline-block; font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--it-clay); border: 1px dashed oklch(0.62 0.05 60); padding: 7px 14px; border-radius: 999px; }
+.itin-root .pp .tba { margin-top: 18px; color: var(--it-clay-soft); border-color: oklch(0.55 0.06 60); }
 .itin-root .hosp { background: var(--it-clay-soft); border-radius: 16px; padding: 32px 34px; }
 .itin-root .hosp .k { font-family: var(--it-serif); font-size: 11px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--it-clay-deep); }
 .itin-root .hosp h4 { font-family: var(--it-serif); font-weight: 600; font-size: 20px; margin: 12px 0 8px; color: oklch(0.38 0.1 38); }

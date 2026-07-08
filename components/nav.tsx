@@ -43,7 +43,14 @@ export function Nav() {
                       </span>
                     </AccordionTrigger>
                     <AccordionContent className="px-2 pt-1 pb-3 text-xs text-white/80 leading-relaxed">
-                      Traditional henna application, music, and dance celebration with family and friends.
+                      <p>Traditional henna application, music, and dance celebration with family and friends.</p>
+                      <Link
+                        href="/wardrobe-planner#mehendi"
+                        className="mt-2.5 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase text-white/90 transition-colors hover:bg-white/20 hover:text-white"
+                      >
+                        <Shirt className="w-3 h-3 text-pink-300 shrink-0" />
+                        What to Wear
+                      </Link>
                     </AccordionContent>
                   </AccordionItem>
 
@@ -61,7 +68,14 @@ export function Nav() {
                       </span>
                     </AccordionTrigger>
                     <AccordionContent className="px-2 pt-1 pb-3 text-xs text-white/80 leading-relaxed">
-                      Auspicious rituals and applying turmeric paste for purification and blessing.
+                      <p>Auspicious rituals and applying turmeric paste for purification and blessing.</p>
+                      <Link
+                        href="/wardrobe-planner#haldi-tulsi"
+                        className="mt-2.5 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase text-white/90 transition-colors hover:bg-white/20 hover:text-white"
+                      >
+                        <Shirt className="w-3 h-3 text-amber-300 shrink-0" />
+                        What to Wear
+                      </Link>
                     </AccordionContent>
                   </AccordionItem>
 
@@ -79,7 +93,14 @@ export function Nav() {
                       </span>
                     </AccordionTrigger>
                     <AccordionContent className="px-2 pt-1 pb-3 text-xs text-white/80 leading-relaxed">
-                      Auspicious rituals and applying turmeric paste for purification and blessing.
+                      <p>Auspicious rituals and applying turmeric paste for purification and blessing.</p>
+                      <Link
+                        href="/wardrobe-planner#haldi-vraj"
+                        className="mt-2.5 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase text-white/90 transition-colors hover:bg-white/20 hover:text-white"
+                      >
+                        <Shirt className="w-3 h-3 text-amber-300 shrink-0" />
+                        What to Wear
+                      </Link>
                     </AccordionContent>
                   </AccordionItem>
 
@@ -97,7 +118,14 @@ export function Nav() {
                       </span>
                     </AccordionTrigger>
                     <AccordionContent className="px-2 pt-1 pb-3 text-xs text-white/80 leading-relaxed">
-                      An evening of music, dance performances, and celebration.
+                      <p>An evening of music, dance performances, and celebration.</p>
+                      <Link
+                        href="/wardrobe-planner#sangeet"
+                        className="mt-2.5 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase text-white/90 transition-colors hover:bg-white/20 hover:text-white"
+                      >
+                        <Shirt className="w-3 h-3 text-purple-300 shrink-0" />
+                        What to Wear
+                      </Link>
                     </AccordionContent>
                   </AccordionItem>
 
@@ -115,7 +143,14 @@ export function Nav() {
                       </span>
                     </AccordionTrigger>
                     <AccordionContent className="px-2 pt-1 pb-3 text-xs text-white/80 leading-relaxed">
-                      The sacred wedding ceremony, tying the knot, and pheras.
+                      <p>The sacred wedding ceremony, tying the knot, and pheras.</p>
+                      <Link
+                        href="/wardrobe-planner#lagna"
+                        className="mt-2.5 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase text-white/90 transition-colors hover:bg-white/20 hover:text-white"
+                      >
+                        <Shirt className="w-3 h-3 text-rose-300 shrink-0" />
+                        What to Wear
+                      </Link>
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
