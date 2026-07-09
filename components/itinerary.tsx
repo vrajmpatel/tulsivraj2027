@@ -21,15 +21,6 @@ const SECTIONS = [
   { id: "know", label: "Good to Know" },
 ] as const
 
-type GlanceCard = { tag: string; big: string; small: string; key?: boolean }
-
-const GLANCE: GlanceCard[] = [
-  { tag: "Welcome Hour & Hi-Tea", big: "4:00 PM", small: "Arrive, settle in, and enjoy tea and snacks." },
-  { tag: "The Baraat", big: "5:00 PM", small: "The celebration sets off with drums and dancing." },
-  { tag: "Varmala", big: "6:07 PM", small: "The garland exchange — the moment not to miss.", key: true },
-  { tag: "Ceremony", big: "6:45 PM", small: "The wedding rites begin, with dinner alongside." },
-]
-
 type TLRow = {
   t: string
   ap: string
@@ -43,73 +34,62 @@ type TLRow = {
   span?: string
 }
 
-const BARAAT: TLRow[] = [
+// The Lagna schedule, split where the "gather & settle in" pause falls —
+// arrival through the varmala, then the ceremony onward.
+const LAGNA_OPENING: TLRow[] = [
   {
     t: "4:00", ap: "PM", first: true,
-    tag: "Welcome & Hi-Tea", title: "Arrival & refreshments",
+    tag: "Welcome & Hi-Tea", title: "Guest arrival",
     desc: "Make your way to Aambaug and enjoy tea and snacks as the baraat gathers and the evening begins.",
   },
   {
-    t: "5:00", ap: "PM", last: true,
-    tag: "Groom's Procession", title: "The Baraat begins",
+    t: "5:00", ap: "PM",
+    tag: "Groom's Procession", title: "The Baraat",
     desc: "Vraj sets off in a lively procession to the beat of the dhol and the DJ. Family and friends dance their way to the venue — please join the celebration.",
-    span: "~ 5:00 – 5:55 PM",
+  },
+  {
+    t: "6:07", ap: "PM", last: true, sun: true, keyCard: true,
+    tag: "Varmala · Garland Exchange", title: "Varmala at sunset",
+    desc: "Timed to the setting sun, Tulsi enters with her brothers beneath a canopy of flowers. The couple exchange floral garlands — their first ceremony together, a sign of acceptance and joy.",
+    span: "The moment not to miss",
   },
 ]
 
-const VARMALA: TLRow[] = [
+const LAGNA_CEREMONY: TLRow[] = [
   {
-    t: "5:55", ap: "PM", first: true,
-    tag: "Arrival", title: "Varmala",
-    desc: "The procession reaches Aambaug to the welcome of the Nasik dhol as everyone gathers for the garland exchange.",
-  }
-]
-
-const CEREMONY: TLRow[] = [
-  {
-    t: "6:45", ap: "PM",
+    t: "6:45", ap: "PM", first: true,
     tag: "Groom's Entry", title: "The ceremony begins",
     desc: "Vraj takes his place at the mandap, entering with his grandparents, and the pandit begins the wedding rites.",
   },
   {
     t: "7:15", ap: "PM",
-    tag: "Bride's Entry", title: "Tulsi arrives",
-    desc: "Tulsi makes her entrance to the beat of the Nasik dhol, walking beneath her grandmother's saree held overhead, accompanied by her maternal uncle and aunt.",
+    tag: "Hast Melap", title: "Tulsi arrives",
+    desc: "Tulsi makes her entrance to the beat of the Nasik dhol, walking beneath her grandmother's saree held overhead — and the couple's hands are joined as the rites continue.",
   },
   {
-    t: "7:15", ap: "PM", last: true,
-    tag: "Vivah & Dinner", title: "Wedding rituals & dinner",
-    desc: "The marriage rites continue around the sacred fire while dinner service opens. Ceremonies and dining flow together — graze whenever you like.",
-    span: "~ 7:15 – 8:30 PM",
+    t: "7:15", ap: "PM",
+    tag: "Dinner",
+    desc: "Dinner is served alongside the ceremony — there's no fixed sitting, so eat whenever you like.",
   },
-]
-
-const CELEBRATION: TLRow[] = [
   {
-    t: "8:30", ap: "PM", first: true,
-    tag: "Reception Hour", title: "Greet the couple",
+    t: "8:15", ap: "PM",
+    tag: "Pheras",
+    desc: "The couple take their pheras around the sacred fire — the defining rites of the marriage.",
+  },
+  {
+    t: "8:45", ap: "PM",
+    tag: "Reception", title: "Greet the couple",
     desc: "Offer your blessings, share a moment with Tulsi and Vraj, and capture a photograph together.",
-    span: "~ 8:30 – 9:30 PM",
   },
   {
     t: "9:30", ap: "PM",
-    tag: "Dinner", title: "Dinner with family",
+    tag: "Family Dinner",
     desc: "The families gather for dinner together as the celebration continues.",
   },
   {
-    t: "10:15", ap: "PM",
-    tag: "Ganpati Puja & Thappa", title: "A closing prayer",
-    desc: "A post-dinner prayer to Lord Ganesha to bless the marriage and the journey ahead.",
-  },
-  {
-    t: "10:30", ap: "PM",
-    tag: "Bidaai · Farewell", title: "The vidaai",
+    t: "10:30", ap: "PM", last: true,
+    tag: "Vidaai · Farewell", title: "The vidaai",
     desc: "The tender farewell, as Tulsi departs with her new family. A moment of joy and a few happy tears — your presence and blessings mean everything.",
-  },
-  {
-    t: "11:00", ap: "PM", last: true,
-    tag: "Departure", title: "The couple departs",
-    desc: "The newlyweds set off into married life. Safe travels home — and thank you for celebrating with us.",
   },
 ]
 
@@ -209,7 +189,7 @@ const PRE_EVENTS: EventSection[] = [
       {
         t: "9:15", ap: "AM",
         tag: "Pithi",
-        desc: "The turmeric ceremony — family and friends take turns applying pithi to bless Tulsi.",
+        desc: "The turmeric ceremony — family and friends take turns applying pithi to bless Vraj.",
       },
       {
         t: "10:00", ap: "AM",
@@ -473,22 +453,8 @@ export function Itinerary() {
             </p>
           </div>
 
-          <div className="block reveal">
-            <div className="glance">
-              {GLANCE.map((g) => (
-                <div className={"gcard" + (g.key ? " is-key" : "")} key={g.tag}>
-                  <div className="tag">{g.tag}</div>
-                  <div className="big">{g.big}</div>
-                  <div className="small">{g.small}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <Timeline label="The Baraat" rows={BARAAT} />
-          <Timeline label="Welcome & Varmala" rows={VARMALA} />
-          <Timeline label="The Wedding Ceremony" rows={CEREMONY} />
-          <Timeline label="Reception & Farewell" rows={CELEBRATION} />
+          <Timeline label="The Baraat & Varmala" rows={LAGNA_OPENING} />
+          <Timeline label="Gather & Settle In" rows={LAGNA_CEREMONY} />
         </div>
       </section>
 
