@@ -1,9 +1,20 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { Flower2, Sun, Music, Gem, Heart, type LucideIcon } from "lucide-react"
+import { useCallback, useEffect, useState } from "react"
+import useEmblaCarousel from "embla-carousel-react"
+import { Flower2, Sun, Music, Gem, Download, ChevronLeft, ChevronRight, type LucideIcon } from "lucide-react"
 
 type PaletteColor = { name: string; hex: string }
+
+type Gender = "women" | "men"
+
+/** event-folder -> gender -> image URLs under /public/wardrobe, read server-side. */
+export type WardrobeImages = Record<string, Record<Gender, string[]>>
+
+// Both haldi ceremonies (Tulsi's and Vraj's) share one set of reference photos.
+function wardrobeFolder(eventId: string): string {
+  return eventId.startsWith("haldi") ? "haldi" : eventId
+}
 
 type WardrobeEvent = {
   id: string
@@ -158,9 +169,12 @@ function eventTitle(ev: Pick<WardrobeEvent, "host" | "name">) {
   return ev.host ? `${ev.host} ${ev.name}` : ev.name
 }
 
-export function WardrobePlanner() {
+export function WardrobePlanner({ wardrobeImages }: { wardrobeImages: WardrobeImages }) {
   const [active, setActive] = useState(0)
+  const [gender, setGender] = useState<Gender>("women")
   const [saved, setSaved] = useState<Record<string, boolean>>({})
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true })
+  const [slideIndex, setSlideIndex] = useState(0)
 
   // Deep links from the EVENTS menu: /wardrobe-planner#<event-id> selects the
   // matching tab and scrolls to the planner (no element carries the hash id).
@@ -178,6 +192,40 @@ export function WardrobePlanner() {
 
   const ev = EVENTS[active]
   const EventIcon = ev.icon
+  const images = wardrobeImages[wardrobeFolder(ev.id)]?.[gender] ?? []
+
+  useEffect(() => {
+    if (!emblaApi) return
+    const onSelect = () => setSlideIndex(emblaApi.selectedScrollSnap())
+    emblaApi.on("select", onSelect)
+    onSelect()
+    return () => {
+      emblaApi.off("select", onSelect)
+    }
+  }, [emblaApi])
+
+  // Reset to the first slide whenever the event or gender filter changes the
+  // underlying slide list.
+  useEffect(() => {
+    if (!emblaApi) return
+    emblaApi.reInit()
+    emblaApi.scrollTo(0)
+  }, [emblaApi, images])
+
+  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi])
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi])
+
+  const saveLook = useCallback(() => {
+    const src = images[slideIndex]
+    if (!src) return
+    const link = document.createElement("a")
+    link.href = src
+    link.download = src.split("/").pop() ?? "look.jpeg"
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    setSaved((s) => ({ ...s, [ev.id]: true }))
+  }, [images, slideIndex, ev.id])
 
   return (
     <section id="wardrobe-planner" className="wp-root scroll-mt-24">
@@ -260,17 +308,88 @@ export function WardrobePlanner() {
               <span className="dirA-avoid-l">Good to know</span>
               <span>{ev.avoid}</span>
             </div>
+          </div>
+        </div>
 
-            <div className="dirA-actions">
+        {/* Style gallery — real reference photos, filterable by gender */}
+        <div className="wp-gallery">
+          <div className="wp-gallery-head">
+            <div className="wp-label">Style Gallery</div>
+            <div className="wp-gender-tabs" role="tablist" aria-label="Filter looks by gender">
               <button
                 type="button"
-                className={"wp-btn wp-btn-primary" + (saved[ev.id] ? " is-saved" : "")}
-                onClick={() => setSaved((s) => ({ ...s, [ev.id]: !s[ev.id] }))}
+                role="tab"
+                className={"wp-gender-tab" + (gender === "women" ? " is-active" : "")}
+                aria-selected={gender === "women"}
+                onClick={() => setGender("women")}
               >
-                <Heart size={15} strokeWidth={1.6} />
-                {saved[ev.id] ? "Saved to my plan" : "Save this look"}
+                Women
+              </button>
+              <button
+                type="button"
+                role="tab"
+                className={"wp-gender-tab" + (gender === "men" ? " is-active" : "")}
+                aria-selected={gender === "men"}
+                onClick={() => setGender("men")}
+              >
+                Men
               </button>
             </div>
+          </div>
+
+          <div className="wp-carousel">
+            {images.length > 0 ? (
+              <>
+                <div className="wp-carousel-viewport" ref={emblaRef}>
+                  <div className="wp-carousel-track">
+                    {images.map((src, i) => (
+                      <div className="wp-carousel-slide" key={src}>
+                        <img
+                          src={src}
+                          alt={`${eventTitle(ev)} — ${gender === "women" ? "women's" : "men's"} look ${i + 1}`}
+                          loading={i === 0 ? "eager" : "lazy"}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {images.length > 1 && (
+                  <>
+                    <span className="wp-carousel-count">
+                      {slideIndex + 1} / {images.length}
+                    </span>
+                    <button
+                      type="button"
+                      className="wp-carousel-arrow wp-carousel-arrow-prev"
+                      onClick={scrollPrev}
+                      aria-label="Previous look"
+                    >
+                      <ChevronLeft size={18} />
+                    </button>
+                    <button
+                      type="button"
+                      className="wp-carousel-arrow wp-carousel-arrow-next"
+                      onClick={scrollNext}
+                      aria-label="Next look"
+                    >
+                      <ChevronRight size={18} />
+                    </button>
+                  </>
+                )}
+
+                <button
+                  type="button"
+                  className={"wp-btn wp-btn-primary wp-carousel-save" + (saved[ev.id] ? " is-saved" : "")}
+                  onClick={saveLook}
+                >
+                  <Download size={15} strokeWidth={1.6} />
+                  {saved[ev.id] ? "Saved to my plan" : "Save this look"}
+                </button>
+              </>
+            ) : (
+              <div className="wp-carousel-empty">Photos coming soon.</div>
+            )}
           </div>
         </div>
       </div>

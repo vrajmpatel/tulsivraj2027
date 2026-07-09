@@ -273,6 +273,63 @@
 .dirA-avoid-l { font-family: var(--wp-serif); font-weight: 600; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; white-space: nowrap; }
 .dirA-actions { margin-top: auto; }
 
+/* ---- Style gallery (photo carousel) ------------------------------------ */
+.wp-gallery { margin-top: 48px; }
+.wp-gallery-head {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 14px; margin-bottom: 16px;
+}
+.wp-gallery-head .wp-label { margin-bottom: 0; }
+
+.wp-gender-tabs { display: inline-flex; padding: 4px; gap: 4px; background: var(--wp-clay-soft); border-radius: 999px; }
+.wp-gender-tab {
+  font-family: var(--wp-sans); font-size: 13px; font-weight: 500;
+  padding: 7px 20px; border-radius: 999px; border: none;
+  background: transparent; color: var(--wp-muted); cursor: pointer;
+  transition: all .18s ease;
+}
+.wp-gender-tab:hover { color: var(--wp-fg); }
+.wp-gender-tab.is-active { background: var(--wp-fg); color: var(--wp-bg); }
+
+.wp-carousel {
+  position: relative; border-radius: 16px; overflow: hidden;
+  background: var(--wp-clay-soft); box-shadow: 0 18px 40px -22px rgba(60,40,25,.5);
+}
+.wp-carousel-viewport { overflow: hidden; }
+.wp-carousel-track { display: flex; }
+.wp-carousel-slide {
+  position: relative; min-width: 0; flex: 0 0 100%;
+  height: 440px; display: flex; align-items: center; justify-content: center;
+}
+@media (min-width: 768px) { .wp-carousel-slide { height: 580px; } }
+.wp-carousel-slide img { width: 100%; height: 100%; object-fit: contain; object-position: center; display: block; }
+
+.wp-carousel-empty {
+  display: flex; align-items: center; justify-content: center;
+  height: 440px; color: var(--wp-muted); font-size: 14px;
+}
+@media (min-width: 768px) { .wp-carousel-empty { height: 580px; } }
+
+.wp-carousel-count {
+  position: absolute; left: 16px; top: 16px; z-index: 3;
+  font-family: var(--wp-sans); font-size: 12.5px; font-weight: 500; color: #fff;
+  background: rgba(30,20,12,.42); backdrop-filter: blur(4px);
+  padding: 5px 12px; border-radius: 999px;
+}
+
+.wp-carousel-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 3;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 38px; height: 38px; border-radius: 999px; border: 1px solid rgba(255,255,255,.5);
+  background: rgba(30,20,12,.38); color: #fff; backdrop-filter: blur(4px);
+  cursor: pointer; transition: background .18s ease;
+}
+.wp-carousel-arrow:hover { background: rgba(30,20,12,.6); }
+.wp-carousel-arrow-prev { left: 14px; }
+.wp-carousel-arrow-next { right: 14px; }
+
+.wp-carousel-save { position: absolute; right: 16px; bottom: 16px; z-index: 4; box-shadow: 0 8px 22px -8px rgba(0,0,0,.55); }
+
 /* ---- Page hero (mirrors the Guide hero, scoped to the wardrobe root) --- */
 .wp-root .wp-hero {
   position: relative; min-height: 88vh; display: flex; align-items: flex-end;

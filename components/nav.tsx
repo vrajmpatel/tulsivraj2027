@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Calendar, Flower2, Sun, Music, Heart, Compass, Shirt, BookOpen, MapPin, CircleHelp } from "lucide-react"
+import { Calendar, Flower2, Sun, Music, Heart, Compass, Shirt, BookOpen, MapPin, CircleHelp, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
@@ -44,13 +44,22 @@ export function Nav() {
                     </AccordionTrigger>
                     <AccordionContent className="px-2 pt-1 pb-3 text-xs text-white/80 leading-relaxed">
                       <p>Traditional henna application, music, and dance celebration with family and friends.</p>
-                      <Link
-                        href="/wardrobe-planner#mehendi"
-                        className="mt-2.5 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase text-white/90 transition-colors hover:bg-white/20 hover:text-white"
-                      >
-                        <Shirt className="w-3 h-3 text-pink-300 shrink-0" />
-                        What to Wear
-                      </Link>
+                      <div className="mt-2.5 flex flex-wrap items-center gap-2">
+                        <Link
+                          href="/itinerary#mehendi"
+                          className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase text-white/90 transition-colors hover:bg-white/20 hover:text-white"
+                        >
+                          <Clock className="w-3 h-3 text-pink-300 shrink-0" />
+                          When to Arrive
+                        </Link>
+                        <Link
+                          href="/wardrobe-planner#mehendi"
+                          className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase text-white/90 transition-colors hover:bg-white/20 hover:text-white"
+                        >
+                          <Shirt className="w-3 h-3 text-pink-300 shrink-0" />
+                          What to Wear
+                        </Link>
+                      </div>
                     </AccordionContent>
                   </AccordionItem>
 
@@ -69,13 +78,22 @@ export function Nav() {
                     </AccordionTrigger>
                     <AccordionContent className="px-2 pt-1 pb-3 text-xs text-white/80 leading-relaxed">
                       <p>Auspicious rituals and applying turmeric paste for purification and blessing.</p>
-                      <Link
-                        href="/wardrobe-planner#haldi-tulsi"
-                        className="mt-2.5 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase text-white/90 transition-colors hover:bg-white/20 hover:text-white"
-                      >
-                        <Shirt className="w-3 h-3 text-amber-300 shrink-0" />
-                        What to Wear
-                      </Link>
+                      <div className="mt-2.5 flex flex-wrap items-center gap-2">
+                        <Link
+                          href="/itinerary#haldi-tulsi"
+                          className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase text-white/90 transition-colors hover:bg-white/20 hover:text-white"
+                        >
+                          <Clock className="w-3 h-3 text-amber-300 shrink-0" />
+                          When to Arrive
+                        </Link>
+                        <Link
+                          href="/wardrobe-planner#haldi-tulsi"
+                          className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase text-white/90 transition-colors hover:bg-white/20 hover:text-white"
+                        >
+                          <Shirt className="w-3 h-3 text-amber-300 shrink-0" />
+                          What to Wear
+                        </Link>
+                      </div>
                     </AccordionContent>
                   </AccordionItem>
 
@@ -94,13 +112,22 @@ export function Nav() {
                     </AccordionTrigger>
                     <AccordionContent className="px-2 pt-1 pb-3 text-xs text-white/80 leading-relaxed">
                       <p>Auspicious rituals and applying turmeric paste for purification and blessing.</p>
-                      <Link
-                        href="/wardrobe-planner#haldi-vraj"
-                        className="mt-2.5 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase text-white/90 transition-colors hover:bg-white/20 hover:text-white"
-                      >
-                        <Shirt className="w-3 h-3 text-amber-300 shrink-0" />
-                        What to Wear
-                      </Link>
+                      <div className="mt-2.5 flex flex-wrap items-center gap-2">
+                        <Link
+                          href="/itinerary#haldi-vraj"
+                          className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase text-white/90 transition-colors hover:bg-white/20 hover:text-white"
+                        >
+                          <Clock className="w-3 h-3 text-amber-300 shrink-0" />
+                          When to Arrive
+                        </Link>
+                        <Link
+                          href="/wardrobe-planner#haldi-vraj"
+                          className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase text-white/90 transition-colors hover:bg-white/20 hover:text-white"
+                        >
+                          <Shirt className="w-3 h-3 text-amber-300 shrink-0" />
+                          What to Wear
+                        </Link>
+                      </div>
                     </AccordionContent>
                   </AccordionItem>
 
@@ -119,13 +146,22 @@ export function Nav() {
                     </AccordionTrigger>
                     <AccordionContent className="px-2 pt-1 pb-3 text-xs text-white/80 leading-relaxed">
                       <p>An evening of music, dance performances, and celebration.</p>
-                      <Link
-                        href="/wardrobe-planner#sangeet"
-                        className="mt-2.5 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase text-white/90 transition-colors hover:bg-white/20 hover:text-white"
-                      >
-                        <Shirt className="w-3 h-3 text-purple-300 shrink-0" />
-                        What to Wear
-                      </Link>
+                      <div className="mt-2.5 flex flex-wrap items-center gap-2">
+                        <Link
+                          href="/itinerary#sangeet"
+                          className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase text-white/90 transition-colors hover:bg-white/20 hover:text-white"
+                        >
+                          <Clock className="w-3 h-3 text-purple-300 shrink-0" />
+                          When to Arrive
+                        </Link>
+                        <Link
+                          href="/wardrobe-planner#sangeet"
+                          className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase text-white/90 transition-colors hover:bg-white/20 hover:text-white"
+                        >
+                          <Shirt className="w-3 h-3 text-purple-300 shrink-0" />
+                          What to Wear
+                        </Link>
+                      </div>
                     </AccordionContent>
                   </AccordionItem>
 
@@ -144,13 +180,22 @@ export function Nav() {
                     </AccordionTrigger>
                     <AccordionContent className="px-2 pt-1 pb-3 text-xs text-white/80 leading-relaxed">
                       <p>The sacred wedding ceremony, tying the knot, and pheras.</p>
-                      <Link
-                        href="/wardrobe-planner#lagna"
-                        className="mt-2.5 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase text-white/90 transition-colors hover:bg-white/20 hover:text-white"
-                      >
-                        <Shirt className="w-3 h-3 text-rose-300 shrink-0" />
-                        What to Wear
-                      </Link>
+                      <div className="mt-2.5 flex flex-wrap items-center gap-2">
+                        <Link
+                          href="/itinerary#lagna"
+                          className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase text-white/90 transition-colors hover:bg-white/20 hover:text-white"
+                        >
+                          <Clock className="w-3 h-3 text-rose-300 shrink-0" />
+                          When to Arrive
+                        </Link>
+                        <Link
+                          href="/wardrobe-planner#lagna"
+                          className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase text-white/90 transition-colors hover:bg-white/20 hover:text-white"
+                        >
+                          <Shirt className="w-3 h-3 text-rose-300 shrink-0" />
+                          What to Wear
+                        </Link>
+                      </div>
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
