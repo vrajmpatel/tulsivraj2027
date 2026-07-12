@@ -1226,15 +1226,6 @@
   font-family: var(--st-display); font-weight: 400; color: var(--st-fg);
   font-size: clamp(42px, 7vw, 86px); line-height: 1.02; margin: 16px 0 0;
 }
-.story-root .hero-sub { margin: 20px auto 0; max-width: 560px; color: var(--st-muted); font-size: 16.5px; line-height: 1.6; }
-
-/* ---- Hero stat line ----------------------------------------------------- */
-.story-root .route-stat {
-  display: inline-flex; align-items: baseline; gap: 8px; margin-top: 26px;
-  font-family: var(--st-serif); font-style: italic; color: var(--st-clay-deep); font-size: 15px;
-}
-.story-root .route-stat b { font-family: var(--font-poiret), "Poiret One", ui-sans-serif, system-ui, sans-serif; font-style: normal; font-size: 22px; color: var(--st-fg); }
-
 /* ---- Sticky distance meter --------------------------------------------- */
 .story-root .meter-wrap {
   position: sticky; top: 0; z-index: 30; background: oklch(0.97 0.01 85 / 0.92);

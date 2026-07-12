@@ -154,14 +154,6 @@ export function OurStory() {
             <br />
             to the Mandap
           </h1>
-          <p className="hero-sub">
-            One of us grew up outside Philadelphia. The other, in Vadodara. Here&apos;s the (very
-            long-distance) story of how we closed the gap.
-          </p>
-
-          <div className="route-stat">
-            <b>10.5 time zones</b> · countless texts
-          </div>
         </div>
       </header>
 
