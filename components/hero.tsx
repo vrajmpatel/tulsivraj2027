@@ -38,8 +38,8 @@ export function Hero() {
           className="flex w-full flex-col items-center justify-center text-white transform translate-y-[8vh]"
           style={{ textShadow: "0 4px 20px rgba(0,0,0,0.5)" }}
         >
-          <div 
-            className="flex w-3/4 justify-between font-oranienbaum text-3xl sm:text-5xl md:text-7xl lg:text-[80px] uppercase font-normal text-zinc-300 opacity-60"
+          <div
+            className="flex w-3/5 sm:w-3/4 justify-between font-oranienbaum text-3xl sm:text-5xl md:text-7xl lg:text-[80px] uppercase font-normal text-zinc-300 opacity-60"
             aria-label="TULSI & VRAJ"
           >
             {Array.from("TULSI & VRAJ").map((char, index) => (
