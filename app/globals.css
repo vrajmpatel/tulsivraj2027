@@ -197,7 +197,7 @@
 .dirA-tabs { display: flex; gap: 8px; flex: 1 1 auto; min-width: 0; overflow-x: auto; scrollbar-width: none; }
 .dirA-tabs::-webkit-scrollbar { display: none; }
 .dirA-tab {
-  display: flex; align-items: center; gap: 10px;
+  display: flex; align-items: center; gap: 10px; flex: 0 0 auto;
   background: transparent; border: 1px solid var(--wp-line);
   border-radius: 999px; padding: 9px 18px 9px 12px; cursor: pointer;
   font-family: var(--wp-sans); color: var(--wp-muted); transition: all .18s ease;
@@ -206,9 +206,9 @@
 .dirA-tab-day {
   font-family: var(--font-poiret), "Poiret One", ui-sans-serif, system-ui, sans-serif; font-size: 13px; font-weight: 600;
   color: var(--wp-faint); border-right: 1px solid var(--wp-line);
-  padding-right: 10px; transition: color .18s;
+  padding-right: 10px; transition: color .18s; white-space: nowrap;
 }
-.dirA-tab-name { font-size: 13.5px; font-weight: 500; }
+.dirA-tab-name { font-size: 13.5px; font-weight: 500; white-space: nowrap; }
 .dirA-tab.is-active { background: var(--wp-fg); border-color: var(--wp-fg); color: var(--wp-bg); }
 .dirA-tab.is-active .dirA-tab-day { color: var(--wp-clay-soft); border-color: rgba(255,255,255,.25); }
 
