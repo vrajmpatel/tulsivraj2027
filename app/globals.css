@@ -1268,7 +1268,7 @@
 .story-root .meter-num { flex: 0 0 auto; font-family: var(--font-poiret), "Poiret One", ui-sans-serif, system-ui, sans-serif; font-size: 18px; color: var(--st-clay-deep); min-width: 148px; text-align: center; white-space: nowrap; }
 .story-root .meter-num span { font-family: var(--st-sans); font-size: 10.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--st-faint); display: block; margin-top: 1px; }
 @media (max-width: 700px) {
-  .story-root .meter-row { padding-left: 84px; }
+  .story-root .meter-row { padding-left: 104px; }
   .story-root .meter-city, .story-root .meter-num { font-size: 11px; min-width: 0; }
   .story-root .meter-city .sub { font-size: 8.5px; }
   .story-root .meter-num span { display: none; }
