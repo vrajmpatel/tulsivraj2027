@@ -37,7 +37,7 @@ export function Countdown() {
   ]
 
   return (
-    <section className="bg-background py-20">
+    <section id="countdown" className="bg-background py-20">
       <div className="mx-auto max-w-4xl px-6 text-center text-black lg:px-8">
         <div className="mb-8 flex justify-center">
           <AddToCalendar />

@@ -68,17 +68,20 @@ export function AddToCalendar() {
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className="flex items-center gap-2 rounded-full border-black/15 bg-transparent px-4 py-2 font-serif text-[11px] tracking-[0.25em] uppercase text-black/70 transition-all hover:bg-black/5 active:scale-95 cursor-pointer h-9"
+          className="flex items-center gap-2 rounded-full border border-black/15 bg-black/5 pl-5 pr-2.5 py-2 font-serif text-xs tracking-[0.25em] uppercase text-black/70 shadow-md backdrop-blur-md transition-all hover:bg-black/10 active:scale-95 cursor-pointer h-10"
         >
-          <CalendarPlus className="w-4 h-4 shrink-0" />
+          <CalendarPlus className="w-4 h-4 text-black/40 shrink-0" />
           <span>Save the Date</span>
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="center" className="font-serif tracking-wide">
+      <DropdownMenuContent
+        align="center"
+        className="min-w-[13rem] rounded-2xl border border-black/10 bg-white/85 p-2 font-serif shadow-2xl backdrop-blur-md"
+      >
         <DropdownMenuItem
           asChild
-          className="cursor-pointer focus:!bg-green-600 focus:!text-white"
+          className="cursor-pointer rounded-lg px-3 py-2.5 text-xs uppercase tracking-[0.2em] text-black/70 transition-colors focus:!bg-black/5 focus:!text-black"
         >
           <a href={googleCalendarUrl()} target="_blank" rel="noopener noreferrer">
             Google Calendar
@@ -86,7 +89,7 @@ export function AddToCalendar() {
         </DropdownMenuItem>
         <DropdownMenuItem
           onSelect={downloadIcs}
-          className="cursor-pointer focus:!bg-green-600 focus:!text-white"
+          className="cursor-pointer rounded-lg px-3 py-2.5 text-xs uppercase tracking-[0.2em] text-black/70 transition-colors focus:!bg-black/5 focus:!text-black"
         >
           Apple Calendar
         </DropdownMenuItem>

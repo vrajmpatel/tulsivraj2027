@@ -1,8 +1,8 @@
 "use client"
 
-import { useEffect, useState, type MouseEvent, type ReactNode } from "react"
+import { useEffect, useState, type MouseEvent } from "react"
 import Link from "next/link"
-import { Clock, Sunset, Utensils, Shirt, Camera, MapPin, ArrowUp, type LucideIcon } from "lucide-react"
+import { ArrowUp } from "lucide-react"
 
 // ----------------------------------------------------------------------------
 // Content — distilled from the claude.ai/design handoff (project/Itinerary.html),
@@ -18,7 +18,7 @@ const SECTIONS = [
   { id: "haldi-vraj", label: "Vraj's Haldi" },
   { id: "sangeet", label: "Sangeet" },
   { id: "lagna", label: "Lagna" },
-  { id: "know", label: "Good to Know" },
+  { id: "venue", label: "Venue" },
 ] as const
 
 type TLRow = {
@@ -243,45 +243,6 @@ const PRE_EVENTS: EventSection[] = [
   },
 ]
 
-type Fact = { icon: LucideIcon; label: string; title: string; text: ReactNode }
-
-const FACTS: Fact[] = [
-  {
-    icon: Clock, label: "Timing", title: "Arrive by 4:30 PM",
-    text: "Come early so you don't miss the baraat — and settle in well before the sunset varmala around 6:07 PM.",
-  },
-  {
-    icon: Sunset, label: "Don't Miss", title: "The sunset varmala",
-    text: "The garland exchange is the heart of the evening. Be in your seat a little early to catch it.",
-  },
-  {
-    icon: Utensils, label: "Dining", title: "Eat whenever you like",
-    text: "Dinner is served alongside the ceremony — there's no fixed sitting, so graze at your own pace.",
-  },
-  {
-    icon: Shirt, label: "Dress", title: "Festive Indian attire",
-    text: (
-      <>
-        Bright, celebratory colours are perfect. See the{" "}
-        <Link href="/wardrobe-planner">Wardrobe Planner</Link> for ideas for each event.
-      </>
-    ),
-  },
-  {
-    icon: Camera, label: "Photos", title: "Capture, then pause",
-    text: "Photographs are welcome — but please step back and be present during the sacred rites at the mandap.",
-  },
-  {
-    icon: MapPin, label: "Getting There", title: "Plan your ride",
-    text: (
-      <>
-        See the <Link href="/guide">Travel Guide</Link> for transport around Vadodara. Shuttle details,
-        if arranged, will be shared closer to the date.
-      </>
-    ),
-  },
-]
-
 // ----------------------------------------------------------------------------
 // Presentational helpers
 // ----------------------------------------------------------------------------
@@ -458,40 +419,18 @@ export function Itinerary() {
         </div>
       </section>
 
-      {/* Good to Know */}
-      <section id="know" className="sec alt">
+      {/* Venue */}
+      <section id="venue" className="sec alt">
         <div className="wrap">
           <div className="sec-head reveal">
-            <span className="kicker">Good to Know</span>
-            <h2 className="sec-title">A few gentle notes</h2>
+            <span className="kicker">Venue</span>
+            <h2 className="sec-title">Where it all happens</h2>
             <p className="sec-intro">
-              Small things to help the evening go smoothly — so you can relax and be fully present.
+              Everything you need to know about the venue for the week&apos;s celebrations.
             </p>
           </div>
 
           <div className="block reveal">
-            <div className="facts">
-              {FACTS.map((f) => {
-                const Icon = f.icon
-                return (
-                  <div className="fact" key={f.title}>
-                    <div className="fact-top">
-                      <Icon size={18} strokeWidth={1.6} />
-                      <span>{f.label}</span>
-                    </div>
-                    <h4>{f.title}</h4>
-                    <p>{f.text}</p>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-
-          <div className="block reveal">
-            <div className="subhead">
-              <span className="l">The Venue</span>
-              <span className="rule" />
-            </div>
             <div className="venue">
               <div className="pp">
                 <span className="k">Where</span>

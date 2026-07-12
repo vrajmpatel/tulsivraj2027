@@ -1,6 +1,26 @@
+"use client"
+
+import { useEffect, useState } from "react"
+import { ChevronDown } from "lucide-react"
+
 import { RsvpDialog } from "@/components/rsvp-dialog"
 
 export function Hero() {
+  const [atTop, setAtTop] = useState(true)
+
+  useEffect(() => {
+    function handleScroll() {
+      setAtTop(window.scrollY < 80)
+    }
+    handleScroll()
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  function scrollToCountdown() {
+    document.getElementById("countdown")?.scrollIntoView({ behavior: "smooth" })
+  }
+
   return (
     <section className="relative min-h-screen pb-8">
       {/* Background image */}
@@ -37,6 +57,18 @@ export function Hero() {
           <RsvpDialog />
         </div>
       </div>
+
+      <button
+        type="button"
+        onClick={scrollToCountdown}
+        aria-label="Scroll down to the countdown"
+        className={`absolute bottom-20 left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-1.5 text-black/70 transition-opacity duration-500 hover:text-black cursor-pointer ${
+          atTop ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+      >
+        <span className="font-serif text-xs tracking-[0.3em] uppercase">Countdown With Us!</span>
+        <ChevronDown className="h-5 w-5 animate-bounce" />
+      </button>
     </section>
   )
 }

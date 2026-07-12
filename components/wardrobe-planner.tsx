@@ -233,7 +233,7 @@ export function WardrobePlanner({ wardrobeImages }: { wardrobeImages: WardrobeIm
       <header className="wp-hero">
         <div className="wp-hero-img" aria-hidden="true" />
         <div className="wp-hero-inner">
-          <p className="wp-hero-kicker">Wardrobe Planner</p>
+          <p className="wp-hero-kicker">~ Wardrobe Planner ~</p>
           <h1 className="wp-hero-title">What to Wear</h1>
           <p className="wp-hero-sub">
             A colour guide for every celebration — five days, five moods. Come dressed for the moment.
@@ -241,23 +241,30 @@ export function WardrobePlanner({ wardrobeImages }: { wardrobeImages: WardrobeIm
         </div>
       </header>
 
-      <div id="wardrobe-planner-events" className="wp-container scroll-mt-24">
-        {/* Event tabs */}
-        <div className="dirA-tabs">
-          {EVENTS.map((e, i) => (
-            <button
-              key={e.id}
-              type="button"
-              className={"dirA-tab" + (i === active ? " is-active" : "")}
-              onClick={() => setActive(i)}
-              aria-pressed={i === active}
-            >
-              <span className="dirA-tab-day">{e.dayNum}</span>
-              <span className="dirA-tab-name">{eventTitle(e)}</span>
-            </button>
-          ))}
+      {/* Sticky nav — same treatment as the Itinerary/Guide subnav */}
+      <nav className="wp-subnav">
+        <div className="wp-subnav-inner">
+          <div className="wp-subnav-row">
+            <span className="wp-subnav-brand">Wardrobe Planner</span>
+            <div className="dirA-tabs">
+              {EVENTS.map((e, i) => (
+                <button
+                  key={e.id}
+                  type="button"
+                  className={"dirA-tab" + (i === active ? " is-active" : "")}
+                  onClick={() => setActive(i)}
+                  aria-pressed={i === active}
+                >
+                  <span className="dirA-tab-day">{e.dayNum}</span>
+                  <span className="dirA-tab-name">{eventTitle(e)}</span>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
+      </nav>
 
+      <div id="wardrobe-planner-events" className="wp-container scroll-mt-24">
         {/* Featured spread */}
         <div className="dirA-spread">
           {/* Left — colour-field mood panel */}

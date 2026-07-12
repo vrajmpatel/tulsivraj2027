@@ -38,6 +38,11 @@
   --sidebar-accent-foreground: oklch(0.25 0.01 85);
   --sidebar-border: oklch(0.88 0.01 85);
   --sidebar-ring: oklch(0.5 0.01 85);
+
+  /* Shared hover accent for buttons/links across every page — swapped from
+     the warm clay/terracotta tone to blue, site-wide. */
+  --hover-blue: oklch(0.56 0.13 250);
+  --hover-blue-deep: oklch(0.46 0.12 250);
 }
 
 .dark {
@@ -139,6 +144,7 @@
   --wp-muted: oklch(0.52 0.012 70);
   --wp-faint: oklch(0.62 0.012 70);
   --wp-line: oklch(0.88 0.012 80);
+  --wp-line-soft: oklch(0.92 0.01 80);
   --wp-clay: oklch(0.56 0.13 38);
   --wp-clay-soft: oklch(0.93 0.045 50);
   --wp-serif: var(--font-playfair), "Playfair Display", Georgia, serif;
@@ -188,16 +194,17 @@
 .wp-btn-primary.is-saved svg { fill: currentColor; }
 
 /* ---- Editorial tabs --------------------------------------------------- */
-.dirA-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 26px; }
+.dirA-tabs { display: flex; gap: 8px; flex: 1 1 auto; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.dirA-tabs::-webkit-scrollbar { display: none; }
 .dirA-tab {
   display: flex; align-items: center; gap: 10px;
   background: transparent; border: 1px solid var(--wp-line);
   border-radius: 999px; padding: 9px 18px 9px 12px; cursor: pointer;
   font-family: var(--wp-sans); color: var(--wp-muted); transition: all .18s ease;
 }
-.dirA-tab:hover { border-color: var(--wp-clay); color: var(--wp-fg); }
+.dirA-tab:hover { border-color: var(--hover-blue); color: var(--wp-fg); }
 .dirA-tab-day {
-  font-family: var(--wp-serif); font-size: 13px; font-weight: 600;
+  font-family: var(--font-poiret), "Poiret One", ui-sans-serif, system-ui, sans-serif; font-size: 13px; font-weight: 600;
   color: var(--wp-faint); border-right: 1px solid var(--wp-line);
   padding-right: 10px; transition: color .18s;
 }
@@ -312,7 +319,7 @@
 
 .wp-carousel-count {
   position: absolute; left: 16px; top: 16px; z-index: 3;
-  font-family: var(--wp-sans); font-size: 12.5px; font-weight: 500; color: #fff;
+  font-family: var(--font-poiret), "Poiret One", ui-sans-serif, system-ui, sans-serif; font-size: 12.5px; font-weight: 500; color: #fff;
   background: rgba(30,20,12,.42); backdrop-filter: blur(4px);
   padding: 5px 12px; border-radius: 999px;
 }
@@ -359,6 +366,25 @@
   margin: 22px 0 0; max-width: 560px; color: rgba(255,251,244,.92);
   font-size: 16px; line-height: 1.6; text-shadow: 0 2px 14px rgba(0,0,0,.45);
 }
+
+/* ---- Sticky nav (mirrors the Guide/Itinerary subnav) ------------------- */
+.wp-root .wp-subnav {
+  position: sticky; top: 0; z-index: 40; background: oklch(0.97 0.01 85 / 0.82);
+  backdrop-filter: blur(12px); border-bottom: 1px solid var(--wp-line-soft);
+}
+.wp-root .wp-subnav-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+@media (min-width: 768px) { .wp-root .wp-subnav-inner { padding-left: 60px; padding-right: 60px; } }
+.wp-root .wp-subnav-row {
+  display: flex; align-items: center; gap: 10px; height: 64px; overflow-x: auto;
+  scrollbar-width: none;
+}
+.wp-root .wp-subnav-row::-webkit-scrollbar { display: none; }
+@media (max-width: 1340px) { .wp-root .wp-subnav-row { padding-left: 96px; } }
+.wp-root .wp-subnav-brand {
+  font-family: var(--wp-display); font-size: 19px; color: var(--wp-fg); white-space: nowrap;
+  margin-right: 8px; padding-right: 18px; border-right: 1px solid var(--wp-line); flex: 0 0 auto;
+}
+@media (max-width: 760px) { .wp-root .wp-subnav-brand { display: none; } }
 
 /* ====================================================================== */
 /*  Travel Guide (/guide) — ported from the claude.ai/design handoff.      */
@@ -504,7 +530,7 @@
   position: relative; overflow: hidden;
 }
 .guide-root .date-card .tag { font-family: var(--g-serif); font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--g-clay); }
-.guide-root .date-card .big { font-family: var(--g-display); font-size: 27px; color: var(--g-fg); margin: 9px 0 4px; }
+.guide-root .date-card .big { font-family: var(--font-poiret), "Poiret One", ui-sans-serif, system-ui, sans-serif; font-size: 27px; color: var(--g-fg); margin: 9px 0 4px; }
 .guide-root .date-card .small { font-size: 13.5px; color: var(--g-muted); line-height: 1.5; }
 .guide-root .date-card.is-key { background: var(--g-fg); border-color: var(--g-fg); }
 .guide-root .date-card.is-key .tag { color: var(--g-clay-soft); }
@@ -536,7 +562,7 @@
 .guide-root .card p { font-size: 14px; line-height: 1.6; color: var(--g-muted); margin: 0; }
 .guide-root .card .ph { font-size: 13.5px; color: var(--g-fg); margin-top: 12px; display: inline-flex; align-items: center; gap: 7px; text-decoration: none; font-weight: 500; }
 .guide-root .card .ph svg { color: var(--g-clay); }
-.guide-root .card .ph:hover { color: var(--g-clay-deep); }
+.guide-root .card .ph:hover { color: var(--hover-blue-deep); }
 .guide-root .card .addr { font-size: 13px; line-height: 1.55; color: var(--g-muted); margin-top: 10px; }
 
 /* ---- Fact tiles ------------------------------------------------------- */
@@ -577,7 +603,7 @@
 .guide-root .visa-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px 28px; }
 @media (max-width: 640px) { .guide-root .visa-grid { grid-template-columns: 1fr; } }
 .guide-root .visa-item { display: flex; gap: 11px; align-items: flex-start; }
-.guide-root .visa-item .n { font-family: var(--g-display); font-size: 18px; color: var(--g-clay); line-height: 1.1; flex: 0 0 auto; }
+.guide-root .visa-item .n { font-family: var(--font-poiret), "Poiret One", ui-sans-serif, system-ui, sans-serif; font-size: 18px; color: var(--g-clay); line-height: 1.1; flex: 0 0 auto; }
 .guide-root .visa-item div span { display: block; font-family: var(--g-serif); font-size: 12px; font-weight: 600; letter-spacing: 0.04em; color: oklch(0.4 0.09 38); margin-bottom: 2px; }
 .guide-root .visa-item div p { margin: 0; font-size: 13.5px; line-height: 1.5; color: oklch(0.45 0.06 40); }
 
@@ -603,7 +629,7 @@
 }
 .guide-root .place:hover { transform: translateY(-3px); box-shadow: 0 18px 36px -22px rgba(60,40,25,.4); border-color: var(--g-line); }
 .guide-root .place .idx {
-  font-family: var(--g-display); font-size: 21px; color: var(--g-clay); line-height: 1;
+  font-family: var(--font-poiret), "Poiret One", ui-sans-serif, system-ui, sans-serif; font-size: 21px; color: var(--g-clay); line-height: 1;
   width: 38px; height: 38px; border-radius: 999px; border: 1px solid var(--g-line);
   display: flex; align-items: center; justify-content: center; flex: 0 0 auto;
 }
@@ -647,10 +673,10 @@
   text-decoration: none; background: var(--g-card); border: 1px solid var(--g-line-soft); border-radius: 14px;
   padding: 22px; display: flex; flex-direction: column; gap: 4px; transition: all .2s ease;
 }
-.guide-root .em:hover { transform: translateY(-3px); box-shadow: 0 16px 32px -20px rgba(60,40,25,.4); border-color: var(--g-clay); }
+.guide-root .em:hover { transform: translateY(-3px); box-shadow: 0 16px 32px -20px rgba(60,40,25,.4); border-color: var(--hover-blue); }
 .guide-root .em .lab { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 500; color: var(--g-muted); }
 .guide-root .em .lab svg { color: var(--g-clay); }
-.guide-root .em .num { font-family: var(--g-display); font-size: 38px; color: var(--g-fg); line-height: 1; }
+.guide-root .em .num { font-family: var(--font-poiret), "Poiret One", ui-sans-serif, system-ui, sans-serif; font-size: 38px; color: var(--g-fg); line-height: 1; }
 
 .guide-root .contact-strip { display: grid; grid-template-columns: 1.4fr 1fr; gap: 18px; margin-top: 32px; }
 @media (max-width: 760px) { .guide-root .contact-strip { grid-template-columns: 1fr; } }
@@ -686,7 +712,7 @@
   opacity: 0; visibility: hidden; transform: translateY(8px); transition: all .25s ease;
 }
 .guide-root .backtop.show { opacity: 1; visibility: visible; transform: none; }
-.guide-root .backtop:hover { border-color: var(--g-clay); color: var(--g-clay); }
+.guide-root .backtop:hover { border-color: var(--hover-blue); color: var(--hover-blue); }
 
 /* ====================================================================== */
 /*  Itinerary (/itinerary) — ported from the claude.ai/design handoff      */
@@ -818,7 +844,7 @@
 .itin-root .tl { display: flex; flex-direction: column; }
 .itin-root .tl-row { display: grid; grid-template-columns: 88px 38px 1fr; align-items: stretch; }
 .itin-root .tl-time { text-align: right; padding: 22px 0 0; }
-.itin-root .tl-time .t { font-family: var(--it-display); font-size: 25px; color: var(--it-fg); line-height: 1; display: block; white-space: nowrap; }
+.itin-root .tl-time .t { font-family: var(--font-poiret), "Poiret One", ui-sans-serif, system-ui, sans-serif; font-size: 25px; color: var(--it-fg); line-height: 1; display: block; white-space: nowrap; }
 .itin-root .tl-time .ap { font-family: var(--it-serif); font-size: 10.5px; font-weight: 600; letter-spacing: 0.14em; color: var(--it-clay); display: block; margin-top: 4px; }
 .itin-root .tl-rail { position: relative; }
 .itin-root .tl-rail::before {
@@ -899,7 +925,7 @@
   padding: 9px 18px; border-radius: 999px; border: 1px solid var(--it-line); background: var(--it-card);
   transition: all .18s ease;
 }
-.itin-root .foot-links a:hover { color: var(--it-clay); border-color: var(--it-clay); }
+.itin-root .foot-links a:hover { color: var(--hover-blue); border-color: var(--hover-blue); }
 
 /* ---- Back to top ------------------------------------------------------ */
 .itin-root .backtop {
@@ -910,7 +936,7 @@
   opacity: 0; visibility: hidden; transform: translateY(8px); transition: all .25s ease;
 }
 .itin-root .backtop.show { opacity: 1; visibility: visible; transform: none; }
-.itin-root .backtop:hover { border-color: var(--it-clay); color: var(--it-clay); }
+.itin-root .backtop:hover { border-color: var(--hover-blue); color: var(--hover-blue); }
 
 /* ====================================================================== */
 /*  Guest List / RSVP admin (/guest-list) — a private, unlisted dashboard. */
@@ -1039,7 +1065,7 @@
 .admin-root .stat-top { display: flex; align-items: center; gap: 8px; color: var(--ad-clay); }
 .admin-root .stat-top svg { width: 17px; height: 17px; flex: 0 0 auto; }
 .admin-root .stat-top span { font-family: var(--ad-serif); font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ad-faint); }
-.admin-root .stat-val { font-family: var(--ad-display); font-size: 38px; color: var(--ad-fg); margin-top: 8px; line-height: 1; }
+.admin-root .stat-val { font-family: var(--font-poiret), "Poiret One", ui-sans-serif, system-ui, sans-serif; font-size: 38px; color: var(--ad-fg); margin-top: 8px; line-height: 1; }
 .admin-root .stat.is-key { background: var(--ad-fg); border-color: var(--ad-fg); }
 .admin-root .stat.is-key .stat-top, .admin-root .stat.is-key .stat-top span { color: var(--ad-clay-soft); }
 .admin-root .stat.is-key .stat-val { color: #fff; }
@@ -1066,9 +1092,9 @@
   border-radius: 999px; padding: 10px 18px; border: 1px solid var(--ad-line);
   background: var(--ad-card); color: var(--ad-fg); transition: all .16s ease;
 }
-.admin-root .btn:hover { border-color: var(--ad-clay); color: var(--ad-clay); }
+.admin-root .btn:hover { border-color: var(--hover-blue); color: var(--hover-blue); }
 .admin-root .btn.primary { background: var(--ad-fg); border-color: var(--ad-fg); color: var(--ad-bg); }
-.admin-root .btn.primary:hover { background: var(--ad-clay-deep); border-color: var(--ad-clay-deep); color: #fff; }
+.admin-root .btn.primary:hover { background: var(--hover-blue-deep); border-color: var(--hover-blue-deep); color: #fff; }
 .admin-root .btn:disabled { opacity: .55; cursor: not-allowed; }
 
 .admin-root .icon-btn {
@@ -1129,7 +1155,7 @@
   color: var(--ad-fg); background: var(--ad-bg); border: 1px solid var(--ad-line);
   border-radius: 9px; padding: 8px 10px; cursor: pointer; transition: border-color .15s ease;
 }
-.admin-root .combo-btn:hover { border-color: var(--ad-clay); }
+.admin-root .combo-btn:hover { border-color: var(--hover-blue); }
 .admin-root .combo-btn:focus-visible { outline: none; border-color: var(--ad-clay); box-shadow: 0 0 0 3px var(--ad-clay-soft); }
 .admin-root .combo-btn:disabled { opacity: .6; cursor: not-allowed; }
 .admin-root .combo-btn.is-empty .combo-val { color: var(--ad-faint); }
@@ -1207,7 +1233,7 @@
   display: inline-flex; align-items: baseline; gap: 8px; margin-top: 26px;
   font-family: var(--st-serif); font-style: italic; color: var(--st-clay-deep); font-size: 15px;
 }
-.story-root .route-stat b { font-family: var(--st-display); font-style: normal; font-size: 22px; color: var(--st-fg); }
+.story-root .route-stat b { font-family: var(--font-poiret), "Poiret One", ui-sans-serif, system-ui, sans-serif; font-style: normal; font-size: 22px; color: var(--st-fg); }
 
 /* ---- Sticky distance meter --------------------------------------------- */
 .story-root .meter-wrap {
@@ -1239,7 +1265,7 @@
   transform: translate(-50%, -50%) rotate(90deg); color: var(--st-clay-deep);
   transition: left .25s linear; display: flex; align-items: center; justify-content: center;
 }
-.story-root .meter-num { flex: 0 0 auto; font-family: var(--st-display); font-size: 18px; color: var(--st-clay-deep); min-width: 148px; text-align: center; white-space: nowrap; }
+.story-root .meter-num { flex: 0 0 auto; font-family: var(--font-poiret), "Poiret One", ui-sans-serif, system-ui, sans-serif; font-size: 18px; color: var(--st-clay-deep); min-width: 148px; text-align: center; white-space: nowrap; }
 .story-root .meter-num span { font-family: var(--st-sans); font-size: 10.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--st-faint); display: block; margin-top: 1px; }
 @media (max-width: 700px) {
   .story-root .meter-row { padding-left: 84px; }
@@ -1330,7 +1356,7 @@
 .story-root .finale-inner { position: relative; z-index: 1; }
 .story-root .finale .flo { font-size: 18px; letter-spacing: .5em; color: var(--st-clay); }
 .story-root .finale p { font-size: 16px; line-height: 1.6; color: var(--st-muted); margin: 16px auto 0; max-width: 480px; }
-.story-root .finale-stat { margin-top: 30px; font-family: var(--st-display); font-size: 26px; color: var(--st-clay-deep); }
+.story-root .finale-stat { margin-top: 30px; font-family: var(--font-poiret), "Poiret One", ui-sans-serif, system-ui, sans-serif; font-size: 26px; color: var(--st-clay-deep); }
 .story-root .finale-stat span { display: block; font-family: var(--st-sans); font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--st-faint); margin-top: 4px; }
 .story-root .finale-links { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 34px; }
 .story-root .finale-links a {
@@ -1338,7 +1364,7 @@
   padding: 9px 18px; border-radius: 999px; border: 1px solid var(--st-line); background: var(--st-card);
   transition: all .18s ease;
 }
-.story-root .finale-links a:hover { color: var(--st-clay); border-color: var(--st-clay); }
+.story-root .finale-links a:hover { color: var(--hover-blue); border-color: var(--hover-blue); }
 
 /* ---- Invitee picker panel (portaled to <body>, so styled globally) --- */
 .invitee-combo-pop {

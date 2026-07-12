@@ -50,7 +50,7 @@ export function Nav() {
                           className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase text-white/90 transition-colors hover:bg-white/20 hover:text-white"
                         >
                           <Clock className="w-3 h-3 text-pink-300 shrink-0" />
-                          When to Arrive
+                          Itinerary
                         </Link>
                         <Link
                           href="/wardrobe-planner#mehendi"
@@ -84,7 +84,7 @@ export function Nav() {
                           className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase text-white/90 transition-colors hover:bg-white/20 hover:text-white"
                         >
                           <Clock className="w-3 h-3 text-amber-300 shrink-0" />
-                          When to Arrive
+                          Itinerary
                         </Link>
                         <Link
                           href="/wardrobe-planner#haldi-tulsi"
@@ -118,7 +118,7 @@ export function Nav() {
                           className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase text-white/90 transition-colors hover:bg-white/20 hover:text-white"
                         >
                           <Clock className="w-3 h-3 text-amber-300 shrink-0" />
-                          When to Arrive
+                          Itinerary
                         </Link>
                         <Link
                           href="/wardrobe-planner#haldi-vraj"
@@ -152,7 +152,7 @@ export function Nav() {
                           className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase text-white/90 transition-colors hover:bg-white/20 hover:text-white"
                         >
                           <Clock className="w-3 h-3 text-purple-300 shrink-0" />
-                          When to Arrive
+                          Itinerary
                         </Link>
                         <Link
                           href="/wardrobe-planner#sangeet"
@@ -186,7 +186,7 @@ export function Nav() {
                           className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] uppercase text-white/90 transition-colors hover:bg-white/20 hover:text-white"
                         >
                           <Clock className="w-3 h-3 text-rose-300 shrink-0" />
-                          When to Arrive
+                          Itinerary
                         </Link>
                         <Link
                           href="/wardrobe-planner#lagna"
