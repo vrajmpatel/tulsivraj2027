@@ -1252,10 +1252,14 @@
 .story-root .meter-end.start { left: 0; color: var(--st-teal); }
 .story-root .meter-end.end { left: 100%; color: var(--st-clay); }
 .story-root .meter-plane {
-  position: absolute; top: 50%; left: 0%; width: 22px; height: 22px;
-  transform: translate(-50%, -50%) rotate(90deg); color: var(--st-clay-deep);
-  transition: left .25s linear; display: flex; align-items: center; justify-content: center;
+  position: absolute; top: 50%; left: 0%; width: 22px; height: 22px; z-index: 2;
+  transform: translate(-50%, -50%); color: var(--st-clay-deep); opacity: 0;
+  transition: left .25s linear, opacity .2s ease; display: flex; align-items: center; justify-content: center;
 }
+.story-root .meter-plane.is-visible { opacity: 1; }
+.story-root .meter-plane .ico-land { display: none; transform: rotate(90deg); }
+.story-root .meter-plane.is-landing .ico-takeoff { display: none; }
+.story-root .meter-plane.is-landing .ico-land { display: block; }
 .story-root .meter-num { flex: 0 0 auto; font-family: var(--font-poiret), "Poiret One", ui-sans-serif, system-ui, sans-serif; font-size: 18px; color: var(--st-clay-deep); min-width: 148px; text-align: center; white-space: nowrap; }
 .story-root .meter-num span { font-family: var(--st-sans); font-size: 10.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--st-faint); display: block; margin-top: 1px; }
 @media (max-width: 700px) {
@@ -1331,14 +1335,6 @@
 .story-root .story-item.is-milestone .story-card { background: var(--st-fg); border-color: var(--st-fg); }
 .story-root .story-item.is-milestone .story-card h4 { color: #fff; }
 .story-root .story-item.is-milestone .story-card p { color: oklch(0.86 0.012 80); }
-
-/* ---- Edit note (scaffold reminder) --------------------------------------- */
-.story-root .edit-note {
-  max-width: 620px; margin: 0 auto 40px; background: var(--st-clay-soft); border: 1px dashed var(--st-clay);
-  border-radius: 12px; padding: 14px 18px; font-size: 13px; color: var(--st-clay-deep); line-height: 1.55;
-  display: flex; gap: 10px; align-items: flex-start;
-}
-.story-root .edit-note svg { flex: 0 0 auto; margin-top: 1px; }
 
 /* ---- Finale --------------------------------------------------------------- */
 .story-root .finale { text-align: center; padding: 90px 0 100px; position: relative; overflow: hidden; }

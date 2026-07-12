@@ -8,9 +8,9 @@ import {
   HeartHandshake,
   ImageIcon,
   MessageCircle,
-  PencilLine,
   Plane,
   PlaneLanding,
+  PlaneTakeoff,
   Repeat,
   Sparkles,
   type LucideIcon,
@@ -126,6 +126,8 @@ export function OurStory() {
       const pct = (progress * 100).toFixed(2)
       fillRef.current.style.width = pct + "%"
       planeRef.current.style.left = pct + "%"
+      planeRef.current.classList.toggle("is-visible", progress > 0)
+      planeRef.current.classList.toggle("is-landing", progress >= 0.5)
 
       const miles = Math.round(TOTAL_MI * (1 - progress))
       milesRef.current.textContent = miles.toLocaleString() + " mi"
@@ -170,7 +172,8 @@ export function OurStory() {
               <span className="meter-end start" aria-hidden="true" />
               <span className="meter-end end" aria-hidden="true" />
               <div className="meter-plane" ref={planeRef}>
-                <Plane size={18} strokeWidth={1.6} />
+                <PlaneTakeoff className="ico-takeoff" size={18} strokeWidth={1.6} />
+                <Plane className="ico-land" size={18} strokeWidth={1.6} />
               </div>
             </div>
             <div className="meter-city right">
@@ -195,15 +198,6 @@ export function OurStory() {
               Scroll along — the mile-o-meter above counts down as our story does. Every milestone
               here is a placeholder; swap in your own dates, photos, and words.
             </p>
-          </div>
-
-          <div className="edit-note reveal">
-            <PencilLine size={16} strokeWidth={1.6} />
-            <span>
-              Everything below is a scaffold — dates, blurbs, and photo slots are placeholders.
-              Replace the italic text with your real story, drop photos into the picture frames, and
-              delete/add chapters as needed.
-            </span>
           </div>
 
           <div className="story-tl">
