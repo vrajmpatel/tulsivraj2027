@@ -1147,6 +1147,23 @@
 .admin-root .badge.yes { background: var(--ad-green-soft); color: oklch(0.4 0.1 150); }
 .admin-root .badge.no { background: var(--ad-red-soft); color: var(--ad-red); }
 .admin-root .badge.muted { background: var(--ad-bg-deep); color: var(--ad-faint); border: 1px solid var(--ad-line); }
+.admin-root .badge.prio-low { background: var(--ad-green-soft); color: oklch(0.4 0.1 150); }
+.admin-root .badge.prio-medium { background: var(--ad-clay-soft); color: var(--ad-clay-deep); }
+.admin-root .badge.prio-high { background: var(--ad-red-soft); color: var(--ad-red); }
+
+/* ---- Task status toggle ------------------------------------------------- */
+.admin-root .status-btn {
+  display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px;
+  border: 1px solid var(--ad-line); background: var(--ad-card); color: var(--ad-muted);
+  font-family: var(--ad-sans); font-size: 12px; font-weight: 600; cursor: pointer;
+  transition: all .15s ease; white-space: nowrap;
+}
+.admin-root .status-btn:hover { border-color: var(--ad-clay); color: var(--ad-fg); }
+.admin-root .status-btn.is-done { background: var(--ad-green-soft); border-color: transparent; color: oklch(0.4 0.1 150); }
+.admin-root .status-btn:disabled { opacity: .5; cursor: not-allowed; }
+.admin-root .tbl tbody tr.is-done .strong,
+.admin-root .tbl tbody tr.is-done .dim { opacity: .5; text-decoration: line-through; }
+.admin-root .tbl tbody tr.is-done .badge { opacity: .6; }
 
 /* ---- Searchable invitee picker (trigger; panel is portaled below) ---- */
 .admin-root .combo-btn {

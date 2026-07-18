@@ -40,6 +40,14 @@ const windSong = WindSong({
 export const metadata: Metadata = {
   title: "Tulsi & Vraj's Wedding 2027 - Vadodara",
   description: "Deploy intelligent AI support agents that solve your customers' problems with seamless integrations and enterprise security",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon_io/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+      { url: "/favicon_io/favicon-16x16.png", type: "image/png", sizes: "16x16" },
+    ],
+    apple: "/favicon_io/apple-touch-icon.png",
+  },
 }
 
 export default function RootLayout({
