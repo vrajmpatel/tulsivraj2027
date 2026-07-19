@@ -207,42 +207,42 @@ export function Nav() {
 
       {/* Floating Right Sidebar */}
       <div className="fixed right-4 sm:right-6 top-5 z-50 flex flex-col gap-6 p-2">
-        <Link href="/our-story" className="group relative flex items-center justify-center w-8 h-8 transition-transform duration-300 hover:scale-110 active:scale-95">
+        <Link href="/our-story" className="group relative flex items-center justify-center w-10 h-10 sm:w-8 sm:h-8 transition-transform duration-300 hover:scale-110 active:scale-95">
           <div className="absolute inset-0 rounded-full bg-white/10 border border-white/20 scale-0 group-hover:scale-100 transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-lg" />
           <span className="absolute right-11 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 pointer-events-none font-serif text-[10px] tracking-[0.2em] uppercase text-white bg-white/10 border border-white/20 backdrop-blur-md px-3 py-1.5 rounded-lg whitespace-nowrap shadow-lg flex items-center">
             Our Story
           </span>
           <Heart className="w-5 h-5 z-10 text-white/80 group-hover:text-white transition-colors duration-300" />
         </Link>
-        <Link href="/itinerary" className="group relative flex items-center justify-center w-8 h-8 transition-transform duration-300 hover:scale-110 active:scale-95">
+        <Link href="/itinerary" className="group relative flex items-center justify-center w-10 h-10 sm:w-8 sm:h-8 transition-transform duration-300 hover:scale-110 active:scale-95">
           <div className="absolute inset-0 rounded-full bg-white/10 border border-white/20 scale-0 group-hover:scale-100 transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-lg" />
           <span className="absolute right-11 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 pointer-events-none font-serif text-[10px] tracking-[0.2em] uppercase text-white bg-white/10 border border-white/20 backdrop-blur-md px-3 py-1.5 rounded-lg whitespace-nowrap shadow-lg flex items-center">
             Itinerary
           </span>
           <Compass className="w-5 h-5 z-10 text-white/80 group-hover:text-white transition-colors duration-300" />
         </Link>
-        <Link href="/wardrobe-planner" className="group relative flex items-center justify-center w-8 h-8 transition-transform duration-300 hover:scale-110 active:scale-95">
+        <Link href="/wardrobe-planner" className="group relative flex items-center justify-center w-10 h-10 sm:w-8 sm:h-8 transition-transform duration-300 hover:scale-110 active:scale-95">
           <div className="absolute inset-0 rounded-full bg-white/10 border border-white/20 scale-0 group-hover:scale-100 transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-lg" />
           <span className="absolute right-11 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 pointer-events-none font-serif text-[10px] tracking-[0.2em] uppercase text-white bg-white/10 border border-white/20 backdrop-blur-md px-3 py-1.5 rounded-lg whitespace-nowrap shadow-lg flex items-center">
             Wardrobe Planner
           </span>
           <Shirt className="w-5 h-5 z-10 text-white/80 group-hover:text-white transition-colors duration-300" />
         </Link>
-        <Link href="/guide" className="group relative flex items-center justify-center w-8 h-8 transition-transform duration-300 hover:scale-110 active:scale-95">
+        <Link href="/guide" className="group relative flex items-center justify-center w-10 h-10 sm:w-8 sm:h-8 transition-transform duration-300 hover:scale-110 active:scale-95">
           <div className="absolute inset-0 rounded-full bg-white/10 border border-white/20 scale-0 group-hover:scale-100 transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-lg" />
           <span className="absolute right-11 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 pointer-events-none font-serif text-[10px] tracking-[0.2em] uppercase text-white bg-white/10 border border-white/20 backdrop-blur-md px-3 py-1.5 rounded-lg whitespace-nowrap shadow-lg flex items-center">
             Guide
           </span>
           <BookOpen className="w-5 h-5 z-10 text-white/80 group-hover:text-white transition-colors duration-300" />
         </Link>
-        <Link href="#vadodara" className="group relative flex items-center justify-center w-8 h-8 transition-transform duration-300 hover:scale-110 active:scale-95">
+        <Link href="#vadodara" className="group relative flex items-center justify-center w-10 h-10 sm:w-8 sm:h-8 transition-transform duration-300 hover:scale-110 active:scale-95">
           <div className="absolute inset-0 rounded-full bg-white/10 border border-white/20 scale-0 group-hover:scale-100 transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-lg" />
           <span className="absolute right-11 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 pointer-events-none font-serif text-[10px] tracking-[0.2em] uppercase text-white bg-white/10 border border-white/20 backdrop-blur-md px-3 py-1.5 rounded-lg whitespace-nowrap shadow-lg flex items-center">
             Vadodara
           </span>
           <MapPin className="w-5 h-5 z-10 text-white/80 group-hover:text-white transition-colors duration-300" />
         </Link>
-        <Link href="#questions" className="group relative flex items-center justify-center w-8 h-8 transition-transform duration-300 hover:scale-110 active:scale-95">
+        <Link href="#questions" className="group relative flex items-center justify-center w-10 h-10 sm:w-8 sm:h-8 transition-transform duration-300 hover:scale-110 active:scale-95">
           <div className="absolute inset-0 rounded-full bg-white/10 border border-white/20 scale-0 group-hover:scale-100 transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-lg" />
           <span className="absolute right-11 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 pointer-events-none font-serif text-[10px] tracking-[0.25em] uppercase text-white bg-white/10 border border-white/20 backdrop-blur-md px-3 py-1.5 rounded-lg whitespace-nowrap shadow-lg flex items-center">
             Questions
