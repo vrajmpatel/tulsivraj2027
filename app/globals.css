@@ -178,7 +178,7 @@
 }
 .wp-label {
   font-family: var(--wp-serif); font-size: 11px; font-weight: 600;
-  letter-spacing: 0.26em; text-transform: uppercase; color: var(--wp-faint);
+  letter-spacing: 0.26em; text-transform: uppercase; color: oklch(0.42 0.07 55);
   margin-bottom: 12px;
 }
 .wp-dot { color: var(--wp-line); margin: 0 2px; }
@@ -275,7 +275,7 @@
 .dirA-suggest { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 22px; }
 .dirA-sug-l {
   display: block; font-family: var(--wp-serif); font-size: 11px; font-weight: 600;
-  letter-spacing: 0.2em; text-transform: uppercase; color: var(--wp-clay); margin-bottom: 7px;
+  letter-spacing: 0.2em; text-transform: uppercase; color: oklch(0.42 0.07 55); margin-bottom: 7px;
 }
 .dirA-sug p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--wp-fg); }
 
@@ -284,7 +284,7 @@
   background: var(--wp-line-soft); border-radius: 10px; margin-bottom: 24px;
   font-size: 13.5px; color: var(--wp-fg); line-height: 1.5;
 }
-.dirA-avoid-l { font-family: var(--wp-serif); font-weight: 600; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; white-space: nowrap; }
+.dirA-avoid-l { font-family: var(--wp-serif); font-weight: 600; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; white-space: nowrap; color: oklch(0.42 0.07 55); }
 .dirA-actions { margin-top: auto; }
 
 /* ---- Style gallery (photo carousel) ------------------------------------ */
