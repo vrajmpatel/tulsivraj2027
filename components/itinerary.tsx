@@ -1,8 +1,10 @@
 "use client"
 
-import { useEffect, useState, type MouseEvent } from "react"
+import { useEffect, useRef, useState, type MouseEvent } from "react"
 import Link from "next/link"
-import { ArrowUp } from "lucide-react"
+import { ArrowUp, MapPin } from "lucide-react"
+
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
 // ----------------------------------------------------------------------------
 // Content — distilled from the claude.ai/design handoff (project/Itinerary.html),
@@ -13,13 +15,25 @@ import { ArrowUp } from "lucide-react"
 // ----------------------------------------------------------------------------
 
 const SECTIONS = [
-  { id: "mehendi", label: "Mehendi" },
-  { id: "haldi-tulsi", label: "Tulsi's Haldi" },
-  { id: "haldi-vraj", label: "Vraj's Haldi" },
-  { id: "sangeet", label: "Sangeet" },
-  { id: "lagna", label: "Lagna" },
-  { id: "venue", label: "Venue" },
+  { id: "mehendi", label: "Mehendi", day: "02" },
+  { id: "haldi-tulsi", label: "Tulsi's Haldi", day: "03" },
+  { id: "haldi-vraj", label: "Vraj's Haldi", day: "04" },
+  { id: "sangeet", label: "Sangeet", day: "04" },
+  { id: "lagna", label: "Lagna", day: "05" },
 ] as const
+
+// Every event this week is held at the same venue, except the Sangeet.
+const VENUE = {
+  name: "Aambaug, Vadodara",
+  address: "834R+XR8, Ampad, Vadodara, Gujarat 391101, India",
+  mapsUrl: "https://maps.app.goo.gl/fQaPZkFKYjZtpaLAA",
+}
+
+const SANGEET_VENUE = {
+  name: "Suncity Club & Resort",
+  address: "Next to Chandan Multiplex, Gotri-Sherkhi Road, Vadodara, Gujarat 391330, India",
+  mapsUrl: "https://maps.app.goo.gl/8j15FuUyTndy8Err7",
+}
 
 type TLRow = {
   t: string
@@ -103,6 +117,7 @@ type EventSection = {
   intro: string
   timelineLabel: string
   rows: TLRow[]
+  venue?: typeof VENUE
 }
 
 const PRE_EVENTS: EventSection[] = [
@@ -209,6 +224,7 @@ const PRE_EVENTS: EventSection[] = [
     intro:
       "An evening of music, dance performances and celebration — the glam night before the wedding day.",
     timelineLabel: "The Evening's Flow",
+    venue: SANGEET_VENUE,
     rows: [
       {
         t: "6:30", ap: "PM", first: true,
@@ -246,6 +262,66 @@ const PRE_EVENTS: EventSection[] = [
 // ----------------------------------------------------------------------------
 // Presentational helpers
 // ----------------------------------------------------------------------------
+
+// Circular "Get Directions" icon button, set beside each event title — fades/
+// drops in as its section scrolls into view (piggybacking on the .reveal
+// observer set up below), and opens a popover with the venue address + map
+// link on hover or click/tap.
+function DirectionsCTA({ venue = VENUE }: { venue?: typeof VENUE }) {
+  const [open, setOpen] = useState(false)
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const cancelClose = () => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current)
+      closeTimer.current = null
+    }
+  }
+  const openNow = () => {
+    cancelClose()
+    setOpen(true)
+  }
+  const scheduleClose = () => {
+    cancelClose()
+    closeTimer.current = setTimeout(() => setOpen(false), 200)
+  }
+
+  useEffect(() => () => cancelClose(), [])
+
+  return (
+    <div className="event-directions reveal" onMouseEnter={openNow} onMouseLeave={scheduleClose}>
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <button type="button" className="directions-trigger" aria-label="Get directions to the venue">
+            <MapPin className="w-4 h-4 pin-ico" />
+          </button>
+        </PopoverTrigger>
+        <PopoverContent
+          align="start"
+          sideOffset={10}
+          onMouseEnter={openNow}
+          onMouseLeave={scheduleClose}
+          className="w-72 rounded-2xl border border-stone-200 bg-stone-50 p-5 shadow-2xl font-serif text-stone-800"
+        >
+          <p className="text-[11px] font-sans font-semibold uppercase tracking-[0.22em] text-[oklch(0.52_0.13_150)]">
+            Venue
+          </p>
+          <h4 className="mt-2 text-lg text-stone-900">{venue.name}</h4>
+          <p className="mt-1.5 font-sans text-sm leading-relaxed text-stone-600">{venue.address}</p>
+          <a
+            href={venue.mapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-stone-900 px-4 py-2 font-sans text-xs font-semibold uppercase tracking-[0.08em] text-white transition-colors hover:bg-stone-700"
+          >
+            <MapPin className="h-3.5 w-3.5" />
+            Open in Google Maps
+          </a>
+        </PopoverContent>
+      </Popover>
+    </div>
+  )
+}
 
 function Timeline({ label, rows }: { label: string; rows: TLRow[] }) {
   return (
@@ -363,7 +439,7 @@ export function Itinerary() {
       <nav className="subnav" id="subnav">
         <div className="wrap">
           <div className="subnav-row">
-            <span className="subnav-brand">The Wedding Itinerary</span>
+            <span className="subnav-brand">Events</span>
             {SECTIONS.map((s) => (
               <a
                 key={s.id}
@@ -371,6 +447,7 @@ export function Itinerary() {
                 href={`#${s.id}`}
                 onClick={(e) => jumpTo(e, s.id)}
               >
+                <span className="link-day">{s.day}</span>
                 {s.label}
               </a>
             ))}
@@ -384,7 +461,10 @@ export function Itinerary() {
           <div className="wrap">
             <div className="sec-head reveal">
               <span className="kicker">{ev.kicker}</span>
-              <h2 className="sec-title">{ev.title}</h2>
+              <div className="sec-title-row">
+                <h2 className="sec-title">{ev.title}</h2>
+                <DirectionsCTA venue={ev.venue} />
+              </div>
               <p className="sec-intro">{ev.intro}</p>
             </div>
             {ev.rows.length > 0 ? (
@@ -407,7 +487,10 @@ export function Itinerary() {
         <div className="wrap">
           <div className="sec-head reveal">
             <span className="kicker">Tuesday · Jan 5 · Evening</span>
-            <h2 className="sec-title">Lagna</h2>
+            <div className="sec-title-row">
+              <h2 className="sec-title">Lagna</h2>
+              <DirectionsCTA />
+            </div>
             <p className="sec-intro">
               The wedding day itself, at Aambaug. Aim to arrive directly for the baraat — the heart
               of the evening is the varmala, exchanged as the sun sets.
@@ -416,41 +499,6 @@ export function Itinerary() {
 
           <Timeline label="The Baraat & Varmala" rows={LAGNA_OPENING} />
           <Timeline label="Gather & Settle In" rows={LAGNA_CEREMONY} />
-        </div>
-      </section>
-
-      {/* Venue */}
-      <section id="venue" className="sec alt">
-        <div className="wrap">
-          <div className="sec-head reveal">
-            <span className="kicker">Venue</span>
-            <h2 className="sec-title">Where it all happens</h2>
-            <p className="sec-intro">
-              Everything you need to know about the venue for the week&apos;s celebrations.
-            </p>
-          </div>
-
-          <div className="block reveal">
-            <div className="venue">
-              <div className="pp">
-                <span className="k">Where</span>
-                <h4>Aambaug, Vadodara</h4>
-                <p>
-                  The full address, map link, and any shuttle pick-up times will be confirmed here as
-                  the day approaches.
-                </p>
-                <span className="tba">Address to be announced</span>
-              </div>
-              <div className="hosp">
-                <span className="k">Questions</span>
-                <h4>We&apos;re here to help</h4>
-                <p>
-                  For anything about timings or logistics on the day, please reach out to our point
-                  person — see the <Link href="/guide">Travel Guide</Link> for contacts.
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 

@@ -14,7 +14,7 @@ import {
 const EVENT = {
   title: "Tulsi & Vraj's Wedding",
   description: "Join us as we celebrate Tulsi & Vraj tying the knot!",
-  location: "Vadodara, Gujarat, India",
+  location: "Aam Baug / Rambaug - Wedding Lawn, 834R+XR8, Ampad, Vadodara, Gujarat 391101, India",
   // All-day event: end date is exclusive, so it spans Jan 5 only.
   start: "20270105",
   end: "20270106",

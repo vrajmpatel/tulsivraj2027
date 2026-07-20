@@ -43,7 +43,7 @@ const EVENTS: WardrobeEvent[] = [
     id: "mehendi",
     name: "Mehendi",
     host: null,
-    date: "Jan 2, 2027",
+    date: "Jan 2",
     dayNum: "02",
     day: "Saturday",
     time: "Daytime",
@@ -69,7 +69,7 @@ const EVENTS: WardrobeEvent[] = [
     id: "haldi-tulsi",
     name: "Vidhi & Haldi",
     host: "Tulsi's",
-    date: "Jan 3, 2027",
+    date: "Jan 3",
     dayNum: "03",
     day: "Sunday",
     time: "Morning",
@@ -93,7 +93,7 @@ const EVENTS: WardrobeEvent[] = [
     id: "haldi-vraj",
     name: "Vidhi & Haldi",
     host: "Vraj's",
-    date: "Jan 4, 2027",
+    date: "Jan 4",
     dayNum: "04",
     day: "Monday",
     time: "Morning",
@@ -119,7 +119,7 @@ const EVENTS: WardrobeEvent[] = [
     id: "sangeet",
     name: "Sangeet",
     host: null,
-    date: "Jan 4, 2027",
+    date: "Jan 4",
     dayNum: "04",
     day: "Monday",
     time: "Evening",
@@ -142,7 +142,7 @@ const EVENTS: WardrobeEvent[] = [
     id: "lagna",
     name: "Lagna",
     host: null,
-    date: "Jan 5, 2027",
+    date: "Jan 5",
     dayNum: "05",
     day: "Tuesday",
     time: "Ceremony",
@@ -245,7 +245,7 @@ export function WardrobePlanner({ wardrobeImages }: { wardrobeImages: WardrobeIm
       <nav className="wp-subnav">
         <div className="wp-subnav-inner">
           <div className="wp-subnav-row">
-            <span className="wp-subnav-brand">Wardrobe Planner</span>
+            <span className="wp-subnav-brand">Events</span>
             <div className="dirA-tabs">
               {EVENTS.map((e, i) => (
                 <button
@@ -292,9 +292,9 @@ export function WardrobePlanner({ wardrobeImages }: { wardrobeImages: WardrobeIm
           {/* Right — details */}
           <div className="dirA-detail">
             <div className="dirA-meta">
-              <span>{ev.date}</span>
-              <span className="wp-dot">·</span>
               <span>{ev.day}</span>
+              <span className="wp-dot">·</span>
+              <span>{ev.date}</span>
               <span className="wp-dot">·</span>
               <span>{ev.time}</span>
             </div>

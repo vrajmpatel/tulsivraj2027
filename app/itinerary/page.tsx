@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function ItineraryPage() {
   return (
     <main className="min-h-screen">
-      <BackButton />
+      <BackButton className="font-sans text-[13px] font-medium normal-case tracking-[0.02em] px-[15px] py-2 text-[oklch(0.52_0.012_70)] hover:text-[oklch(0.27_0.012_70)]" />
       <Itinerary />
     </main>
   )
