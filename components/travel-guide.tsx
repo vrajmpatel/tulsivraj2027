@@ -127,7 +127,7 @@ const EAT_THALI: EatCard[] = [
 const EAT_FINE: EatCard[] = [
   { title: "Peshawri", meta: "WelcomHotel ITC", text: "Outstanding tandoor and North-West Frontier cuisine. Worth the splurge." },
   { title: "Azure", meta: "Surya Palace Hotel", text: "Elegant multi-cuisine — great for a special evening." },
-  { title: "Mirch Masala", meta: "Vadodara", text: "Popular for rich North Indian curries and kebabs." },
+  { title: "Old School Eatery", meta: "Alkapuri, Vadodara", text: "A local favourite in Alkapuri." },
 ]
 
 const EAT_CASUAL: EatCard[] = [

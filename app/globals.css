@@ -407,9 +407,9 @@
   --g-faint: oklch(0.62 0.012 70);
   --g-line: oklch(0.88 0.012 80);
   --g-line-soft: oklch(0.92 0.01 80);
-  --g-clay: oklch(0.56 0.13 38);
-  --g-clay-deep: oklch(0.46 0.12 36);
-  --g-clay-soft: oklch(0.93 0.045 50);
+  --g-forest: oklch(0.52 0.13 150);
+  --g-forest-deep: oklch(0.42 0.12 150);
+  --g-forest-soft: oklch(0.9 0.05 150);
   --g-serif: var(--font-playfair), "Playfair Display", Georgia, serif;
   --g-display: var(--font-oranienbaum), "Oranienbaum", "Playfair Display", serif;
   --g-sans: var(--font-inter), "Inter", system-ui, sans-serif;
@@ -460,7 +460,7 @@
   font-family: var(--g-serif); font-size: 12.5px; letter-spacing: 0.18em; text-transform: uppercase;
   color: rgba(255,251,244,.95); text-shadow: 0 2px 14px rgba(0,0,0,.5);
 }
-.guide-root .hero-meta .dot { width: 5px; height: 5px; border-radius: 999px; background: var(--g-clay-soft); opacity: .85; }
+.guide-root .hero-meta .dot { width: 5px; height: 5px; border-radius: 999px; background: var(--g-forest-soft); opacity: .85; }
 
 /* ---- Sticky nav ------------------------------------------------------- */
 .guide-root .subnav {
@@ -488,7 +488,7 @@
   font-family: var(--g-sans);
 }
 .guide-root .subnav-link:hover { color: var(--g-fg); border-color: var(--g-line); }
-.guide-root .subnav-link.is-active { background: var(--g-fg); color: var(--g-bg); border-color: var(--g-fg); }
+.guide-root .subnav-link.is-active { background: var(--g-forest); color: var(--g-bg); border-color: var(--g-forest); }
 
 /* ---- Section scaffold ------------------------------------------------- */
 .guide-root section[id] { scroll-margin-top: 72px; }
@@ -537,16 +537,16 @@
   background: var(--g-card); border: 1px solid var(--g-line-soft); border-radius: 14px; padding: 24px 24px 22px;
   position: relative; overflow: hidden;
 }
-.guide-root .date-card .tag { font-family: var(--g-serif); font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--g-clay); }
+.guide-root .date-card .tag { font-family: var(--g-serif); font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--g-forest); }
 .guide-root .date-card .big { font-family: var(--font-poiret), "Poiret One", ui-sans-serif, system-ui, sans-serif; font-size: 27px; color: var(--g-fg); margin: 9px 0 4px; }
 .guide-root .date-card .small { font-size: 13.5px; color: var(--g-muted); line-height: 1.5; }
 .guide-root .date-card.is-key { background: var(--g-fg); border-color: var(--g-fg); }
-.guide-root .date-card.is-key .tag { color: var(--g-clay-soft); }
+.guide-root .date-card.is-key .tag { color: var(--g-forest-soft); }
 .guide-root .date-card.is-key .big, .guide-root .date-card.is-key .small { color: var(--g-bg); }
 .guide-root .date-card.is-key .small { color: oklch(0.86 0.012 80); }
 
 .guide-root .note-line { margin-top: 18px; font-size: 14.5px; color: var(--g-muted); line-height: 1.6; display: flex; gap: 10px; align-items: flex-start; }
-.guide-root .note-line svg { color: var(--g-clay); flex: 0 0 auto; margin-top: 2px; }
+.guide-root .note-line svg { color: var(--g-forest); flex: 0 0 auto; margin-top: 2px; }
 
 /* ---- Card grid -------------------------------------------------------- */
 .guide-root .grid { display: grid; gap: 18px; }
@@ -563,13 +563,13 @@
 .guide-root .card:hover { transform: translateY(-3px); box-shadow: 0 18px 36px -22px rgba(60,40,25,.4); border-color: var(--g-line); }
 .guide-root .card-ico {
   width: 42px; height: 42px; border-radius: 11px; display: flex; align-items: center; justify-content: center;
-  background: var(--g-clay-soft); color: var(--g-clay-deep); margin-bottom: 16px;
+  background: var(--g-forest-soft); color: var(--g-forest-deep); margin-bottom: 16px;
 }
 .guide-root .card h4 { font-family: var(--g-serif); font-weight: 600; font-size: 18px; margin: 0 0 7px; line-height: 1.25; }
-.guide-root .card .meta { font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--g-clay); margin: 0 0 6px; }
+.guide-root .card .meta { font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--g-forest); margin: 0 0 6px; }
 .guide-root .card p { font-size: 14px; line-height: 1.6; color: var(--g-muted); margin: 0; }
 .guide-root .card .ph { font-size: 13.5px; color: var(--g-fg); margin-top: 12px; display: inline-flex; align-items: center; gap: 7px; text-decoration: none; font-weight: 500; }
-.guide-root .card .ph svg { color: var(--g-clay); }
+.guide-root .card .ph svg { color: var(--g-forest); }
 .guide-root .card .ph:hover { color: var(--hover-blue-deep); }
 .guide-root .card .addr { font-size: 13px; line-height: 1.55; color: var(--g-muted); margin-top: 10px; }
 
@@ -578,7 +578,7 @@
 @media (max-width: 900px) { .guide-root .facts { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 520px) { .guide-root .facts { grid-template-columns: 1fr; } }
 .guide-root .fact { background: var(--g-card); padding: 22px 22px 20px; }
-.guide-root .fact-top { display: flex; align-items: center; gap: 9px; color: var(--g-clay); margin-bottom: 12px; }
+.guide-root .fact-top { display: flex; align-items: center; gap: 9px; color: var(--g-forest); margin-bottom: 12px; }
 .guide-root .fact-top span { font-family: var(--g-serif); font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--g-faint); }
 .guide-root .fact p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--g-fg); }
 .guide-root .fact p b { font-weight: 600; }
@@ -591,29 +591,29 @@
   font-size: 15px; line-height: 1.55; color: var(--g-fg); padding: 11px 0; border-bottom: 1px solid var(--g-line-soft);
 }
 .guide-root .pack .tick {
-  flex: 0 0 auto; width: 22px; height: 22px; border-radius: 7px; background: var(--g-clay-soft);
-  color: var(--g-clay-deep); display: flex; align-items: center; justify-content: center; margin-top: 1px;
+  flex: 0 0 auto; width: 22px; height: 22px; border-radius: 7px; background: var(--g-forest-soft);
+  color: var(--g-forest-deep); display: flex; align-items: center; justify-content: center; margin-top: 1px;
 }
 
 /* ---- Callout (visa) --------------------------------------------------- */
 .guide-root .callout {
   display: grid; grid-template-columns: auto 1fr; gap: 26px; align-items: start;
-  background: var(--g-clay-soft); border-radius: 18px; padding: 34px 36px;
+  background: var(--g-forest-soft); border-radius: 18px; padding: 34px 36px;
 }
 @media (max-width: 640px) { .guide-root .callout { grid-template-columns: 1fr; gap: 18px; padding: 26px; } }
 .guide-root .callout-badge {
-  width: 56px; height: 56px; border-radius: 14px; background: var(--g-clay); color: #fff;
+  width: 56px; height: 56px; border-radius: 14px; background: var(--g-forest); color: #fff;
   display: flex; align-items: center; justify-content: center;
 }
-.guide-root .callout h4 { font-family: var(--g-serif); font-weight: 600; font-size: 21px; margin: 0 0 4px; color: oklch(0.38 0.1 38); }
-.guide-root .callout .ctxt { font-size: 14.5px; line-height: 1.6; color: oklch(0.42 0.07 40); margin: 0 0 18px; max-width: 640px; }
-.guide-root .callout .ctxt a { color: var(--g-clay-deep); font-weight: 600; text-underline-offset: 3px; }
+.guide-root .callout h4 { font-family: var(--g-serif); font-weight: 600; font-size: 21px; margin: 0 0 4px; color: var(--g-forest-deep); }
+.guide-root .callout .ctxt { font-size: 14.5px; line-height: 1.6; color: var(--g-fg); margin: 0 0 18px; max-width: 640px; }
+.guide-root .callout .ctxt a { color: var(--g-forest-deep); font-weight: 600; text-underline-offset: 3px; }
 .guide-root .visa-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px 28px; }
 @media (max-width: 640px) { .guide-root .visa-grid { grid-template-columns: 1fr; } }
 .guide-root .visa-item { display: flex; gap: 11px; align-items: flex-start; }
-.guide-root .visa-item .n { font-family: var(--font-poiret), "Poiret One", ui-sans-serif, system-ui, sans-serif; font-size: 18px; color: var(--g-clay); line-height: 1.1; flex: 0 0 auto; }
-.guide-root .visa-item div span { display: block; font-family: var(--g-serif); font-size: 12px; font-weight: 600; letter-spacing: 0.04em; color: oklch(0.4 0.09 38); margin-bottom: 2px; }
-.guide-root .visa-item div p { margin: 0; font-size: 13.5px; line-height: 1.5; color: oklch(0.45 0.06 40); }
+.guide-root .visa-item .n { font-family: var(--font-poiret), "Poiret One", ui-sans-serif, system-ui, sans-serif; font-size: 18px; color: var(--g-forest); line-height: 1.1; flex: 0 0 auto; }
+.guide-root .visa-item div span { display: block; font-family: var(--g-serif); font-size: 12px; font-weight: 600; letter-spacing: 0.04em; color: var(--g-forest-deep); margin-bottom: 2px; }
+.guide-root .visa-item div p { margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--g-muted); }
 
 /* ---- Explore banner --------------------------------------------------- */
 .guide-root .banner {
@@ -624,7 +624,7 @@
 .guide-root .banner img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 30%; z-index: -2; }
 .guide-root .banner::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(105deg, rgba(28,20,12,.5) 0%, rgba(28,20,12,.12) 52%, rgba(28,20,12,0) 80%); }
 .guide-root .banner-txt { padding: 36px 40px; }
-.guide-root .banner-txt .k { font-family: var(--g-serif); font-size: 12px; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase; color: var(--g-clay-soft); text-shadow: 0 2px 10px rgba(0,0,0,.4); }
+.guide-root .banner-txt .k { font-family: var(--g-serif); font-size: 12px; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase; color: var(--g-forest-soft); text-shadow: 0 2px 10px rgba(0,0,0,.4); }
 .guide-root .banner-txt h3 { font-family: var(--g-display); font-size: clamp(30px,4.5vw,46px); color: #fff; margin: 12px 0 0; line-height: 1.04; text-shadow: 0 3px 18px rgba(0,0,0,.5); max-width: 560px; }
 
 /* ---- Place list ------------------------------------------------------- */
@@ -637,13 +637,13 @@
 }
 .guide-root .place:hover { transform: translateY(-3px); box-shadow: 0 18px 36px -22px rgba(60,40,25,.4); border-color: var(--g-line); }
 .guide-root .place .idx {
-  font-family: var(--font-poiret), "Poiret One", ui-sans-serif, system-ui, sans-serif; font-size: 21px; color: var(--g-clay); line-height: 1;
+  font-family: var(--font-poiret), "Poiret One", ui-sans-serif, system-ui, sans-serif; font-size: 21px; color: var(--g-forest); line-height: 1;
   width: 38px; height: 38px; border-radius: 999px; border: 1px solid var(--g-line);
   display: flex; align-items: center; justify-content: center; flex: 0 0 auto;
 }
 .guide-root .place h4 { font-family: var(--g-serif); font-weight: 600; font-size: 18px; margin: 5px 0 6px; line-height: 1.25; }
 .guide-root .place p { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--g-muted); }
-.guide-root .place .tag { display: inline-flex; align-items: center; gap: 6px; margin-top: 11px; font-size: 11.5px; font-weight: 600; letter-spacing: 0.04em; color: var(--g-clay); }
+.guide-root .place .tag { display: inline-flex; align-items: center; gap: 6px; margin-top: 11px; font-size: 11.5px; font-weight: 600; letter-spacing: 0.04em; color: var(--g-forest); }
 
 /* ---- Dish chips ------------------------------------------------------- */
 .guide-root .dishes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
@@ -662,7 +662,7 @@
   font-size: 14.5px; line-height: 1.6; color: var(--g-fg); padding: 13px 0; border-bottom: 1px solid var(--g-line-soft);
 }
 .guide-root .etq li:last-child { border-bottom: none; }
-.guide-root .etq .b { flex: 0 0 auto; width: 7px; height: 7px; border-radius: 999px; background: var(--g-clay); margin-top: 8px; }
+.guide-root .etq .b { flex: 0 0 auto; width: 7px; height: 7px; border-radius: 999px; background: var(--g-forest); margin-top: 8px; }
 
 .guide-root .phrases { margin: 0; padding: 0; }
 .guide-root .phrase {
@@ -683,20 +683,20 @@
 }
 .guide-root .em:hover { transform: translateY(-3px); box-shadow: 0 16px 32px -20px rgba(60,40,25,.4); border-color: var(--hover-blue); }
 .guide-root .em .lab { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 500; color: var(--g-muted); }
-.guide-root .em .lab svg { color: var(--g-clay); }
+.guide-root .em .lab svg { color: var(--g-forest); }
 .guide-root .em .num { font-family: var(--font-poiret), "Poiret One", ui-sans-serif, system-ui, sans-serif; font-size: 38px; color: var(--g-fg); line-height: 1; }
 
 .guide-root .contact-strip { display: grid; grid-template-columns: 1.4fr 1fr; gap: 18px; margin-top: 32px; }
 @media (max-width: 760px) { .guide-root .contact-strip { grid-template-columns: 1fr; } }
 .guide-root .pp { background: var(--g-fg); color: var(--g-bg); border-radius: 16px; padding: 30px 32px; }
-.guide-root .pp .k { font-family: var(--g-serif); font-size: 11px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--g-clay-soft); }
+.guide-root .pp .k { font-family: var(--g-serif); font-size: 11px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--g-forest-soft); }
 .guide-root .pp h4 { font-family: var(--g-display); font-size: 26px; margin: 10px 0 8px; color: #fff; }
 .guide-root .pp p { margin: 0; font-size: 14.5px; line-height: 1.6; color: oklch(0.86 0.012 80); }
-.guide-root .pp .tba { display: inline-block; margin-top: 16px; font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--g-clay-soft); border: 1px dashed oklch(0.55 0.06 60); padding: 7px 14px; border-radius: 999px; }
-.guide-root .hosp { background: var(--g-clay-soft); border-radius: 16px; padding: 30px 32px; }
-.guide-root .hosp .k { font-family: var(--g-serif); font-size: 11px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--g-clay-deep); }
-.guide-root .hosp h4 { font-family: var(--g-serif); font-weight: 600; font-size: 19px; margin: 10px 0 6px; color: oklch(0.38 0.1 38); }
-.guide-root .hosp p { margin: 0; font-size: 14px; line-height: 1.6; color: oklch(0.44 0.06 40); }
+.guide-root .pp .tba { display: inline-block; margin-top: 16px; font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--g-forest-soft); border: 1px dashed oklch(0.55 0.06 60); padding: 7px 14px; border-radius: 999px; }
+.guide-root .hosp { background: var(--g-forest-soft); border-radius: 16px; padding: 30px 32px; }
+.guide-root .hosp .k { font-family: var(--g-serif); font-size: 11px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--g-forest-deep); }
+.guide-root .hosp h4 { font-family: var(--g-serif); font-weight: 600; font-size: 19px; margin: 10px 0 6px; color: var(--g-forest-deep); }
+.guide-root .hosp p { margin: 0; font-size: 14px; line-height: 1.6; color: var(--g-fg); }
 
 /* ---- Footer ----------------------------------------------------------- */
 .guide-root .foot { position: relative; text-align: center; padding: 90px 0 80px; overflow: hidden; }
@@ -706,7 +706,7 @@
 }
 .guide-root .foot::before { content: ''; position: absolute; inset: 0; z-index: 0; background: linear-gradient(var(--g-bg), oklch(0.97 0.01 85 / 0.4)); }
 .guide-root .foot-inner { position: relative; z-index: 1; }
-.guide-root .foot .flo { font-size: 18px; letter-spacing: 0.5em; color: var(--g-clay); }
+.guide-root .foot .flo { font-size: 18px; letter-spacing: 0.5em; color: var(--g-forest); }
 .guide-root .foot h3 { font-family: var(--g-display); font-size: clamp(30px,5vw,46px); color: var(--g-fg); margin: 18px 0 0; line-height: 1.1; }
 .guide-root .foot p { font-size: 16px; line-height: 1.6; color: var(--g-muted); margin: 16px auto 0; max-width: 460px; }
 .guide-root .foot .sig { font-family: var(--g-serif); font-style: italic; font-size: 22px; color: var(--g-fg); margin-top: 26px; }
