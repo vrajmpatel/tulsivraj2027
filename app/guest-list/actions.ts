@@ -38,6 +38,45 @@ export async function addInvitee(formData: FormData): Promise<ActionResult> {
   return { ok: true }
 }
 
+/** Update an existing invitee's details. */
+export async function updateInvitee(
+  id: string,
+  formData: FormData,
+): Promise<ActionResult> {
+  if (!id) return { ok: false, error: "Missing invitee id." }
+
+  const full_name = String(formData.get("full_name") ?? "").trim()
+  if (!full_name) return { ok: false, error: "A name is required." }
+
+  const email = String(formData.get("email") ?? "").trim()
+  const phone = String(formData.get("phone") ?? "").trim()
+  const side = String(formData.get("side") ?? "").trim()
+  const max_guests = Number(formData.get("max_guests")) || 1
+  const notes = String(formData.get("notes") ?? "").trim()
+
+  try {
+    const supabase = createAdminClient()
+    const { error } = await supabase
+      .from("invitee")
+      .update({
+        full_name,
+        email: email || null,
+        phone: phone || null,
+        side: side || null,
+        max_guests,
+        notes: notes || null,
+      })
+      .eq("id", id)
+    if (error) throw error
+  } catch (e) {
+    console.error("updateInvitee failed:", e)
+    return { ok: false, error: "Could not update invitee. Please try again." }
+  }
+
+  revalidatePath(PATH)
+  return { ok: true }
+}
+
 /** Remove an invitee. Any RSVP linked to them is unlinked (FK is ON DELETE SET NULL). */
 export async function deleteInvitee(id: string): Promise<ActionResult> {
   if (!id) return { ok: false, error: "Missing invitee id." }

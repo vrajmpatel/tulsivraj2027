@@ -10,6 +10,7 @@ import {
   X,
   Link2,
   Trash2,
+  Pencil,
   Search,
   UserPlus,
   ChevronsUpDown,
@@ -17,6 +18,7 @@ import {
 
 import {
   addInvitee,
+  updateInvitee,
   deleteInvitee,
   deleteRsvp,
   linkRsvp,
@@ -70,6 +72,7 @@ export function GuestAdmin({
   const [pending, startTransition] = useTransition()
   const [inviteeQuery, setInviteeQuery] = useState("")
   const [rsvpQuery, setRsvpQuery] = useState("")
+  const [editingInvitee, setEditingInvitee] = useState<Invitee | null>(null)
   const formRef = useRef<HTMLFormElement>(null)
 
   const inviteeById = useMemo(
@@ -122,6 +125,21 @@ export function GuestAdmin({
       if (res.ok) {
         toast.success("Invitee added.")
         formRef.current?.reset()
+      } else {
+        toast.error(res.error)
+      }
+    })
+  }
+
+  function onEditInvitee(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    if (!editingInvitee) return
+    const formData = new FormData(e.currentTarget)
+    startTransition(async () => {
+      const res = await updateInvitee(editingInvitee.id, formData)
+      if (res.ok) {
+        toast.success("Invitee updated.")
+        setEditingInvitee(null)
       } else {
         toast.error(res.error)
       }
@@ -231,7 +249,13 @@ export function GuestAdmin({
               <input className="inp" name="full_name" placeholder="Full name *" required />
               <input className="inp" name="email" type="email" placeholder="Email" />
               <input className="inp" name="phone" placeholder="Phone" />
-              <input className="inp" name="side" placeholder="Side (tulsi / vraj / both)" />
+              <select className="inp" name="side" defaultValue="" aria-label="Side">
+                <option value="" disabled>
+                  Side
+                </option>
+                <option value="tulsi">Tulsi</option>
+                <option value="vraj">Vraj</option>
+              </select>
               <input className="inp" name="max_guests" type="number" min={1} defaultValue={1} placeholder="Max guests" />
               <input className="inp" name="notes" placeholder="Notes" />
             </div>
@@ -299,14 +323,24 @@ export function GuestAdmin({
                         </td>
                         <td className="dim notes">{i.notes || "—"}</td>
                         <td className="num">
-                          <button
-                            className="icon-btn danger"
-                            title="Remove invitee"
-                            onClick={() => onDeleteInvitee(i.id, i.full_name)}
-                            disabled={pending}
-                          >
-                            <Trash2 size={15} />
-                          </button>
+                          <div className="row-actions">
+                            <button
+                              className="icon-btn"
+                              title="Edit invitee"
+                              onClick={() => setEditingInvitee(i)}
+                              disabled={pending}
+                            >
+                              <Pencil size={15} />
+                            </button>
+                            <button
+                              className="icon-btn danger"
+                              title="Remove invitee"
+                              onClick={() => onDeleteInvitee(i.id, i.full_name)}
+                              disabled={pending}
+                            >
+                              <Trash2 size={15} />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     )
@@ -424,6 +458,15 @@ export function GuestAdmin({
           <div className="sig">Tulsi &amp; Vraj</div>
         </div>
       </footer>
+
+      {editingInvitee && (
+        <EditInviteeModal
+          invitee={editingInvitee}
+          pending={pending}
+          onSubmit={onEditInvitee}
+          onClose={() => setEditingInvitee(null)}
+        />
+      )}
     </div>
   )
 }
@@ -447,6 +490,119 @@ function Stat({
       </div>
       <div className="stat-val">{value}</div>
     </div>
+  )
+}
+
+// ----------------------------------------------------------------------------
+// Edit invitee popup. Rendered in a portal so it sits above everything else,
+// including the table's scroll container.
+// ----------------------------------------------------------------------------
+function EditInviteeModal({
+  invitee,
+  pending,
+  onSubmit,
+  onClose,
+}: {
+  invitee: Invitee
+  pending: boolean
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
+  onClose: () => void
+}) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose()
+    }
+    document.addEventListener("keydown", onKey)
+    return () => document.removeEventListener("keydown", onKey)
+  }, [onClose])
+
+  if (typeof document === "undefined") return null
+
+  return createPortal(
+    <div className="modal-overlay" onMouseDown={onClose}>
+      <div
+        className="modal-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Edit ${invitee.full_name}`}
+        onMouseDown={(e) => e.stopPropagation()}
+      >
+        <div className="modal-head">
+          <h3>Edit invitee</h3>
+          <button
+            className="icon-btn"
+            title="Close"
+            onClick={onClose}
+            disabled={pending}
+          >
+            <X size={16} />
+          </button>
+        </div>
+        <form className="modal-form" onSubmit={onSubmit}>
+          <label className="modal-field">
+            <span>Full name *</span>
+            <input
+              className="inp"
+              name="full_name"
+              defaultValue={invitee.full_name}
+              required
+            />
+          </label>
+          <label className="modal-field">
+            <span>Email</span>
+            <input
+              className="inp"
+              name="email"
+              type="email"
+              defaultValue={invitee.email ?? ""}
+            />
+          </label>
+          <label className="modal-field">
+            <span>Phone</span>
+            <input className="inp" name="phone" defaultValue={invitee.phone ?? ""} />
+          </label>
+          <label className="modal-field">
+            <span>Side</span>
+            <select className="inp" name="side" defaultValue={invitee.side ?? ""}>
+              <option value="" disabled>
+                Side
+              </option>
+              <option value="tulsi">Tulsi</option>
+              <option value="vraj">Vraj</option>
+            </select>
+          </label>
+          <label className="modal-field">
+            <span>Max guests</span>
+            <input
+              className="inp"
+              name="max_guests"
+              type="number"
+              min={1}
+              defaultValue={invitee.max_guests}
+            />
+          </label>
+          <label className="modal-field">
+            <span>Notes</span>
+            <input className="inp" name="notes" defaultValue={invitee.notes ?? ""} />
+          </label>
+
+          <div className="modal-actions">
+            <button
+              type="button"
+              className="btn"
+              onClick={onClose}
+              disabled={pending}
+            >
+              Cancel
+            </button>
+            <button className="btn primary" type="submit" disabled={pending}>
+              Save changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>,
+    document.body,
   )
 }
 

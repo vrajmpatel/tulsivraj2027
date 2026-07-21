@@ -17,7 +17,7 @@ export default async function GuestListPage() {
   if (!isAdminConfigured()) {
     return (
       <main className="admin-root" style={{ minHeight: "100vh" }}>
-        <BackButton />
+        <BackButton className="font-sans text-[13px] font-medium normal-case tracking-[0.02em] px-[15px] py-2 text-[oklch(0.52_0.012_70)] hover:text-[oklch(0.27_0.012_70)]" />
         <div className="wrap" style={{ paddingTop: 120, paddingBottom: 120 }}>
           <span className="kicker">Setup needed</span>
           <h1 className="sec-title">Almost there</h1>
@@ -54,7 +54,7 @@ export default async function GuestListPage() {
 
   return (
     <main className="min-h-screen">
-      <BackButton />
+      <BackButton className="font-sans text-[13px] font-medium normal-case tracking-[0.02em] px-[15px] py-2 text-[oklch(0.52_0.012_70)] hover:text-[oklch(0.27_0.012_70)]" />
       <GuestAdmin invitees={invitees} rsvps={rsvps} loadError={loadError} />
     </main>
   )
