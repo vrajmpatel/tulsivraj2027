@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Calendar, Flower2, Sun, Music, Heart, Compass, Shirt, BookOpen, MapPin, CircleHelp, Clock } from "lucide-react"
+import { Flower2, Sun, Music, Heart, Compass, Shirt, BookOpen, MapPin, CircleHelp, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
@@ -17,9 +17,14 @@ export function Nav() {
               <PopoverTrigger asChild>
                 <Button 
                   variant="outline"
-                  className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 pl-5 pr-2.5 py-2 font-serif text-xs tracking-[0.25em] uppercase text-white shadow-md backdrop-blur-md transition-all hover:bg-white/20 active:scale-95 cursor-pointer h-10"
+                  className="flex items-center justify-center gap-3 rounded-full border border-white/20 bg-white/10 pl-1 pr-4 py-2 font-serif text-xs tracking-[0.25em] uppercase text-white shadow-md backdrop-blur-md transition-all hover:bg-white/20 active:scale-95 cursor-pointer h-10"
                 >
-                  <Calendar className="w-4 h-4 text-gray-300 shrink-0" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/favicon_io/events-icon-white.png"
+                    alt=""
+                    className="w-8 h-8 rounded-full object-contain shrink-0"
+                  />
                   <span>EVENTS</span>
                 </Button>
               </PopoverTrigger>
@@ -235,7 +240,7 @@ export function Nav() {
           </span>
           <BookOpen className="w-5 h-5 z-10 text-white/80 group-hover:text-white transition-colors duration-300" />
         </Link>
-        <Link href="#vadodara" className="group relative flex items-center justify-center w-10 h-10 sm:w-8 sm:h-8 transition-transform duration-300 hover:scale-110 active:scale-95">
+        <Link href="/vadodara" className="group relative flex items-center justify-center w-10 h-10 sm:w-8 sm:h-8 transition-transform duration-300 hover:scale-110 active:scale-95">
           <div className="absolute inset-0 rounded-full bg-white/10 border border-white/20 scale-0 group-hover:scale-100 transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-lg" />
           <span className="absolute right-11 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 pointer-events-none font-serif text-[10px] tracking-[0.2em] uppercase text-white bg-white/10 border border-white/20 backdrop-blur-md px-3 py-1.5 rounded-lg whitespace-nowrap shadow-lg flex items-center">
             Vadodara

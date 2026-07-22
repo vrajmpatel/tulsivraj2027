@@ -14,6 +14,7 @@ import {
   Search,
   UserPlus,
   ChevronsUpDown,
+  Download,
 } from "lucide-react"
 
 import {
@@ -50,6 +51,42 @@ export type Rsvp = {
   message: string | null
 }
 
+// How many invitee rows render at a time — more are revealed as the host
+// scrolls the (fixed-height) invitees table, instead of the page growing.
+const INVITEE_PAGE_SIZE = 20
+
+// Sticky-nav sections — mirrors the scrollspy pill nav used on the
+// Itinerary/Wardrobe Planner pages.
+const NAV_SECTIONS = [
+  { id: "overview", label: "Overview" },
+  { id: "invitees", label: "Invitees" },
+  { id: "rsvps", label: "RSVPs" },
+] as const
+
+// ----------------------------------------------------------------------------
+// CSV export — Excel opens .csv natively, so this avoids pulling in a
+// spreadsheet library just to produce a downloadable file.
+// ----------------------------------------------------------------------------
+function csvCell(value: string | number) {
+  const s = String(value ?? "")
+  return /[",\r\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s
+}
+
+function downloadCsv(filename: string, headers: string[], rows: (string | number)[][]) {
+  const csv = [headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n")
+  // Leading BOM so Excel reads UTF-8 (accented names, etc.) correctly.
+  const BOM = String.fromCharCode(0xfeff)
+  const blob = new Blob([BOM + csv], { type: "text/csv;charset=utf-8;" })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement("a")
+  link.href = url
+  link.download = filename
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  URL.revokeObjectURL(url)
+}
+
 function fmtDate(iso: string) {
   const d = new Date(iso)
   return Number.isNaN(d.getTime())
@@ -74,6 +111,37 @@ export function GuestAdmin({
   const [rsvpQuery, setRsvpQuery] = useState("")
   const [editingInvitee, setEditingInvitee] = useState<Invitee | null>(null)
   const formRef = useRef<HTMLFormElement>(null)
+
+  // Sticky-nav scrollspy — highlights the pill for the section in view,
+  // same behavior as the Itinerary/Wardrobe Planner subnav.
+  const [activeSection, setActiveSection] = useState<string>(NAV_SECTIONS[0].id)
+
+  useEffect(() => {
+    const root = document.querySelector(".admin-root")
+    if (!root) return
+    const sections = Array.from(root.querySelectorAll<HTMLElement>("section[id]"))
+    const spy = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActiveSection((e.target as HTMLElement).id)
+        })
+      },
+      { rootMargin: "-45% 0px -50% 0px", threshold: 0 },
+    )
+    sections.forEach((s) => spy.observe(s))
+    return () => spy.disconnect()
+  }, [])
+
+  function jumpToSection(e: React.MouseEvent<HTMLAnchorElement>, id: string) {
+    e.preventDefault()
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
+  }
+
+  // Invitees table keeps a fixed height and reveals more rows as the host
+  // scrolls, instead of letting the page grow forever as guests are added.
+  const [visibleInviteeCount, setVisibleInviteeCount] = useState(INVITEE_PAGE_SIZE)
+  const inviteesScrollRef = useRef<HTMLDivElement>(null)
+  const inviteesSentinelRef = useRef<HTMLDivElement>(null)
 
   const inviteeById = useMemo(
     () => new Map(invitees.map((i) => [i.id, i])),
@@ -105,6 +173,37 @@ export function GuestAdmin({
         .some((v) => (v as string).toLowerCase().includes(q)),
     )
   }, [invitees, inviteeQuery])
+
+  // Reset how many rows are revealed whenever the search narrows the list.
+  useEffect(() => {
+    setVisibleInviteeCount(INVITEE_PAGE_SIZE)
+  }, [inviteeQuery])
+
+  const visibleInvitees = filteredInvitees.slice(0, visibleInviteeCount)
+  const hasMoreInvitees = visibleInviteeCount < filteredInvitees.length
+
+  // Infinite scroll: reveal the next batch once the sentinel at the bottom
+  // of the (fixed-height, scrollable) invitees table comes into view. Keyed
+  // on visibleInviteeCount so the observer is torn down and re-created after
+  // every batch — otherwise a sentinel that's still on-screen post-load (the
+  // fixed-height box wasn't full yet) never re-fires, since IntersectionObserver
+  // only reports threshold *crossings*, not "still intersecting."
+  useEffect(() => {
+    const sentinel = inviteesSentinelRef.current
+    const root = inviteesScrollRef.current
+    if (!sentinel || !root || !hasMoreInvitees) return
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setVisibleInviteeCount((c) => Math.min(c + INVITEE_PAGE_SIZE, filteredInvitees.length))
+        }
+      },
+      { root, rootMargin: "200px" },
+    )
+    io.observe(sentinel)
+    return () => io.disconnect()
+  }, [visibleInviteeCount, hasMoreInvitees, filteredInvitees.length])
 
   const filteredRsvps = useMemo(() => {
     const q = rsvpQuery.trim().toLowerCase()
@@ -170,6 +269,44 @@ export function GuestAdmin({
     })
   }
 
+  function onExportInvitees() {
+    const rows = filteredInvitees.map((i) => {
+      const responses = rsvpCountByInvitee.get(i.id) ?? 0
+      return [
+        i.full_name,
+        i.email ?? "",
+        i.phone ?? "",
+        i.side ?? "",
+        i.max_guests,
+        responses > 0 ? `Responded${responses > 1 ? ` x${responses}` : ""}` : "Awaiting",
+        i.notes ?? "",
+      ]
+    })
+    downloadCsv(
+      `guest-list-invitees-${new Date().toISOString().slice(0, 10)}.csv`,
+      ["Name", "Email", "Phone", "Side", "Max Guests", "Status", "Notes"],
+      rows,
+    )
+  }
+
+  function onExportRsvps() {
+    const rows = filteredRsvps.map((r) => [
+      r.full_name,
+      r.email ?? "",
+      r.phone ?? "",
+      r.attending ? "Yes" : "No",
+      r.attending ? r.guest_count : "",
+      r.message ?? "",
+      fmtDate(r.created_at),
+      r.invitee_id ? (inviteeById.get(r.invitee_id)?.full_name ?? "") : "Not matched",
+    ])
+    downloadCsv(
+      `guest-list-rsvps-${new Date().toISOString().slice(0, 10)}.csv`,
+      ["Name", "Email", "Phone", "Attending", "Guests", "Message", "Received", "Matched Invitee"],
+      rows,
+    )
+  }
+
   return (
     <div className="admin-root">
       {/* Hero — same photo + cream styling as the other pages */}
@@ -178,18 +315,6 @@ export function GuestAdmin({
         <div className="wrap hero-inner">
           <p className="hero-kicker">~ Private · Hosts Only ~</p>
           <h1 className="hero-title">Guest List &amp; RSVPs</h1>
-          <p className="hero-sub">
-            Your private dashboard. Track who&apos;s been invited, see who has
-            responded, and match each RSVP to the right invitee. This page is
-            unlisted — only people with the link can reach it.
-          </p>
-          <div className="hero-meta">
-            <span>Tulsi &amp; Vraj</span>
-            <span className="dot" />
-            <span>Private Dashboard</span>
-            <span className="dot" />
-            <span>Unlisted</span>
-          </div>
         </div>
       </header>
 
@@ -197,10 +322,17 @@ export function GuestAdmin({
       <nav className="subnav">
         <div className="wrap">
           <div className="subnav-row">
-            <span className="subnav-brand">Guest List</span>
-            <a className="subnav-link" href="#overview">Overview</a>
-            <a className="subnav-link" href="#invitees">Invitees</a>
-            <a className="subnav-link" href="#rsvps">RSVPs</a>
+            <span className="subnav-brand">Sections</span>
+            {NAV_SECTIONS.map((s) => (
+              <a
+                key={s.id}
+                className={"subnav-link" + (activeSection === s.id ? " is-active" : "")}
+                href={`#${s.id}`}
+                onClick={(e) => jumpToSection(e, s.id)}
+              >
+                {s.label}
+              </a>
+            ))}
           </div>
         </div>
       </nav>
@@ -218,7 +350,6 @@ export function GuestAdmin({
         <div className="wrap">
           <div className="sec-head">
             <span className="kicker">At a Glance</span>
-            <h2 className="sec-title">Where things stand</h2>
           </div>
           <div className="stats">
             <Stat icon={<Users size={18} />} label="Invitees" value={invitees.length} />
@@ -274,10 +405,15 @@ export function GuestAdmin({
                 aria-label="Search invitees"
               />
             </div>
-            <span className="count">{filteredInvitees.length} shown</span>
+            <div className="toolbar-actions">
+              <button className="btn" type="button" onClick={onExportInvitees}>
+                <Download size={14} /> Export to Excel
+              </button>
+              <span className="count">{filteredInvitees.length} shown</span>
+            </div>
           </div>
 
-          <div className="tbl-wrap">
+          <div className="tbl-wrap tbl-wrap-scroll" ref={inviteesScrollRef}>
             <table className="tbl">
               <thead>
                 <tr>
@@ -300,7 +436,7 @@ export function GuestAdmin({
                     </td>
                   </tr>
                 ) : (
-                  filteredInvitees.map((i) => {
+                  visibleInvitees.map((i) => {
                     const responses = rsvpCountByInvitee.get(i.id) ?? 0
                     return (
                       <tr key={i.id}>
@@ -348,6 +484,7 @@ export function GuestAdmin({
                 )}
               </tbody>
             </table>
+            {hasMoreInvitees && <div ref={inviteesSentinelRef} className="load-sentinel" aria-hidden="true" />}
           </div>
         </div>
       </section>
@@ -374,10 +511,15 @@ export function GuestAdmin({
                 aria-label="Search RSVPs"
               />
             </div>
-            <span className="count">{filteredRsvps.length} shown</span>
+            <div className="toolbar-actions">
+              <button className="btn" type="button" onClick={onExportRsvps}>
+                <Download size={14} /> Export to Excel
+              </button>
+              <span className="count">{filteredRsvps.length} shown</span>
+            </div>
           </div>
 
-          <div className="tbl-wrap">
+          <div className="tbl-wrap tbl-wrap-scroll">
             <table className="tbl">
               <thead>
                 <tr>

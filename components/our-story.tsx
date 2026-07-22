@@ -149,7 +149,8 @@ export function OurStory() {
     <div className="story-root">
       {/* Hero */}
       <header className="hero">
-        <div className="wrap">
+        <div className="hero-img" aria-hidden="true" />
+        <div className="wrap hero-inner">
           <p className="hero-kicker">~ Our Story ~</p>
           <h1 className="hero-title">
             7,900 Miles

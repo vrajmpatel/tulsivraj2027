@@ -351,7 +351,7 @@
 }
 .wp-root .wp-hero-img {
   position: absolute; inset: 0; z-index: -2;
-  background: url('/SMT063.jpg') center 22%/cover no-repeat;
+  background: url('/SMT063.jpg') center 30%/cover no-repeat;
 }
 .wp-root .wp-hero::after {
   content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
@@ -434,7 +434,7 @@
 }
 .guide-root .hero-img {
   position: absolute; inset: 0; z-index: -2;
-  background: url('/SMT063.jpg') center 22%/cover no-repeat;
+  background: url('/SMT063.jpg') center 30%/cover no-repeat;
 }
 .guide-root .hero::after {
   content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
@@ -723,6 +723,107 @@
 .guide-root .backtop:hover { border-color: var(--hover-blue); color: var(--hover-blue); }
 
 /* ====================================================================== */
+/*  Vadodara Map (/vadodara) — map + key places, tied to the sidebar pin.   */
+/*  Same warm cream + forest design language as the Guide page. Every      */
+/*  selector is scoped under .vad-root so class names never leak globally. */
+/* ====================================================================== */
+.vad-root {
+  --v-bg: oklch(0.97 0.01 85);
+  --v-bg-deep: oklch(0.945 0.012 80);
+  --v-card: oklch(0.995 0.004 85);
+  --v-fg: oklch(0.27 0.012 70);
+  --v-muted: oklch(0.52 0.012 70);
+  --v-line: oklch(0.88 0.012 80);
+  --v-line-soft: oklch(0.92 0.01 80);
+  --v-forest: oklch(0.52 0.13 150);
+  --v-forest-deep: oklch(0.42 0.12 150);
+  --v-forest-soft: oklch(0.9 0.05 150);
+  --v-serif: var(--font-playfair), "Playfair Display", Georgia, serif;
+  --v-display: var(--font-oranienbaum), "Oranienbaum", "Playfair Display", serif;
+  --v-sans: var(--font-inter), "Inter", system-ui, sans-serif;
+
+  background: var(--v-bg);
+  color: var(--v-fg);
+  font-family: var(--v-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+.vad-root * { box-sizing: border-box; }
+.vad-root a { color: inherit; text-decoration: none; }
+.vad-root .wrap { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
+@media (max-width: 640px) { .vad-root .wrap { padding: 0 18px; } }
+
+.vad-root .vad-hero {
+  position: relative; min-height: 56vh; display: flex; align-items: flex-end;
+  overflow: hidden; isolation: isolate;
+}
+.vad-root .vad-hero-img {
+  position: absolute; inset: 0; z-index: -2;
+  background: url('/SMT063.jpg') center 30%/cover no-repeat;
+}
+.vad-root .vad-hero::after {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(to bottom, rgba(28,20,12,.42) 0%, rgba(28,20,12,.12) 38%, rgba(28,20,12,.30) 66%, var(--v-bg) 100%);
+}
+.vad-root .vad-hero-inner { padding-bottom: 56px; padding-top: 120px; width: 100%; }
+.vad-root .vad-hero-kicker {
+  font-family: var(--v-serif); font-size: 14px; font-weight: 500; font-style: italic;
+  letter-spacing: 0.22em; color: rgba(255,251,244,.92);
+  text-shadow: 0 2px 14px rgba(0,0,0,.45);
+}
+.vad-root .vad-hero-title {
+  font-family: var(--v-display); font-weight: 400; color: #fff;
+  font-size: clamp(42px, 7vw, 88px); line-height: 0.98; letter-spacing: 0.01em;
+  margin: 16px 0 0; text-shadow: 0 4px 30px rgba(0,0,0,.45);
+}
+.vad-root .vad-hero-sub {
+  margin: 22px 0 0; max-width: 560px; color: rgba(255,251,244,.92);
+  font-size: 16px; line-height: 1.6; text-shadow: 0 2px 14px rgba(0,0,0,.45);
+}
+
+.vad-root section[id] { scroll-margin-top: 72px; }
+.vad-root .vad-sec { padding: 64px 0; }
+.vad-root .vad-sec.alt { background: var(--v-bg-deep); }
+.vad-root .vad-sec-head { max-width: 720px; margin-bottom: 36px; }
+.vad-root .vad-kicker {
+  font-family: var(--v-serif); font-size: 14px; font-weight: 400;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--v-muted); opacity: 0.9;
+}
+.vad-root .vad-sec-title {
+  font-family: var(--v-display); font-weight: 400;
+  font-size: clamp(28px, 4vw, 42px); margin: 14px 0 0; color: var(--v-fg);
+}
+.vad-root .vad-sec-intro { font-size: 16.5px; line-height: 1.65; color: var(--v-muted); margin: 16px 0 0; max-width: 620px; }
+
+.vad-root .vad-map-frame {
+  position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 20px;
+  overflow: hidden; border: 1px solid var(--v-line-soft); box-shadow: 0 22px 44px -28px rgba(60,40,25,.4);
+}
+.vad-root .vad-map-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+.vad-root .vad-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+@media (max-width: 920px) { .vad-root .vad-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .vad-root .vad-grid { grid-template-columns: 1fr; } }
+
+.vad-root .vad-card {
+  display: block; background: var(--v-card); border: 1px solid var(--v-line-soft);
+  border-radius: 16px; padding: 22px 22px 20px; transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.vad-root .vad-card:hover { transform: translateY(-3px); box-shadow: 0 18px 36px -22px rgba(60,40,25,.4); border-color: var(--v-line); }
+.vad-root .vad-card-ico {
+  width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  background: var(--v-forest-soft); color: var(--v-forest-deep); margin-bottom: 14px;
+}
+.vad-root .vad-card-tag { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--v-forest-deep); margin-bottom: 6px; }
+.vad-root .vad-card h4 { font-family: var(--v-serif); font-weight: 600; font-size: 17px; margin: 0 0 7px; line-height: 1.25; color: var(--v-fg); }
+.vad-root .vad-card p { font-size: 13.5px; line-height: 1.55; color: var(--v-muted); margin: 0; }
+.vad-root .vad-card-link {
+  display: inline-flex; align-items: center; gap: 5px; margin-top: 14px; font-size: 12px; font-weight: 600;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--v-forest-deep);
+}
+.vad-root .vad-card:hover .vad-card-link { color: var(--hover-blue-deep); }
+
+/* ====================================================================== */
 /*  Itinerary (/itinerary) — ported from the claude.ai/design handoff      */
 /*  (project/Itinerary.html). Same warm cream + clay design language as     */
 /*  the Guide and Wardrobe Planner. Every selector is scoped under          */
@@ -995,6 +1096,8 @@
   --ad-clay-soft: oklch(0.93 0.045 50);
   --ad-green: oklch(0.55 0.11 150);
   --ad-green-soft: oklch(0.93 0.05 150);
+  --ad-forest: oklch(0.52 0.13 150);
+  --ad-forest-soft: oklch(0.9 0.05 150);
   --ad-red: oklch(0.55 0.16 25);
   --ad-red-soft: oklch(0.94 0.04 25);
   --ad-serif: var(--font-playfair), "Playfair Display", Georgia, serif;
@@ -1020,7 +1123,7 @@
 }
 .admin-root .hero-img {
   position: absolute; inset: 0; z-index: -2;
-  background: url('/SMT063.jpg') center 22%/cover no-repeat;
+  background: url('/SMT063.jpg') center 30%/cover no-repeat;
 }
 .admin-root .hero::after {
   content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
@@ -1071,6 +1174,7 @@
   font-family: var(--ad-sans);
 }
 .admin-root .subnav-link:hover { color: var(--ad-fg); border-color: var(--ad-line); }
+.admin-root .subnav-link.is-active { background: var(--ad-forest); color: var(--ad-bg); border-color: var(--ad-forest); }
 
 /* ---- Section scaffold ------------------------------------------------- */
 .admin-root section[id] { scroll-margin-top: 72px; }
@@ -1154,15 +1258,19 @@
 .admin-root .search:focus-within { border-color: var(--ad-clay); box-shadow: 0 0 0 3px var(--ad-clay-soft); }
 .admin-root .search input { flex: 1; border: none; outline: none; background: transparent; font-family: var(--ad-sans); font-size: 14px; color: var(--ad-fg); }
 .admin-root .search input::placeholder { color: var(--ad-faint); }
+.admin-root .toolbar-actions { display: flex; align-items: center; gap: 14px; }
 .admin-root .count { font-size: 12.5px; color: var(--ad-faint); white-space: nowrap; }
 
 /* ---- Table ------------------------------------------------------------ */
 .admin-root .tbl-wrap { overflow-x: auto; border: 1px solid var(--ad-line-soft); border-radius: 14px; background: var(--ad-card); }
+.admin-root .tbl-wrap-scroll { max-height: 480px; overflow-y: auto; }
+.admin-root .load-sentinel { height: 1px; }
 .admin-root .tbl { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 720px; }
 .admin-root .tbl thead th {
   text-align: left; font-family: var(--ad-serif); font-size: 11px; font-weight: 600;
   letter-spacing: 0.1em; text-transform: uppercase; color: var(--ad-faint);
   padding: 14px 16px; border-bottom: 1px solid var(--ad-line); white-space: nowrap;
+  position: sticky; top: 0; z-index: 2; background: var(--ad-card);
 }
 .admin-root .tbl th.num, .admin-root .tbl td.num { text-align: right; }
 .admin-root .tbl tbody td { padding: 13px 16px; border-bottom: 1px solid var(--ad-line-soft); vertical-align: top; }
@@ -1270,18 +1378,28 @@
 .story-root .wrap { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
 @media (max-width: 640px) { .story-root .wrap { padding: 0 18px; } }
 
-/* ---- Hero ------------------------------------------------------------- */
+/* ---- Hero (mirrors the Wardrobe/Itinerary photo hero) ----------------- */
 .story-root .hero {
-  position: relative; padding: 130px 0 70px; overflow: hidden; text-align: center;
-  background: radial-gradient(ellipse 900px 500px at 50% -10%, var(--st-clay-soft), transparent 70%);
+  position: relative; min-height: 88vh; display: flex; align-items: flex-end;
+  overflow: hidden; isolation: isolate; text-align: center;
 }
+.story-root .hero-img {
+  position: absolute; inset: 0; z-index: -2;
+  background: url('/SMT063.jpg') center 30%/cover no-repeat;
+}
+.story-root .hero::after {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(to bottom, rgba(28,20,12,.42) 0%, rgba(28,20,12,.12) 38%, rgba(28,20,12,.30) 66%, var(--st-bg) 100%);
+}
+.story-root .hero-inner { width: 100%; padding-top: 130px; padding-bottom: 70px; }
 .story-root .hero-kicker {
   font-family: var(--st-serif); font-size: 14px; font-weight: 500; font-style: italic;
-  letter-spacing: 0.22em; color: var(--st-clay);
+  letter-spacing: 0.22em; color: rgba(255,251,244,.92); text-shadow: 0 2px 14px rgba(0,0,0,.45);
 }
 .story-root .hero-title {
-  font-family: var(--st-display); font-weight: 400; color: var(--st-fg);
+  font-family: var(--st-display); font-weight: 400; color: #fff;
   font-size: clamp(42px, 7vw, 86px); line-height: 1.02; margin: 16px 0 0;
+  text-shadow: 0 4px 30px rgba(0,0,0,.45);
 }
 /* ---- Sticky distance meter --------------------------------------------- */
 .story-root .meter-wrap {

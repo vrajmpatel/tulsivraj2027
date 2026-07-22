@@ -539,34 +539,9 @@ export function TravelGuide() {
           <div className="sec-head reveal">
             <span className="kicker">Accommodations</span>
             <h2 className="sec-title">Where to Stay</h2>
-            <p className="sec-intro">
-              We're holding a room block for guests — details are being finalised and will be shared
-              here soon. A couple of well-regarded alternatives are listed below.
-            </p>
-          </div>
-
-          <div className="contact-strip reveal" style={{ marginTop: 0 }}>
-            <div className="pp">
-              <span className="k">Our Room Block</span>
-              <h4>Recommended Hotel</h4>
-              <p>
-                We've reserved a group rate at our host hotel. Hotel name, address, the booking link,
-                and the room-block cutoff date will be confirmed here shortly.
-              </p>
-              <span className="tba">Details to be announced</span>
-            </div>
-            <div className="hosp">
-              <span className="k">A Tip</span>
-              <h4>Book early</h4>
-              <p>
-                January is peak wedding and tourist season in Gujarat. Once the room block is
-                announced, reserve promptly to stay close to the celebrations.
-              </p>
-            </div>
           </div>
 
           <div className="block reveal">
-            <Subhead>Other Hotels in Vadodara</Subhead>
             <div className="grid c2">
               <div className="card">
                 <div className="card-ico"><Building2 size={21} strokeWidth={1.6} /></div>
