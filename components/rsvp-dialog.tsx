@@ -18,18 +18,23 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Textarea } from "@/components/ui/textarea"
+import { RSVP_LIMITS } from "@/lib/rsvp-schema"
+
+const EMPTY_FORM = {
+  full_name: "",
+  email: "",
+  phone: "",
+  attending: "yes",
+  guest_count: "1",
+  message: "",
+  // Honeypot -- hidden from people, so anything here means a bot filled it in.
+  website: "",
+}
 
 export function RsvpDialog() {
   const [open, setOpen] = useState(false)
   const [submitting, setSubmitting] = useState(false)
-  const [form, setForm] = useState({
-    full_name: "",
-    email: "",
-    phone: "",
-    attending: "yes",
-    guest_count: "1",
-    message: "",
-  })
+  const [form, setForm] = useState(EMPTY_FORM)
 
   function update<K extends keyof typeof form>(key: K, value: string) {
     setForm((prev) => ({ ...prev, [key]: value }))
@@ -57,6 +62,7 @@ export function RsvpDialog() {
           attending: form.attending === "yes",
           guest_count: Number(form.guest_count) || 1,
           message: form.message.trim() || null,
+          website: form.website,
         }),
       })
     } catch (err) {
@@ -79,6 +85,15 @@ export function RsvpDialog() {
       return
     }
 
+    // Rate limited -- they've submitted several times already.
+    if (res.status === 429) {
+      toast.error(
+        data?.error ??
+          "You've sent a few RSVPs already. Please try again later, or reach out to us directly.",
+      )
+      return
+    }
+
     if (!res.ok) {
       toast.error(data?.error ?? "Something went wrong. Please try again.")
       console.error("RSVP submit failed:", data)
@@ -86,14 +101,7 @@ export function RsvpDialog() {
     }
 
     toast.success("Thank you! Your RSVP has been received.")
-    setForm({
-      full_name: "",
-      email: "",
-      phone: "",
-      attending: "yes",
-      guest_count: "1",
-      message: "",
-    })
+    setForm(EMPTY_FORM)
     setOpen(false)
   }
 
@@ -118,6 +126,23 @@ export function RsvpDialog() {
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="grid gap-4">
+          {/*
+            Honeypot. Off-screen rather than display:none, since some bots skip
+            fields they can tell are hidden. No person will ever fill this in.
+          */}
+          <div aria-hidden="true" className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden">
+            <Label htmlFor="rsvp-website">Website</Label>
+            <Input
+              id="rsvp-website"
+              name="website"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              value={form.website}
+              onChange={(e) => update("website", e.target.value)}
+            />
+          </div>
+
           <div className="grid gap-2">
             <Label htmlFor="rsvp-name">Full name</Label>
             <Input
@@ -125,6 +150,7 @@ export function RsvpDialog() {
               value={form.full_name}
               onChange={(e) => update("full_name", e.target.value)}
               placeholder="Your name"
+              maxLength={RSVP_LIMITS.fullName}
               required
             />
           </div>
@@ -137,6 +163,7 @@ export function RsvpDialog() {
               value={form.email}
               onChange={(e) => update("email", e.target.value)}
               placeholder="you@example.com"
+              maxLength={RSVP_LIMITS.email}
             />
           </div>
 
@@ -148,6 +175,7 @@ export function RsvpDialog() {
               value={form.phone}
               onChange={(e) => update("phone", e.target.value)}
               placeholder="Optional"
+              maxLength={RSVP_LIMITS.phone}
             />
           </div>
 
@@ -180,6 +208,7 @@ export function RsvpDialog() {
                 id="rsvp-guests"
                 type="number"
                 min={1}
+                max={RSVP_LIMITS.guestCount}
                 value={form.guest_count}
                 onChange={(e) => update("guest_count", e.target.value)}
               />
@@ -193,6 +222,7 @@ export function RsvpDialog() {
               value={form.message}
               onChange={(e) => update("message", e.target.value)}
               placeholder="Anything you'd like us to know"
+              maxLength={RSVP_LIMITS.message}
             />
           </div>
 
