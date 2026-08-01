@@ -5,6 +5,7 @@ import Link from "next/link"
 import { ArrowUp, MapPin } from "lucide-react"
 
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { WEDDING_EVENTS } from "@/lib/events"
 
 // ----------------------------------------------------------------------------
 // Content — distilled from the claude.ai/design handoff (project/Itinerary.html),
@@ -14,13 +15,9 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 // wedding day itself condensed into the Lagna section.
 // ----------------------------------------------------------------------------
 
-const SECTIONS = [
-  { id: "mehendi", label: "Mehendi", day: "02" },
-  { id: "haldi-tulsi", label: "Tulsi's Haldi", day: "03" },
-  { id: "haldi-vraj", label: "Vraj's Haldi", day: "04" },
-  { id: "sangeet", label: "Sangeet", day: "04" },
-  { id: "lagna", label: "Lagna", day: "05" },
-] as const
+// Shared with the guest list's per-household "Events" column, so renaming an
+// event in one place renames it in both.
+const SECTIONS = WEDDING_EVENTS
 
 // Every event this week is held at the same venue, except the Sangeet.
 const VENUE = {

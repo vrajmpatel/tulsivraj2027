@@ -1105,6 +1105,13 @@
   --ad-sans: var(--font-inter), "Inter", system-ui, sans-serif;
 
   min-height: 100vh;
+  /* Column flex so the footer can be pushed to the bottom on a short page.
+     Without this, min-height stretches the background to fill the viewport
+     while the footer stays at its natural position, leaving a band of empty
+     background beneath it — visible whenever the page renders short (a load
+     error, the "setup needed" state, or an empty guest list). */
+  display: flex;
+  flex-direction: column;
   background: var(--ad-bg);
   color: var(--ad-fg);
   font-family: var(--ad-sans);
@@ -1212,6 +1219,22 @@
 .admin-root .stat.is-key .stat-top, .admin-root .stat.is-key .stat-top span { color: var(--ad-clay-soft); }
 .admin-root .stat.is-key .stat-val { color: #fff; }
 
+/* ---- Progress bars ---------------------------------------------------- */
+.admin-root .progress-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 20px; }
+@media (max-width: 760px) { .admin-root .progress-grid { grid-template-columns: 1fr; } }
+.admin-root .progress-card { background: var(--ad-card); border: 1px solid var(--ad-line-soft); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+.admin-root .progress-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.admin-root .progress-title { display: flex; align-items: center; gap: 8px; color: var(--ad-clay); }
+.admin-root .progress-title svg { width: 17px; height: 17px; flex: 0 0 auto; }
+.admin-root .progress-title span { font-family: var(--ad-serif); font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ad-faint); }
+.admin-root .progress-stats { font-family: var(--font-poiret), "Poiret One", ui-sans-serif, system-ui, sans-serif; font-size: 22px; color: var(--ad-fg); line-height: 1; }
+.admin-root .progress-stats strong { font-weight: 600; font-size: 26px; color: var(--ad-clay-deep); }
+.admin-root .progress-pct { font-family: var(--ad-sans); font-size: 13px; font-weight: 600; color: var(--ad-muted); margin-left: 6px; }
+.admin-root .progress-track { width: 100%; height: 10px; background: var(--ad-line-soft); border-radius: 999px; overflow: hidden; position: relative; }
+.admin-root .progress-fill { height: 100%; background: linear-gradient(90deg, var(--ad-clay) 0%, oklch(0.62 0.14 42) 100%); border-radius: 999px; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+.admin-root .progress-fill.alt { background: linear-gradient(90deg, var(--ad-forest) 0%, oklch(0.58 0.14 152) 100%); }
+.admin-root .progress-sub { font-size: 13px; color: var(--ad-muted); margin: 0; line-height: 1.45; }
+
 /* ---- Add invitee form ------------------------------------------------- */
 .admin-root .add-form {
   background: var(--ad-card); border: 1px solid var(--ad-line-soft); border-radius: 14px;
@@ -1311,6 +1334,89 @@
 .admin-root .tbl tbody tr.is-done .dim { opacity: .5; text-decoration: line-through; }
 .admin-root .tbl tbody tr.is-done .badge { opacity: .6; }
 
+/* ---- "Invitation Sent?" radio group (one per invitee row) --------------- */
+/* position:relative on the group and on each pill is load-bearing, not
+   decoration. The hidden <legend> and the hidden <input>s below are absolutely
+   positioned; without a positioned ancestor their containing block is <html>,
+   so they escape the table's overflow clipping and are laid out at their
+   natural offset deep inside the (much taller) table. That silently extends
+   documentElement.scrollHeight, leaving a large band of empty scrollable space
+   under the page. Containing them here keeps the document the right height. */
+.admin-root .sent-group {
+  display: inline-flex; align-items: center; gap: 4px;
+  border: 0; margin: 0; padding: 0; min-inline-size: 0;
+  position: relative;
+}
+/* Grouping label for screen readers only — the pills carry the visible text. */
+.admin-root .sent-legend {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.admin-root .sent-opt {
+  position: relative;
+  display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 999px;
+  border: 1px solid var(--ad-line); background: var(--ad-card); color: var(--ad-muted);
+  font-family: var(--ad-sans); font-size: 11.5px; font-weight: 600; letter-spacing: 0.03em;
+  cursor: pointer; white-space: nowrap; transition: all .15s ease;
+}
+/* The input stays focusable (and arrow-key navigable) but is not drawn. */
+.admin-root .sent-opt input {
+  position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none;
+}
+.admin-root .sent-opt:hover { border-color: var(--ad-clay); color: var(--ad-fg); }
+.admin-root .sent-opt:has(input:focus-visible) {
+  outline: 2px solid var(--ad-clay); outline-offset: 2px;
+}
+.admin-root .sent-opt.is-active.is-not_yet {
+  background: var(--ad-bg-deep); border-color: var(--ad-line); color: var(--ad-faint);
+}
+.admin-root .sent-opt.is-active.is-physical {
+  background: var(--ad-clay-soft); border-color: transparent; color: var(--ad-clay-deep);
+}
+.admin-root .sent-opt.is-active.is-digital {
+  background: var(--ad-green-soft); border-color: transparent; color: oklch(0.4 0.1 150);
+}
+.admin-root .sent-group:disabled .sent-opt { opacity: .5; cursor: not-allowed; }
+
+/* ---- "Events" checkboxes (one group per invitee row) -------------------- */
+/* Same pill language as the radios above, but each toggles independently.
+   Wraps onto a second line so five options don't stretch the table sideways. */
+/* position:relative for the same reason as .sent-group above — it contains the
+   absolutely-positioned legend and checkboxes so they can't escape the table's
+   overflow and inflate the document height. */
+.admin-root .events-group {
+  display: flex; align-items: center; gap: 4px; flex-wrap: wrap;
+  border: 0; margin: 0; padding: 0; min-inline-size: 0; max-width: 236px;
+  position: relative;
+}
+.admin-root .events-opt {
+  position: relative;
+  display: inline-flex; align-items: center; padding: 4px 9px; border-radius: 999px;
+  border: 1px solid var(--ad-line); background: var(--ad-card); color: var(--ad-muted);
+  font-family: var(--ad-sans); font-size: 11px; font-weight: 600; letter-spacing: 0.02em;
+  cursor: pointer; white-space: nowrap; transition: all .15s ease;
+}
+/* Keeps the pill's own type treatment inside .modal-field, whose `span` rule
+   would otherwise repaint these as field labels. */
+.admin-root .events-opt span {
+  font-size: inherit; font-weight: inherit; letter-spacing: inherit; color: inherit;
+}
+.admin-root .events-opt input {
+  position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none;
+}
+.admin-root .events-opt:hover { border-color: var(--ad-clay); color: var(--ad-fg); }
+.admin-root .events-opt:has(input:focus-visible) {
+  outline: 2px solid var(--ad-clay); outline-offset: 2px;
+}
+/* Driven by :checked rather than a class so it works for the controlled pills
+   in the table and the uncontrolled ones in the edit modal alike. */
+.admin-root .events-opt:has(input:checked) {
+  background: var(--ad-clay-soft); border-color: transparent; color: var(--ad-clay-deep);
+}
+.admin-root .events-group:disabled .events-opt { opacity: .5; cursor: not-allowed; }
+/* Modal variant: full event names, no width cap. */
+.admin-root .events-group.is-modal { max-width: none; }
+
 /* ---- Searchable invitee picker (trigger; panel is portaled below) ---- */
 .admin-root .row-actions { display: inline-flex; align-items: center; gap: 6px; }
 
@@ -1328,7 +1434,10 @@
 .admin-root .combo-btn svg { color: var(--ad-faint); flex: 0 0 auto; }
 
 /* ---- Footer (mirrors the other pages' footer) ------------------------ */
-.admin-root .foot { position: relative; text-align: center; padding: 80px 0 70px; overflow: hidden; }
+/* margin-top:auto takes up the slack in the column flex above, so the footer
+   sits at the bottom of the viewport on a short page and directly after the
+   content on a long one. */
+.admin-root .foot { position: relative; text-align: center; padding: 80px 0 70px; overflow: hidden; margin-top: auto; }
 .admin-root .foot-tex {
   position: absolute; inset: 0; z-index: 0;
   background: url('/indian_mango.png') center/520px; opacity: 0.5; pointer-events: none;
@@ -1339,10 +1448,19 @@
 .admin-root .foot h3 { font-family: var(--ad-display); font-size: clamp(28px,5vw,42px); color: var(--ad-fg); margin: 18px 0 0; line-height: 1.1; }
 .admin-root .foot p { font-size: 15.5px; line-height: 1.6; color: var(--ad-muted); margin: 16px auto 0; max-width: 460px; }
 .admin-root .foot .sig { font-family: var(--ad-serif); font-style: italic; font-size: 22px; color: var(--ad-fg); margin-top: 24px; }
+/* Same closing row as the Itinerary footer. Without it the footer trailed off
+   into italic text and the bottom padding read as dead space. */
+.admin-root .foot-links { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 34px; }
+.admin-root .foot-links a {
+  font-size: 13px; font-weight: 500; color: var(--ad-muted); text-decoration: none;
+  padding: 9px 18px; border-radius: 999px; border: 1px solid var(--ad-line); background: var(--ad-card);
+  transition: all .18s ease;
+}
+.admin-root .foot-links a:hover { color: var(--hover-blue); border-color: var(--hover-blue); }
 
 /* ====================================================================== */
 /*  Our Story (/our-story) — ported from the claude.ai/design handoff      */
-/*  (project/Our Story.html). "7,900 Miles to I Do" — a long-distance      */
+/*  (project/Our Story.html). "12,530 Kilometers to I Do" — a long-distance */
 /*  timeline with a scroll-linked distance meter. Same cream + clay        */
 /*  language as the other pages; every selector is scoped under            */
 /*  .story-root so the generic class names never leak.                     */
@@ -1361,6 +1479,10 @@
   --st-clay-soft: oklch(0.93 0.045 50);
   --st-teal: oklch(0.52 0.08 195);
   --st-teal-soft: oklch(0.92 0.035 195);
+  /* Same forest green the Wardrobe Planner, Guide and Itinerary pages use. */
+  --st-forest: oklch(0.52 0.13 150);
+  --st-forest-deep: oklch(0.42 0.12 150);
+  --st-forest-soft: oklch(0.9 0.05 150);
   --st-serif: var(--font-playfair), "Playfair Display", Georgia, serif;
   --st-display: var(--font-oranienbaum), "Oranienbaum", "Playfair Display", serif;
   --st-sans: var(--font-inter), "Inter", system-ui, sans-serif;
@@ -1436,12 +1558,26 @@
 .story-root .meter-plane.is-landing .ico-takeoff { display: none; }
 .story-root .meter-plane.is-landing .ico-land { display: block; }
 .story-root .meter-num { flex: 0 0 auto; font-family: var(--font-poiret), "Poiret One", ui-sans-serif, system-ui, sans-serif; font-size: 18px; color: var(--st-clay-deep); min-width: 148px; text-align: center; white-space: nowrap; }
+/* Both the distance value and the apart/together label share this small
+   uppercase treatment — .val and .state exist only so the media query below
+   can hide the label on phones without hiding the number with it. */
 .story-root .meter-num span { font-family: var(--st-sans); font-size: 10.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--st-faint); display: block; margin-top: 1px; }
+/* Phones: a single row can't hold the back-button clearance, both cities, the
+   route and the readout — the track collapsed to 0px and the distance was
+   pushed off-screen. Two explicit grid rows instead: cities up top, then the
+   full-width route with the kilometre readout beside it. */
 @media (max-width: 700px) {
-  .story-root .meter-row { padding-left: 104px; }
-  .story-root .meter-city, .story-root .meter-num { font-size: 11px; min-width: 0; }
-  .story-root .meter-city .sub { font-size: 8.5px; }
-  .story-root .meter-num span { display: none; }
+  .story-root .meter-row {
+    display: grid; align-items: center; padding-left: 0;
+    grid-template-columns: 104px minmax(0, 1fr) auto; /* col 1 clears the floating back button */
+    column-gap: 10px; row-gap: 9px;
+  }
+  .story-root .meter-city { grid-area: 1 / 2 / 2 / 3; font-size: 11px; }
+  .story-root .meter-city.right { grid-area: 1 / 3 / 2 / 4; }
+  .story-root .meter-city .sub { display: none; }
+  .story-root .meter-track { grid-area: 2 / 1 / 3 / 3; }
+  .story-root .meter-num { grid-area: 2 / 3 / 3 / 4; min-width: 0; text-align: right; }
+  .story-root .meter-num .state { display: none; }
 }
 
 /* ---- Section scaffold --------------------------------------------------- */
@@ -1511,6 +1647,27 @@
 .story-root .story-item.is-milestone .story-card { background: var(--st-fg); border-color: var(--st-fg); }
 .story-root .story-item.is-milestone .story-card h4 { color: #fff; }
 .story-root .story-item.is-milestone .story-card p { color: oklch(0.86 0.012 80); }
+
+/* Real photo frame — the filled-in counterpart to .photo-slot. */
+.story-root .story-photo {
+  width: 100%; margin-top: 16px; border-radius: 12px; overflow: hidden;
+  border: 1px solid var(--st-line-soft); background: var(--st-bg-deep);
+}
+.story-root .story-photo img {
+  width: 100%; aspect-ratio: 1 / 1; object-fit: cover; object-position: center 38%;
+}
+
+/* Green card — the light forest tone the Wardrobe/Guide/Itinerary pages use.
+   Wins over the dark .is-milestone treatment above by coming later. */
+.story-root .story-item.is-green .story-card {
+  background: var(--st-forest-soft); border-color: oklch(0.84 0.06 150);
+}
+.story-root .story-item.is-green .story-card h4 { color: var(--st-forest-deep); }
+.story-root .story-item.is-green .story-card p { color: oklch(0.42 0.035 150); }
+.story-root .story-item.is-green .story-card p.ph { color: oklch(0.48 0.03 150); }
+.story-root .story-item.is-green .story-badge.both { background: var(--st-forest); color: #fff; }
+.story-root .story-item.is-green .story-photo { border-color: oklch(0.82 0.06 150); }
+.story-root .story-item.is-green .story-dot { background: var(--st-forest); color: #fff; border-color: var(--st-forest); }
 
 /* ---- Finale --------------------------------------------------------------- */
 .story-root .finale { text-align: center; padding: 90px 0 100px; position: relative; overflow: hidden; }

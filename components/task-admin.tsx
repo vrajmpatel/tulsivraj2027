@@ -1,6 +1,7 @@
 "use client"
 
 import { useMemo, useRef, useState, useTransition } from "react"
+import Link from "next/link"
 import { toast } from "sonner"
 import {
   Calendar,
@@ -304,6 +305,12 @@ export function TaskAdmin({
             With love and aabhar —
           </p>
           <div className="sig">Tulsi &amp; Vraj</div>
+          {/* Mirrors the Itinerary footer: a solid row of links closes the page
+              off, and it doubles as navigation between the two private pages. */}
+          <div className="foot-links">
+            <Link href="/">Home</Link>
+            <Link href="/guest-list">Guest List</Link>
+          </div>
         </div>
       </footer>
     </div>

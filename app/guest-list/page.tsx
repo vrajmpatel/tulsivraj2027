@@ -38,7 +38,9 @@ export default async function GuestListPage() {
   const [inviteeRes, rsvpRes] = await Promise.all([
     supabase
       .from("invitee")
-      .select("id, created_at, full_name, email, phone, side, max_guests, notes")
+      .select(
+        "id, created_at, full_name, email, phone, side, max_guests, notes, invitation_sent, events",
+      )
       .order("full_name", { ascending: true }),
     supabase
       .from("rsvp")

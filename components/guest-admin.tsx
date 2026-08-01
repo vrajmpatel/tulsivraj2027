@@ -15,6 +15,7 @@ import {
   UserPlus,
   ChevronsUpDown,
   Download,
+  Send,
 } from "lucide-react"
 
 import {
@@ -23,7 +24,20 @@ import {
   deleteInvitee,
   deleteRsvp,
   linkRsvp,
+  setInvitationSent,
+  setInviteeEvents,
 } from "@/app/guest-list/actions"
+import {
+  INVITATION_SENT_OPTIONS,
+  invitationSentLabel,
+  type InvitationSent,
+} from "@/lib/invitation"
+import {
+  WEDDING_EVENTS,
+  eventLabels,
+  normaliseEventIds,
+  type WeddingEventId,
+} from "@/lib/events"
 
 // ----------------------------------------------------------------------------
 // Types — mirror the columns selected in app/guest-list/page.tsx
@@ -37,6 +51,8 @@ export type Invitee = {
   side: string | null
   max_guests: number
   notes: string | null
+  invitation_sent: InvitationSent
+  events: WeddingEventId[]
 }
 
 export type Rsvp = {
@@ -112,6 +128,13 @@ export function GuestAdmin({
   const [editingInvitee, setEditingInvitee] = useState<Invitee | null>(null)
   const formRef = useRef<HTMLFormElement>(null)
 
+  // Events the host has clicked but the server hasn't confirmed back yet,
+  // keyed by invitee id. Drives what the checkboxes render, so clicking stays
+  // responsive and a fast second click builds on the first.
+  const [eventOverrides, setEventOverrides] = useState<
+    Record<string, WeddingEventId[]>
+  >({})
+
   // Sticky-nav scrollspy — highlights the pill for the section in view,
   // same behavior as the Itinerary/Wardrobe Planner subnav.
   const [activeSection, setActiveSection] = useState<string>(NAV_SECTIONS[0].id)
@@ -148,6 +171,23 @@ export function GuestAdmin({
     [invitees],
   )
 
+  // Once the server sends back a row matching what we optimistically showed,
+  // drop the override so the server is the single source of truth again.
+  useEffect(() => {
+    setEventOverrides((prev) => {
+      let changed = false
+      const next = { ...prev }
+      for (const i of invitees) {
+        const pending = next[i.id]
+        if (pending && pending.join(",") === i.events.join(",")) {
+          delete next[i.id]
+          changed = true
+        }
+      }
+      return changed ? next : prev
+    })
+  }, [invitees])
+
   // How many RSVPs are linked to each invitee — drives the "responded" badge.
   const rsvpCountByInvitee = useMemo(() => {
     const m = new Map<string, number>()
@@ -163,12 +203,24 @@ export function GuestAdmin({
     .filter((r) => r.attending)
     .reduce((sum, r) => sum + (r.guest_count || 0), 0)
   const unmatchedCount = rsvps.filter((r) => !r.invitee_id).length
+  const sentInviteesCount = invitees.filter((i) => i.invitation_sent !== "not_yet").length
+  const sentPct = invitees.length > 0 ? Math.round((sentInviteesCount / invitees.length) * 100) : 0
+
+  const respondedSentCount = invitees.filter(
+    (i) => i.invitation_sent !== "not_yet" && (rsvpCountByInvitee.get(i.id) ?? 0) > 0,
+  ).length
+  const respondedPct =
+    sentInviteesCount > 0 ? Math.round((respondedSentCount / sentInviteesCount) * 100) : 0
 
   const filteredInvitees = useMemo(() => {
     const q = inviteeQuery.trim().toLowerCase()
     if (!q) return invitees
     return invitees.filter((i) =>
-      [i.full_name, i.email, i.phone, i.side, i.notes]
+      [
+        i.full_name, i.email, i.phone, i.side, i.notes,
+        invitationSentLabel(i.invitation_sent),
+        eventLabels(i.events).join(" "),
+      ]
         .filter(Boolean)
         .some((v) => (v as string).toLowerCase().includes(q)),
     )
@@ -220,12 +272,24 @@ export function GuestAdmin({
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
     startTransition(async () => {
-      const res = await addInvitee(formData)
-      if (res.ok) {
-        toast.success("Invitee added.")
-        formRef.current?.reset()
-      } else {
-        toast.error(res.error)
+      try {
+        const res = await addInvitee(formData)
+        if (res.ok) {
+          toast.success("Invitee added.")
+          formRef.current?.reset()
+        } else if (res.duplicateOf) {
+          // Deliberately not resetting the form — whatever was typed stays put so
+          // it can be corrected rather than re-entered.
+          toast.error("Already on the guest list", {
+            description: res.error,
+            duration: 8000,
+          })
+        } else {
+          toast.error(res.error || "Could not add invitee.")
+        }
+      } catch (err: any) {
+        console.error("onAddInvitee error:", err)
+        toast.error(err?.message || "An unexpected error occurred while adding invitee.")
       }
     })
   }
@@ -235,12 +299,23 @@ export function GuestAdmin({
     if (!editingInvitee) return
     const formData = new FormData(e.currentTarget)
     startTransition(async () => {
-      const res = await updateInvitee(editingInvitee.id, formData)
-      if (res.ok) {
-        toast.success("Invitee updated.")
-        setEditingInvitee(null)
-      } else {
-        toast.error(res.error)
+      try {
+        const res = await updateInvitee(editingInvitee.id, formData)
+        if (res.ok) {
+          toast.success("Invitee updated.")
+          setEditingInvitee(null)
+        } else if (res.duplicateOf) {
+          // Modal stays open so the clash can be corrected in place.
+          toast.error("Already on the guest list", {
+            description: res.error,
+            duration: 8000,
+          })
+        } else {
+          toast.error(res.error || "Could not update invitee.")
+        }
+      } catch (err: any) {
+        console.error("onEditInvitee error:", err)
+        toast.error(err?.message || "An unexpected error occurred while updating invitee.")
       }
     })
   }
@@ -248,24 +323,92 @@ export function GuestAdmin({
   function onDeleteInvitee(id: string, name: string) {
     if (!confirm(`Remove "${name}" from the guest list?`)) return
     startTransition(async () => {
-      const res = await deleteInvitee(id)
-      res.ok ? toast.success("Invitee removed.") : toast.error(res.error)
+      try {
+        const res = await deleteInvitee(id)
+        res.ok ? toast.success("Invitee removed.") : toast.error(res.error || "Could not remove invitee.")
+      } catch (err: any) {
+        console.error("onDeleteInvitee error:", err)
+        toast.error(err?.message || "An unexpected error occurred while removing invitee.")
+      }
+    })
+  }
+
+  function onSetInvitationSent(id: string, value: InvitationSent) {
+    startTransition(async () => {
+      try {
+        const res = await setInvitationSent(id, value)
+        if (res.ok) toast.success(`Invitation marked "${invitationSentLabel(value)}".`)
+        else toast.error(res.error || "Could not update invitation status.")
+      } catch (err: any) {
+        console.error("onSetInvitationSent error:", err)
+        toast.error(err?.message || "An unexpected error occurred.")
+      }
+    })
+  }
+
+  /**
+   * Toggling one event sends the whole resulting list, so a burst of clicks
+   * can't interleave into a half-applied state on the server.
+   *
+   * The pending value is also held locally. Without it, a second click landing
+   * before the first round-trip returns would compute its new list from the
+   * stale `invitee.events` prop and silently undo the first change.
+   */
+  function onToggleEvent(invitee: Invitee, eventId: WeddingEventId, on: boolean) {
+    const current = eventOverrides[invitee.id] ?? invitee.events
+    const next = on
+      ? normaliseEventIds([...current, eventId])
+      : current.filter((e) => e !== eventId)
+
+    setEventOverrides((prev) => ({ ...prev, [invitee.id]: next }))
+
+    startTransition(async () => {
+      try {
+        const res = await setInviteeEvents(invitee.id, next)
+        if (!res.ok) {
+          toast.error(res.error || "Could not update events.")
+          // Put the row back to whatever the server last told us.
+          setEventOverrides((prev) => {
+            const copy = { ...prev }
+            delete copy[invitee.id]
+            return copy
+          })
+        }
+      } catch (err: any) {
+        console.error("onToggleEvent error:", err)
+        toast.error(err?.message || "An unexpected error occurred.")
+        setEventOverrides((prev) => {
+          const copy = { ...prev }
+          delete copy[invitee.id]
+          return copy
+        })
+      }
     })
   }
 
   function onLink(rsvpId: string, inviteeId: string) {
     startTransition(async () => {
-      const res = await linkRsvp(rsvpId, inviteeId)
-      if (res.ok) toast.success(inviteeId ? "RSVP linked." : "RSVP unlinked.")
-      else toast.error(res.error)
+      try {
+        const res = await linkRsvp(rsvpId, inviteeId)
+        if (res.ok) toast.success(inviteeId ? "RSVP linked." : "RSVP unlinked.")
+        else toast.error(res.error || "Could not link RSVP.")
+      } catch (err: any) {
+        console.error("onLink error:", err)
+        toast.error(err?.message || "An unexpected error occurred.")
+      }
     })
   }
 
   function onDeleteRsvp(id: string, name: string) {
     if (!confirm(`Delete the RSVP from "${name}"? This cannot be undone.`)) return
     startTransition(async () => {
-      const res = await deleteRsvp(id)
-      res.ok ? toast.success("RSVP deleted.") : toast.error(res.error)
+      try {
+        const res = await deleteRsvp(id)
+        res.ok ? toast.success("RSVP deleted.") : toast.error(res.error || "Could not delete RSVP.")
+      } catch (err: any) {
+        console.error("onDeleteRsvp error:", err)
+        toast.error(err?.message || "An unexpected error occurred.")
+      }
     })
   }
 
@@ -278,13 +421,35 @@ export function GuestAdmin({
         i.phone ?? "",
         i.side ?? "",
         i.max_guests,
+        invitationSentLabel(i.invitation_sent),
+        eventLabels(i.events).join(", "),
+        // A column per event as well as the joined summary above. The joined
+        // cell reads well for a human scanning the sheet, but can't be filtered
+        // or counted -- and "who's coming to the Sangeet?" is the question this
+        // export actually gets used for.
+        ...WEDDING_EVENTS.map((ev) => (i.events.includes(ev.id) ? "Yes" : "")),
+        i.events.length,
         responses > 0 ? `Responded${responses > 1 ? ` x${responses}` : ""}` : "Awaiting",
         i.notes ?? "",
+        fmtDate(i.created_at),
       ]
     })
     downloadCsv(
       `guest-list-invitees-${new Date().toISOString().slice(0, 10)}.csv`,
-      ["Name", "Email", "Phone", "Side", "Max Guests", "Status", "Notes"],
+      [
+        "Name",
+        "Email",
+        "Phone",
+        "Side",
+        "Max Guests",
+        "Invitation Sent",
+        "Events",
+        ...WEDDING_EVENTS.map((ev) => ev.label),
+        "Events Count",
+        "Status",
+        "Notes",
+        "Added",
+      ],
       rows,
     )
   }
@@ -359,6 +524,60 @@ export function GuestAdmin({
             <Stat icon={<Users size={18} />} label="Heads expected" value={expectedHeads} />
             <Stat icon={<Link2 size={18} />} label="RSVPs not matched" value={unmatchedCount} />
           </div>
+
+          <div className="progress-grid">
+            <div className="progress-card">
+              <div className="progress-header">
+                <div className="progress-title">
+                  <Send size={16} />
+                  <span>Invitations Sent</span>
+                </div>
+                <div className="progress-stats">
+                  <strong>{sentInviteesCount}</strong> / {invitees.length}{" "}
+                  <span className="progress-pct">({sentPct}%)</span>
+                </div>
+              </div>
+              <div
+                className="progress-track"
+                role="progressbar"
+                aria-valuenow={sentPct}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-label="Invitations sent progress"
+              >
+                <div className="progress-fill" style={{ width: `${sentPct}%` }} />
+              </div>
+              <p className="progress-sub">
+                {sentInviteesCount} out of {invitees.length} recorded invitees sent
+              </p>
+            </div>
+
+            <div className="progress-card">
+              <div className="progress-header">
+                <div className="progress-title">
+                  <ClipboardList size={16} />
+                  <span>RSVP Responses</span>
+                </div>
+                <div className="progress-stats">
+                  <strong>{respondedSentCount}</strong> / {sentInviteesCount}{" "}
+                  <span className="progress-pct">({respondedPct}%)</span>
+                </div>
+              </div>
+              <div
+                className="progress-track"
+                role="progressbar"
+                aria-valuenow={respondedPct}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-label="RSVP responses progress"
+              >
+                <div className="progress-fill alt" style={{ width: `${respondedPct}%` }} />
+              </div>
+              <p className="progress-sub">
+                {respondedSentCount} out of {sentInviteesCount} invited guests responded
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -421,6 +640,8 @@ export function GuestAdmin({
                   <th>Contact</th>
                   <th>Side</th>
                   <th className="num">Max</th>
+                  <th>Invitation Sent?</th>
+                  <th>Events</th>
                   <th>Status</th>
                   <th>Notes</th>
                   <th className="num">Actions</th>
@@ -429,7 +650,7 @@ export function GuestAdmin({
               <tbody>
                 {filteredInvitees.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="empty">
+                    <td colSpan={9} className="empty">
                       {invitees.length === 0
                         ? "No invitees yet — add your first above."
                         : "No invitees match your search."}
@@ -448,6 +669,20 @@ export function GuestAdmin({
                         </td>
                         <td className="dim">{i.side || "—"}</td>
                         <td className="num">{i.max_guests}</td>
+                        <td>
+                          <InvitationSentRadio
+                            invitee={i}
+                            pending={pending}
+                            onChange={(value) => onSetInvitationSent(i.id, value)}
+                          />
+                        </td>
+                        <td>
+                          <InviteeEventsCheckboxes
+                            invitee={i}
+                            events={eventOverrides[i.id] ?? i.events}
+                            onToggle={(eventId, on) => onToggleEvent(i, eventId, on)}
+                          />
+                        </td>
                         <td>
                           {responses > 0 ? (
                             <span className="badge yes">
@@ -588,18 +823,6 @@ export function GuestAdmin({
         </div>
       </section>
 
-      <footer className="foot">
-        <div className="foot-tex" aria-hidden="true" />
-        <div className="wrap foot-inner">
-          <div className="flo">❀ ❀ ❀</div>
-          <h3>Keep this link to yourself</h3>
-          <p>
-            This page is unlisted — only people with the link can reach it. With
-            love and aabhar —
-          </p>
-          <div className="sig">Tulsi &amp; Vraj</div>
-        </div>
-      </footer>
 
       {editingInvitee && (
         <EditInviteeModal
@@ -632,6 +855,98 @@ function Stat({
       </div>
       <div className="stat-val">{value}</div>
     </div>
+  )
+}
+
+// ----------------------------------------------------------------------------
+// "Invitation Sent?" radio group — one per invitee row.
+//
+// Real <input type="radio"> elements (visually hidden, styled through their
+// labels) rather than buttons, so arrow keys move between the options and
+// screen readers announce it as one grouped choice. Each row needs its own
+// `name`, otherwise every row on the page would share a single group and
+// selecting one would clear the rest.
+// ----------------------------------------------------------------------------
+function InvitationSentRadio({
+  invitee,
+  pending,
+  onChange,
+}: {
+  invitee: Invitee
+  pending: boolean
+  onChange: (value: InvitationSent) => void
+}) {
+  return (
+    <fieldset className="sent-group" disabled={pending}>
+      <legend className="sent-legend">Invitation sent to {invitee.full_name}</legend>
+      {INVITATION_SENT_OPTIONS.map((opt) => {
+        const checked = invitee.invitation_sent === opt.value
+        return (
+          <label
+            key={opt.value}
+            className={`sent-opt is-${opt.value}` + (checked ? " is-active" : "")}
+          >
+            <input
+              type="radio"
+              name={`invitation-sent-${invitee.id}`}
+              value={opt.value}
+              checked={checked}
+              disabled={pending}
+              onChange={() => onChange(opt.value)}
+            />
+            <span>{opt.label}</span>
+          </label>
+        )
+      })}
+    </fieldset>
+  )
+}
+
+// ----------------------------------------------------------------------------
+// "Events" checkboxes — one per invitee row.
+//
+// Checkboxes rather than radios because a household is routinely invited to
+// some events but not all. Styled as the same pills as the Invitation Sent
+// group, but each toggles independently. The group wraps onto a second line so
+// five options don't stretch the table into a long horizontal scroll.
+// ----------------------------------------------------------------------------
+function InviteeEventsCheckboxes({
+  invitee,
+  events,
+  onToggle,
+}: {
+  invitee: Invitee
+  /** Effective selection — the optimistic value while a save is in flight. */
+  events: WeddingEventId[]
+  onToggle: (eventId: WeddingEventId, on: boolean) => void
+}) {
+  // Deliberately not disabled while a save is in flight, unlike the single
+  // -select radios above: setting five events on a row means five clicks in a
+  // row, and greying out between each would make that crawl. The optimistic
+  // tick is the feedback, and the overlay keeps fast clicks correct.
+  return (
+    <fieldset className="events-group">
+      <legend className="sent-legend">Events for {invitee.full_name}</legend>
+      {WEDDING_EVENTS.map((ev) => {
+        const checked = events.includes(ev.id)
+        return (
+          <label
+            key={ev.id}
+            className={"events-opt" + (checked ? " is-active" : "")}
+            title={ev.label}
+          >
+            <input
+              type="checkbox"
+              name={`events-${invitee.id}`}
+              value={ev.id}
+              checked={checked}
+              onChange={(e) => onToggle(ev.id, e.target.checked)}
+            />
+            <span>{ev.short}</span>
+          </label>
+        )
+      })}
+    </fieldset>
   )
 }
 
@@ -724,6 +1039,44 @@ function EditInviteeModal({
             />
           </label>
           <label className="modal-field">
+            <span>Invitation sent?</span>
+            <select
+              className="inp"
+              name="invitation_sent"
+              defaultValue={invitee.invitation_sent}
+            >
+              {INVITATION_SENT_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <fieldset className="modal-field">
+            <span>Events</span>
+            {/* Tells the action the form really did submit this field, so
+                unticking everything saves as "no events" rather than reading
+                as "field absent, leave unchanged". */}
+            <input type="hidden" name="events_present" value="1" />
+            <div className="events-group is-modal">
+              {WEDDING_EVENTS.map((ev) => (
+                <label
+                  key={ev.id}
+                  className="events-opt"
+                  title={ev.label}
+                >
+                  <input
+                    type="checkbox"
+                    name="events"
+                    value={ev.id}
+                    defaultChecked={invitee.events.includes(ev.id)}
+                  />
+                  <span>{ev.label}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <label className="modal-field">
             <span>Notes</span>
             <input className="inp" name="notes" defaultValue={invitee.notes ?? ""} />
           </label>
@@ -767,7 +1120,7 @@ function InviteeCombobox({
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState("")
   const [active, setActive] = useState(0)
-  const [coords, setCoords] = useState<{ left: number; top: number; width: number } | null>(null)
+  const [coords, setCoords] = useState<{ left: number; top: number; width: number; openUp: boolean } | null>(null)
 
   const btnRef = useRef<HTMLButtonElement>(null)
   const popRef = useRef<HTMLDivElement>(null)
@@ -785,7 +1138,15 @@ function InviteeCombobox({
     const el = btnRef.current
     if (!el) return
     const r = el.getBoundingClientRect()
-    setCoords({ left: r.left, top: r.bottom + 4, width: Math.max(r.width, 240) })
+    const popHeight = 280
+    const spaceBelow = window.innerHeight - r.bottom
+    const openUp = spaceBelow < popHeight && r.top > spaceBelow
+    setCoords({
+      left: r.left,
+      top: openUp ? r.top - 4 : r.bottom + 4,
+      width: Math.max(r.width, 240),
+      openUp,
+    })
   }
 
   function toggle() {
@@ -866,8 +1227,13 @@ function InviteeCombobox({
         createPortal(
           <div
             ref={popRef}
-            className="invitee-combo-pop"
-            style={{ left: coords.left, top: coords.top, width: coords.width }}
+            className={"invitee-combo-pop" + (coords.openUp ? " is-open-up" : "")}
+            style={{
+              left: coords.left,
+              top: coords.top,
+              width: coords.width,
+              transform: coords.openUp ? "translateY(-100%)" : undefined,
+            }}
           >
             <div className="combo-search">
               <Search size={14} />

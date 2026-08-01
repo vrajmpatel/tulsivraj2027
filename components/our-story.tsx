@@ -18,12 +18,12 @@ import {
 
 // ----------------------------------------------------------------------------
 // Content — distilled from the claude.ai/design handoff (project/Our Story.html).
-// "7,900 Miles to I Do": the long-distance timeline from Yardley, PA to
+// "12,530 Kilometers to I Do": the long-distance timeline from Yardley, PA to
 // Vadodara, GJ. The chapter copy below is the design's scaffold — dates,
 // blurbs, and photo slots are placeholders awaiting the couple's real story.
 // ----------------------------------------------------------------------------
 
-const TOTAL_MI = 7900
+const TOTAL_KM = 12530
 
 type Chapter = {
   badge: string
@@ -32,9 +32,13 @@ type Chapter = {
   text: string
   placeholder?: boolean
   photo?: string
+  /** A real photo, rendered in place of the dashed `photo` placeholder. */
+  image?: { src: string; alt: string }
   icon: LucideIcon
   date: string
   milestone?: boolean
+  /** Swaps the dark milestone card for the site's light forest green. */
+  accent?: "green"
 }
 
 const CHAPTERS: Chapter[] = [
@@ -76,12 +80,13 @@ const CHAPTERS: Chapter[] = [
     title: "[Where and how it happened]",
     text: "Placeholder — the setting, the surprise (or lack thereof), and the moment “long distance” became “engaged.”",
     placeholder: true,
-    photo: "Drop the proposal photo",
+    accent: "green",
+    image: { src: "/SMT0123.jpg", alt: "The two of us just after the proposal, the ring on her hand." },
   },
   {
     badge: "Vadodara · Jan 2027", tone: "vad", icon: Heart, date: "Jan 5, 2027", milestone: true,
-    title: "Zero miles apart",
-    text: "The gap that once measured 7,900 miles and 10.5 time zones closes for good — under one mandap, in one city, together at last.",
+    title: "Zero kilometers apart",
+    text: "The gap that once measured 12,530 kilometers and 10.5 time zones closes for good — under one mandap, in one city, together at last.",
   },
 ]
 
@@ -92,7 +97,7 @@ const CHAPTERS: Chapter[] = [
 export function OurStory() {
   const fillRef = useRef<HTMLDivElement>(null)
   const planeRef = useRef<HTMLDivElement>(null)
-  const milesRef = useRef<HTMLSpanElement>(null)
+  const distRef = useRef<HTMLSpanElement>(null)
   const stateRef = useRef<HTMLSpanElement>(null)
 
   useEffect(() => {
@@ -115,33 +120,89 @@ export function OurStory() {
     reveals.forEach((r) => ro.observe(r))
 
     // Scroll-linked distance meter — the plane flies dot to dot as the page
-    // scrolls top to bottom, counting down from 7,900 mi to 0. Direct DOM
-    // writes to avoid re-rendering on scroll.
-    const updateMeter = () => {
-      if (!fillRef.current || !planeRef.current || !milesRef.current || !stateRef.current) return
-      const max = document.documentElement.scrollHeight - window.innerHeight
-      let progress = max > 0 ? window.scrollY / max : 0
-      progress = Math.max(0, Math.min(1, progress))
+    // scrolls top to bottom, reading exactly 12,530 km at the very top and
+    // exactly 0 km once the page cannot scroll any further. The scrollable
+    // range is re-measured every time we paint rather than cached, so a
+    // collapsing mobile URL bar, a rotated phone, a resized window, or
+    // late-loading images can never leave the meter short of either end.
+    // Direct DOM writes to avoid re-rendering on scroll.
+    let frame = 0
+
+    const paint = () => {
+      frame = 0
+      const fill = fillRef.current
+      const plane = planeRef.current
+      const dist = distRef.current
+      const state = stateRef.current
+      if (!fill || !plane || !dist || !state) return
+
+      const doc = document.documentElement
+      // clientHeight — not innerHeight — is the viewport the document actually
+      // scrolls inside, so `max` equals the browser's own maximum scroll
+      // offset (innerHeight includes the mobile toolbar area and any
+      // horizontal scrollbar, which would leave a gap we could never reach).
+      const max = doc.scrollHeight - doc.clientHeight
+      const y = window.scrollY || doc.scrollTop || 0
+
+      // Snap the first/last couple of pixels: fractional scroll positions,
+      // non-integer device pixel ratios, browser zoom, and rubber-band
+      // overscroll all mean `y` rarely lands exactly on 0 or on `max`.
+      const EDGE = 2
+      let progress: number
+      if (max <= EDGE || y <= EDGE) progress = 0
+      else if (y >= max - EDGE) progress = 1
+      else progress = y / max
 
       const pct = (progress * 100).toFixed(2)
-      fillRef.current.style.width = pct + "%"
-      planeRef.current.style.left = pct + "%"
-      planeRef.current.classList.toggle("is-visible", progress > 0)
-      planeRef.current.classList.toggle("is-landing", progress >= 0.5)
+      fill.style.width = pct + "%"
+      plane.style.left = pct + "%"
+      plane.classList.toggle("is-visible", progress > 0)
+      plane.classList.toggle("is-landing", progress >= 0.5)
 
-      const miles = Math.round(TOTAL_MI * (1 - progress))
-      milesRef.current.textContent = miles.toLocaleString() + " mi"
-      stateRef.current.textContent = progress >= 0.995 ? "together" : "apart"
+      // 0 km is reserved for the true bottom of the page — anything above it
+      // rounds up to at least 1 km so the readout and the "apart" label agree.
+      const km = progress >= 1 ? 0 : Math.max(1, Math.round(TOTAL_KM * (1 - progress)))
+      dist.textContent = km.toLocaleString("en-US") + " km"
+      state.textContent = progress >= 1 ? "together" : "apart"
     }
 
-    window.addEventListener("scroll", updateMeter, { passive: true })
-    window.addEventListener("resize", updateMeter)
-    updateMeter()
+    // Coalesce bursts of scroll/resize events into one measurement per frame.
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(paint)
+    }
+
+    window.addEventListener("scroll", schedule, { passive: true })
+    window.addEventListener("resize", schedule)
+    window.addEventListener("orientationchange", schedule)
+    window.addEventListener("load", schedule)
+    window.visualViewport?.addEventListener("resize", schedule)
+    window.visualViewport?.addEventListener("scroll", schedule)
+    // Background tabs get no animation frames and deferred scroll events, and
+    // a back/forward restore hands us a scroll position with no event at all —
+    // so re-measure whenever the page becomes visible again.
+    document.addEventListener("visibilitychange", schedule)
+    window.addEventListener("pageshow", schedule)
+
+    // Layout shifts that change the page height without firing scroll/resize
+    // (web fonts, the hero photo decoding, reveal animations landing).
+    const so = new ResizeObserver(schedule)
+    so.observe(document.body)
+    document.fonts?.ready.then(schedule).catch(() => {})
+
+    paint()
 
     return () => {
       ro.disconnect()
-      window.removeEventListener("scroll", updateMeter)
-      window.removeEventListener("resize", updateMeter)
+      so.disconnect()
+      if (frame) cancelAnimationFrame(frame)
+      window.removeEventListener("scroll", schedule)
+      window.removeEventListener("resize", schedule)
+      window.removeEventListener("orientationchange", schedule)
+      window.removeEventListener("load", schedule)
+      window.visualViewport?.removeEventListener("resize", schedule)
+      window.visualViewport?.removeEventListener("scroll", schedule)
+      document.removeEventListener("visibilitychange", schedule)
+      window.removeEventListener("pageshow", schedule)
     }
   }, [])
 
@@ -153,7 +214,7 @@ export function OurStory() {
         <div className="wrap hero-inner">
           <p className="hero-kicker">~ Our Story ~</p>
           <h1 className="hero-title">
-            7,900 Miles
+            12,530 Kilometers
             <br />
             to the Mandap
           </h1>
@@ -182,8 +243,8 @@ export function OurStory() {
               <span className="sub">Where she&apos;s from</span>
             </div>
             <div className="meter-num">
-              <span ref={milesRef}>7,900 mi</span>
-              <span ref={stateRef}>apart</span>
+              <span className="val" ref={distRef}>12,530 km</span>
+              <span className="state" ref={stateRef}>apart</span>
             </div>
           </div>
         </div>
@@ -196,7 +257,7 @@ export function OurStory() {
             <span className="kicker">Chapter by Chapter</span>
             <h2 className="sec-title">How the distance closed</h2>
             <p className="sec-intro">
-              Scroll along — the mile-o-meter above counts down as our story does. Every milestone
+              Scroll along — the distance meter above counts down as our story does. Every milestone
               here is a placeholder; swap in your own dates, photos, and words.
             </p>
           </div>
@@ -210,6 +271,11 @@ export function OurStory() {
                     <span className={`story-badge ${c.tone}`}>{c.badge}</span>
                     <h4>{c.title}</h4>
                     <p className={c.placeholder ? "ph" : undefined}>{c.text}</p>
+                    {c.image && (
+                      <div className="story-photo">
+                        <img src={c.image.src} alt={c.image.alt} loading="lazy" />
+                      </div>
+                    )}
                     {c.photo && (
                       <div className="photo-slot">
                         <ImageIcon size={18} strokeWidth={1.6} />
@@ -229,7 +295,14 @@ export function OurStory() {
               )
               const empty = <div className="side empty" key="empty" />
               return (
-                <div className={"story-item" + (c.milestone ? " is-milestone" : "")} key={i}>
+                <div
+                  className={
+                    "story-item" +
+                    (c.milestone ? " is-milestone" : "") +
+                    (c.accent === "green" ? " is-green" : "")
+                  }
+                  key={i}
+                >
                   {i % 2 === 0 ? [card, marker, empty] : [empty, marker, card]}
                 </div>
               )
@@ -245,7 +318,7 @@ export function OurStory() {
           <div className="flo">❀ ❀ ❀</div>
           <p>We can&apos;t wait to celebrate with you.</p>
           <div className="finale-stat">
-            0 miles<span>Forever, starting Jan 5, 2027</span>
+            0 kilometers<span>Forever, starting Jan 5, 2027</span>
           </div>
           <div className="finale-links">
             <Link href="/itinerary">The Wedding Day</Link>

@@ -17,11 +17,11 @@ export function Nav() {
               <PopoverTrigger asChild>
                 <Button 
                   variant="outline"
-                  className="flex items-center justify-center gap-3 rounded-full border border-white/20 bg-white/10 pl-1 pr-4 py-2 font-serif text-xs tracking-[0.25em] uppercase text-white shadow-md backdrop-blur-md transition-all hover:bg-white/20 active:scale-95 cursor-pointer h-10"
+                  className="flex items-center justify-center gap-1.5 rounded-full border border-white/60 bg-white/80 pl-1 pr-4 py-2 font-serif text-xs tracking-[0.25em] uppercase text-[oklch(0.46_0.10_120)] shadow-md backdrop-blur-md transition-all hover:bg-white/90 hover:text-[oklch(0.52_0.07_78)] active:text-[oklch(0.52_0.07_78)] active:scale-95 cursor-pointer h-10"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src="/favicon_io/events-icon-white.png"
+                    src="/favicon_io/events-icon-green.png"
                     alt=""
                     className="w-8 h-8 rounded-full object-contain shrink-0"
                   />
