@@ -73,7 +73,7 @@ const CHAPTERS: Chapter[] = [
     title: "[Choosing to close the gap for good]",
     text: "Placeholder — the conversation about a future in the same city, the same time zone, the same home.",
     placeholder: true,
-    photo: "Drop a photo here",
+    image: { src: "/first_gift.jpg", alt: "First gift milestone photo" },
   },
   {
     badge: "The Proposal", tone: "both", icon: Gem, date: "[Month 20XX]", milestone: true,
