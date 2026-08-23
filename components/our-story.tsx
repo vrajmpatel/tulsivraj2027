@@ -33,7 +33,7 @@ type Chapter = {
   placeholder?: boolean
   photo?: string
   /** A real photo, rendered in place of the dashed `photo` placeholder. */
-  image?: { src: string; alt: string }
+  image?: { src: string; alt: string; uncropped?: boolean }
   icon: LucideIcon
   date: string
   milestone?: boolean
@@ -47,7 +47,7 @@ const CHAPTERS: Chapter[] = [
     title: "[How you two first “met”]",
     text: "Placeholder — the app, the setup, the mutual friend, the chance encounter. However it started, this is where chapter one begins.",
     placeholder: true,
-    photo: "Drop a photo from around this time",
+    image: { src: "/whatsapp_video.jpeg", alt: "How you two first met", uncropped: true },
   },
   {
     badge: "Long Distance, Round One", tone: "both", icon: MessageCircle, date: "[Month 20XX]",
@@ -60,13 +60,14 @@ const CHAPTERS: Chapter[] = [
     title: "[The first trip to meet in person]",
     text: "Placeholder — who flew where, how long the flight felt, and the moment it became real.",
     placeholder: true,
-    photo: "Drop a photo from the first visit",
+    image: { src: "/old_school.jpeg", alt: "The first trip to meet in person" },
   },
   {
     badge: "Back & Forth", tone: "both", icon: Repeat, date: "[Month 20XX]",
     title: "[The visits that followed]",
     text: "Placeholder — the trips, the airport goodbyes, the growing certainty that the distance was temporary.",
     placeholder: true,
+    image: { src: "/baroda_kayak.jpeg", alt: "The visits that followed" },
   },
   {
     badge: "The Decision", tone: "both", icon: HeartHandshake, date: "[Month 20XX]", milestone: true,
@@ -87,6 +88,7 @@ const CHAPTERS: Chapter[] = [
     badge: "Vadodara · Jan 2027", tone: "vad", icon: Heart, date: "Jan 5, 2027", milestone: true,
     title: "Zero kilometers apart",
     text: "The gap that once measured 12,530 kilometers and 10.5 time zones closes for good — under one mandap, in one city, together at last.",
+    image: { src: "/hawa_mahal.jpeg", alt: "Zero kilometers apart" },
   },
 ]
 
@@ -272,7 +274,7 @@ export function OurStory() {
                     <h4>{c.title}</h4>
                     <p className={c.placeholder ? "ph" : undefined}>{c.text}</p>
                     {c.image && (
-                      <div className="story-photo">
+                      <div className={`story-photo${c.image.uncropped ? " is-uncropped" : ""}`}>
                         <img src={c.image.src} alt={c.image.alt} loading="lazy" />
                       </div>
                     )}

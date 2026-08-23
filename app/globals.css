@@ -1656,6 +1656,9 @@
 .story-root .story-photo img {
   width: 100%; aspect-ratio: 1 / 1; object-fit: cover; object-position: center 38%;
 }
+.story-root .story-photo.is-uncropped img {
+  aspect-ratio: auto; width: 100%; height: auto; object-fit: contain; display: block;
+}
 
 /* Green card — the light forest tone the Wardrobe/Guide/Itinerary pages use.
    Wins over the dark .is-milestone treatment above by coming later. */
