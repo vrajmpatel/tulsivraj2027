@@ -54,7 +54,7 @@ export function VadodaraMap() {
           <h1 className="vad-hero-title">Vadodara</h1>
           <p className="vad-hero-sub">
             The wedding venue, our recommended hotels, and the airport and station — all on one
-            map, so you always know where you're headed.
+            map, so you always know where you&apos;re headed.
           </p>
         </div>
       </header>

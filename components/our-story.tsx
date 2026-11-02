@@ -43,17 +43,17 @@ type Chapter = {
 
 const CHAPTERS: Chapter[] = [
   {
-    badge: "The Beginning", tone: "both", icon: Sparkles, date: "[Month 20XX]",
-    title: "[How you two first “met”]",
-    text: "Placeholder — the app, the setup, the mutual friend, the chance encounter. However it started, this is where chapter one begins.",
-    placeholder: true,
-    image: { src: "/whatsapp_video.jpeg", alt: "How you two first met", uncropped: true },
+    badge: "The Beginning", tone: "both", icon: Sparkles, date: "April 2023",
+    title: "The first conversation",
+    text: "Tulsi and Vraj first started talking via a Whatsapp phone call. Vraj received Tulsi's number and decided to make the first call in a Cupertino, CA public park in the Spring of 2023. It was a beautiful day outside and Vraj was partially nervous and indifferent to start the conversation because he didn't know what to expect. He honestly thought that this relationship might not go that far because of the long distance and different upbringings they both had. However, Vraj was immediately charmed by Tulsi's voice and down-to-earth nature. Tulsi was also not expecting much from the conversation and felt the relationship wouldn't go anywhere. Nevertheless, both Vraj and Tulsi felt that it was worth a try and one conversation wouldn't hurt. That first conversation helped them realize the surprising similarities in their world view and family structure. The story had started but it keep reading to see how it unfolds... :)",
+    image: { src: "/whatsapp_video.jpeg", alt: "Tulsi and Vraj's first WhatsApp call", uncropped: true },
   },
   {
     badge: "Long Distance, Round One", tone: "both", icon: MessageCircle, date: "[Month 20XX]",
     title: "[The 10.5-hour time-zone gap begins]",
     text: "Placeholder — early calls at odd hours, the first “good morning” that was actually goodnight, learning each other from two continents away.",
     placeholder: true,
+    image: { src: "/IMG_7305.PNG", alt: "Tulsi drying her hair during a video call with Vraj." },
   },
   {
     badge: "Vadodara", tone: "vad", icon: PlaneLanding, date: "[Month 20XX]", milestone: true,

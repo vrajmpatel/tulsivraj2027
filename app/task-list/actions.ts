@@ -1,6 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
+import { requireHost } from "@/lib/host-auth"
 import { createAdminClient } from "@/utils/supabase/admin"
 
 const PATH = "/task-list"
@@ -9,6 +10,7 @@ export type ActionResult = { ok: true } | { ok: false; error: string }
 
 /** Add a new planning task. */
 export async function addTask(formData: FormData): Promise<ActionResult> {
+  await requireHost(PATH)
   const title = String(formData.get("title") ?? "").trim()
   if (!title) return { ok: false, error: "A task title is required." }
 
@@ -38,6 +40,7 @@ export async function addTask(formData: FormData): Promise<ActionResult> {
 
 /** Toggle a task's completion state. */
 export async function toggleTaskDone(id: string, done: boolean): Promise<ActionResult> {
+  await requireHost(PATH)
   if (!id) return { ok: false, error: "Missing task id." }
   try {
     const supabase = createAdminClient()
@@ -53,6 +56,7 @@ export async function toggleTaskDone(id: string, done: boolean): Promise<ActionR
 
 /** Delete a task. */
 export async function deleteTask(id: string): Promise<ActionResult> {
+  await requireHost(PATH)
   if (!id) return { ok: false, error: "Missing task id." }
   try {
     const supabase = createAdminClient()

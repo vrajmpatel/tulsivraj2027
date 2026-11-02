@@ -1,6 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
+import { requireHost } from "@/lib/host-auth"
 import { createAdminClient } from "@/utils/supabase/admin"
 import {
   INVITATION_SENT_DEFAULT,
@@ -77,6 +78,7 @@ const DUPLICATE_FIELD_LABEL = {
 
 /** Add a new person to the host-managed guest list (`invitee`). */
 export async function addInvitee(formData: FormData): Promise<ActionResult> {
+  await requireHost(PATH)
   const full_name = String(formData.get("full_name") ?? "").trim()
   if (!full_name) return { ok: false, error: "A name is required." }
 
@@ -126,6 +128,7 @@ export async function updateInvitee(
   id: string,
   formData: FormData,
 ): Promise<ActionResult> {
+  await requireHost(PATH)
   if (!id) return { ok: false, error: "Missing invitee id." }
 
   const full_name = String(formData.get("full_name") ?? "").trim()
@@ -192,6 +195,7 @@ export async function updateInvitee(
 
 /** Remove an invitee. Any RSVP linked to them is unlinked (FK is ON DELETE SET NULL). */
 export async function deleteInvitee(id: string): Promise<ActionResult> {
+  await requireHost(PATH)
   if (!id) return { ok: false, error: "Missing invitee id." }
   try {
     const supabase = createAdminClient()
@@ -214,6 +218,7 @@ export async function setInvitationSent(
   id: string,
   value: string,
 ): Promise<ActionResult> {
+  await requireHost(PATH)
   if (!id) return { ok: false, error: "Missing invitee id." }
   // Validated here as well as by the CHECK constraint: this client uses the
   // service-role key, so nothing else stands between it and the table.
@@ -248,6 +253,7 @@ export async function setInviteeEvents(
   id: string,
   events: string[],
 ): Promise<ActionResult> {
+  await requireHost(PATH)
   if (!id) return { ok: false, error: "Missing invitee id." }
   if (!Array.isArray(events)) return { ok: false, error: "Invalid events." }
   // Validated here as well as by the CHECK constraint: this client uses the
@@ -284,6 +290,7 @@ export async function linkRsvp(
   rsvpId: string,
   inviteeId: string,
 ): Promise<ActionResult> {
+  await requireHost(PATH)
   if (!rsvpId) return { ok: false, error: "Missing RSVP id." }
   try {
     const supabase = createAdminClient()
@@ -302,6 +309,7 @@ export async function linkRsvp(
 
 /** Delete an RSVP response (e.g. a test or accidental submission). */
 export async function deleteRsvp(id: string): Promise<ActionResult> {
+  await requireHost(PATH)
   if (!id) return { ok: false, error: "Missing RSVP id." }
   try {
     const supabase = createAdminClient()

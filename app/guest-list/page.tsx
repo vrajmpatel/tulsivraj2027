@@ -1,11 +1,11 @@
+import { requireHost } from "@/lib/host-auth"
+import { HostNavigation } from "@/components/host-navigation"
 import type { Metadata } from "next"
 import { BackButton } from "@/components/back-button"
 import { GuestAdmin, type Invitee, type Rsvp } from "@/components/guest-admin"
 import { createAdminClient, isAdminConfigured } from "@/utils/supabase/admin"
 
-// This is a private, unlisted management page. Don't cache it and don't index
-// it — there are no links to it anywhere on the site, and we tell crawlers to
-// stay away as a second layer of obscurity.
+// Host authorization is checked before setup details or private data are read.
 export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = {
@@ -14,9 +14,11 @@ export const metadata: Metadata = {
 }
 
 export default async function GuestListPage() {
+  await requireHost("/guest-list")
   if (!isAdminConfigured()) {
     return (
       <main className="admin-root" style={{ minHeight: "100vh" }}>
+        <HostNavigation />
         <BackButton className="font-sans text-[13px] font-medium normal-case tracking-[0.02em] px-[15px] py-2 text-[oklch(0.52_0.012_70)] hover:text-[oklch(0.27_0.012_70)]" />
         <div className="wrap" style={{ paddingTop: 120, paddingBottom: 120 }}>
           <span className="kicker">Setup needed</span>
@@ -56,6 +58,7 @@ export default async function GuestListPage() {
 
   return (
     <main className="min-h-screen">
+      <HostNavigation />
       <BackButton className="font-sans text-[13px] font-medium normal-case tracking-[0.02em] px-[15px] py-2 text-[oklch(0.52_0.012_70)] hover:text-[oklch(0.27_0.012_70)]" />
       <GuestAdmin invitees={invitees} rsvps={rsvps} loadError={loadError} />
     </main>

@@ -1,3 +1,4 @@
+import 'server-only'
 import { createClient } from '@supabase/supabase-js'
 
 /**
@@ -6,8 +7,8 @@ import { createClient } from '@supabase/supabase-js'
  * This BYPASSES Row Level Security, so it can read the private `invitee`
  * guest list and all `rsvp` responses — neither of which is readable with the
  * public publishable key. NEVER import this from a Client Component or expose
- * the returned client to the browser. It is only used by the hidden
- * /guest-list page, its server actions, and the /api/rsvp route handler.
+ * the returned client to the browser. Management pages/actions must authorize
+ * the host before using it. The public RSVP route validates submissions separately.
  */
 export function createAdminClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL

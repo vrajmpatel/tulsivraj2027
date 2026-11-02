@@ -365,7 +365,7 @@ export function TravelGuide() {
                 heritage, Indo-Saracenic palaces, vibrant markets, and warm Gujarati hospitality.
               </p>
               <p>
-                This guide gathers everything you'll need to make the most of your visit — and if a
+                This guide gathers everything you&apos;ll need to make the most of your visit — and if a
                 question comes up, our point person at the end of this guide is here to help.
               </p>
             </div>
@@ -412,7 +412,7 @@ export function TravelGuide() {
               <div className="date-card">
                 <div className="tag">Recommended Departure</div>
                 <div className="big">Wed · Jan 6</div>
-                <div className="small">Depart on the 6th, or later if you'd like to extend the trip.</div>
+                <div className="small">Depart on the 6th, or later if you&apos;d like to extend the trip.</div>
               </div>
             </div>
             <p className="note-line">
@@ -463,7 +463,7 @@ export function TravelGuide() {
                   <div className="visa-item">
                     <span className="n">03</span>
                     <div>
-                      <span>What you'll need</span>
+                      <span>What you&apos;ll need</span>
                       <p>A digital passport photo, a scan of your passport bio page, and a card for the fee.</p>
                     </div>
                   </div>
@@ -513,7 +513,7 @@ export function TravelGuide() {
               </div>
               <div className="fact">
                 <div className="fact-top"><HandHeart size={18} strokeWidth={1.6} /><span>Hospitality</span></div>
-                <p>Gujarat is warm &amp; welcoming. A smile and a "Kem cho?" go a long way.</p>
+                <p>Gujarat is warm &amp; welcoming. A smile and a &quot;Kem cho?&quot; go a long way.</p>
               </div>
             </div>
           </div>
@@ -768,7 +768,7 @@ export function TravelGuide() {
         <div className="wrap foot-inner">
           <div className="flo">❀ ❀ ❀</div>
           <h3>
-            We can't wait to celebrate
+            We can&apos;t wait to celebrate
             <br />
             with you in Vadodara
           </h3>

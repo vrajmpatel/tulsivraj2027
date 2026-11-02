@@ -127,15 +127,14 @@ export function TaskAdmin({
           <p className="hero-sub">
             Your private planning to-do list. Add tasks, assign who&apos;s
             handling them, set a priority and date, and tie each one to an
-            event. This page is unlisted — only people with the link can
-            reach it.
+            event. This page is available only to approved hosts.
           </p>
           <div className="hero-meta">
             <span>Tulsi &amp; Vraj</span>
             <span className="dot" />
             <span>Private Dashboard</span>
             <span className="dot" />
-            <span>Unlisted</span>
+            <span>Host access required</span>
           </div>
         </div>
       </header>
@@ -301,7 +300,7 @@ export function TaskAdmin({
           <div className="flo">❀ ❀ ❀</div>
           <h3>Keep this link to yourself</h3>
           <p>
-            This page is unlisted — only people with the link can reach it.
+            This page is available only to approved hosts.
             With love and aabhar —
           </p>
           <div className="sig">Tulsi &amp; Vraj</div>

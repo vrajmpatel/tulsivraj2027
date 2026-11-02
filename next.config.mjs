@@ -1,11 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  // Keep fixture-based review builds separate from the regular app build.
+  distDir: process.env.NEXT_BUILD_DIR || ".next",
   images: {
     unoptimized: true,
   },

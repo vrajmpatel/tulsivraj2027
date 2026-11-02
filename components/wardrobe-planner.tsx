@@ -8,6 +8,8 @@ type PaletteColor = { name: string; hex: string }
 
 type Gender = "women" | "men"
 
+const EMPTY_IMAGES: string[] = []
+
 /** event-folder -> gender -> image URLs under /public/wardrobe, read server-side. */
 export type WardrobeImages = Record<string, Record<Gender, string[]>>
 
@@ -192,7 +194,7 @@ export function WardrobePlanner({ wardrobeImages }: { wardrobeImages: WardrobeIm
 
   const ev = EVENTS[active]
   const EventIcon = ev.icon
-  const images = wardrobeImages[wardrobeFolder(ev.id)]?.[gender] ?? []
+  const images = wardrobeImages[wardrobeFolder(ev.id)]?.[gender] ?? EMPTY_IMAGES
 
   useEffect(() => {
     if (!emblaApi) return

@@ -74,7 +74,7 @@ export function Nav() {
                       <span className="flex items-center gap-3">
                         <Sun className="w-4 h-4 text-amber-300 shrink-0" />
                         <span className="flex items-center gap-2 whitespace-nowrap">
-                          <span>Tulsi's Vidhi & Haldi</span>
+                          <span>Tulsi&apos;s Vidhi & Haldi</span>
                           <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-[10px] text-white font-serif tracking-[0.15em] uppercase font-normal whitespace-nowrap">
                             | Jan. 3rd 2027 Sun
                           </span>
@@ -108,7 +108,7 @@ export function Nav() {
                       <span className="flex items-center gap-3">
                         <Sun className="w-4 h-4 text-amber-300 shrink-0" />
                         <span className="flex items-center gap-2 whitespace-nowrap">
-                          <span>Vraj's Vidhi & Haldi</span>
+                          <span>Vraj&apos;s Vidhi & Haldi</span>
                           <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-[10px] text-white font-serif tracking-[0.15em] uppercase font-normal whitespace-nowrap">
                             | Jan. 4th 2027 Mon
                           </span>
