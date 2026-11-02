@@ -33,7 +33,7 @@ type Chapter = {
   placeholder?: boolean
   photo?: string
   /** A real photo, rendered in place of the dashed `photo` placeholder. */
-  image?: { src: string; alt: string; uncropped?: boolean }
+  image?: { src: string; alt: string }
   icon: LucideIcon
   date: string
   milestone?: boolean
@@ -43,41 +43,41 @@ type Chapter = {
 
 const CHAPTERS: Chapter[] = [
   {
-    badge: "The Beginning", tone: "both", icon: Sparkles, date: "April 2023",
+    badge: "The Beginning", tone: "both", icon: Sparkles, date: "May 2023",
     title: "The first conversation",
     text: "Tulsi and Vraj first started talking via a Whatsapp phone call. Vraj received Tulsi's number and decided to make the first call in a Cupertino, CA public park in the Spring of 2023. It was a beautiful day outside and Vraj was partially nervous and indifferent to start the conversation because he didn't know what to expect. He honestly thought that this relationship might not go that far because of the long distance and different upbringings they both had. However, Vraj was immediately charmed by Tulsi's voice and down-to-earth nature. Tulsi was also not expecting much from the conversation and felt the relationship wouldn't go anywhere. Nevertheless, both Vraj and Tulsi felt that it was worth a try and one conversation wouldn't hurt. That first conversation helped them realize the surprising similarities in their world view and family structure. The story had started but it keep reading to see how it unfolds... :)",
-    image: { src: "/whatsapp_video.jpeg", alt: "Tulsi and Vraj's first WhatsApp call", uncropped: true },
+    image: { src: "/whatsapp_video.jpeg", alt: "Tulsi and Vraj's first WhatsApp call" },
   },
   {
-    badge: "Long Distance, Round One", tone: "both", icon: MessageCircle, date: "[Month 20XX]",
+    badge: "Long Distance, Round One", tone: "both", icon: MessageCircle, date: "June 2023",
     title: "[The 10.5-hour time-zone gap begins]",
     text: "Placeholder — early calls at odd hours, the first “good morning” that was actually goodnight, learning each other from two continents away.",
     placeholder: true,
     image: { src: "/IMG_7305.PNG", alt: "Tulsi drying her hair during a video call with Vraj." },
   },
   {
-    badge: "Vadodara", tone: "vad", icon: PlaneLanding, date: "[Month 20XX]", milestone: true,
+    badge: "Vadodara", tone: "vad", icon: PlaneLanding, date: "Nov 2024", milestone: true,
     title: "[The first trip to meet in person]",
     text: "Placeholder — who flew where, how long the flight felt, and the moment it became real.",
     placeholder: true,
     image: { src: "/old_school.jpeg", alt: "The first trip to meet in person" },
   },
   {
-    badge: "Back & Forth", tone: "both", icon: Repeat, date: "[Month 20XX]",
+    badge: "Back & Forth", tone: "both", icon: Repeat, date: "Dec 2024",
     title: "[The visits that followed]",
     text: "Placeholder — the trips, the airport goodbyes, the growing certainty that the distance was temporary.",
     placeholder: true,
     image: { src: "/baroda_kayak.jpeg", alt: "The visits that followed" },
   },
   {
-    badge: "The Decision", tone: "both", icon: HeartHandshake, date: "[Month 20XX]", milestone: true,
+    badge: "The Decision", tone: "both", icon: HeartHandshake, date: "March 2025", milestone: true,
     title: "[Choosing to close the gap for good]",
     text: "Placeholder — the conversation about a future in the same city, the same time zone, the same home.",
     placeholder: true,
     image: { src: "/first_gift.jpg", alt: "First gift milestone photo" },
   },
   {
-    badge: "The Proposal", tone: "both", icon: Gem, date: "[Month 20XX]", milestone: true,
+    badge: "The Proposal", tone: "both", icon: Gem, date: "April 2025", milestone: true,
     title: "[Where and how it happened]",
     text: "Placeholder — the setting, the surprise (or lack thereof), and the moment “long distance” became “engaged.”",
     placeholder: true,
@@ -274,7 +274,7 @@ export function OurStory() {
                     <h4>{c.title}</h4>
                     <p className={c.placeholder ? "ph" : undefined}>{c.text}</p>
                     {c.image && (
-                      <div className={`story-photo${c.image.uncropped ? " is-uncropped" : ""}`}>
+                      <div className="story-photo">
                         <img src={c.image.src} alt={c.image.alt} loading="lazy" />
                       </div>
                     )}

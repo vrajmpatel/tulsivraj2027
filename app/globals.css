@@ -1653,11 +1653,9 @@
   width: 100%; margin-top: 16px; border-radius: 12px; overflow: hidden;
   border: 1px solid var(--st-line-soft); background: var(--st-bg-deep);
 }
+/* Each photo keeps its own aspect ratio — never cropped to fit the card. */
 .story-root .story-photo img {
-  width: 100%; aspect-ratio: 1 / 1; object-fit: cover; object-position: center 38%;
-}
-.story-root .story-photo.is-uncropped img {
-  aspect-ratio: auto; width: 100%; height: auto; object-fit: contain; display: block;
+  display: block; width: 100%; height: auto;
 }
 
 /* Green card — the light forest tone the Wardrobe/Guide/Itinerary pages use.
